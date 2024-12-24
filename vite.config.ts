@@ -1,25 +1,40 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { resolve } from 'path';
-import { VitePWA } from 'vite-plugin-pwa';  
+import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
   plugins: [
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      devOptions: {
-        enabled: true  // Enables PWA in development
-      },
       manifest: {
-        name: 'Your App Name',
-        short_name: 'App',
-        start_url: '/',
-        display: 'standalone',
-        background_color: '#ffffff',
-        theme_color: '#000000',
+        name: 'Screen Time Guardian',
+        short_name: 'Screen Guard',
+        description: 'Stay focused and mindful with customizable timers, inspiring quotes, and gentle reminders to take breaks',
+        theme_color: '#ffffff',
         icons: [
-          // You'll need to add your icons here
+          {
+            src: 'icons/icon16.png',
+            sizes: '16x16',
+            type: 'image/png'
+          },
+          {
+            src: 'icons/icon48.png',
+            sizes: '48x48',
+            type: 'image/png'
+          },
+          {
+            src: 'icons/icon128.png',
+            sizes: '128x128',
+            type: 'image/png'
+          },
+          {
+            src: 'icons/icon512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'any maskable'
+          }
         ]
       }
     })
@@ -27,7 +42,7 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        main: resolve(__dirname, 'index.html'),  // Changed from popup to main
+        main: resolve(__dirname, 'index.html'),
       },
       output: {
         entryFileNames: '[name].js',
