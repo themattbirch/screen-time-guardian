@@ -1,31 +1,43 @@
 {
   "name": "screen-time-guardian",
-  "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
+  "description": "Stay focused and mindful with customizable timers, inspiring quotes, and gentle reminders to take breaks. A progressive web app for better screen time management.",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
-    "lint": "eslint .",
+    "build": "vite build",
     "preview": "vite preview"
   },
+  "keywords": [
+    "productivity",
+    "mindfulness",
+    "screen-time",
+    "focus",
+    "pwa",
+    "timer"
+  ],
+  "author": "",
+  "license": "ISC",
   "dependencies": {
-    "@types/node": "^22.10.2",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "vite-plugin-pwa": "^0.21.1"
+    "autoprefixer": "^10.4.18",
+    "framer-motion": "^11.15.0",
+    "lucide-react": "^0.359.0",
+    "postcss": "^8.4.35",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-joyride": "^2.3.0",
+    "react-toastify": "^9.1.1",
+    "recharts": "^2.13.3",
+    "tailwindcss": "^3.4.1",
+    "uuid": "^11.0.3"
   },
   "devDependencies": {
-    "@eslint/js": "^9.17.0",
-    "@types/react": "^18.3.17",
-    "@types/react-dom": "^18.3.5",
+    "@types/node": "^22.9.3",
+    "@types/react": "^18.0.15",
+    "@types/react-dom": "^18.0.6",
     "@vitejs/plugin-react": "^4.3.4",
-    "eslint": "^9.17.0",
-    "eslint-plugin-react-hooks": "^5.0.0",
-    "eslint-plugin-react-refresh": "^0.4.16",
-    "globals": "^15.13.0",
-    "typescript": "~5.6.2",
-    "typescript-eslint": "^8.18.1",
-    "vite": "^6.0.3"
+    "typescript": "^4.7.4",
+    "vite": "^6.0.3",
+    "vite-plugin-pwa": "^0.21.1"
   }
 }
