@@ -13,15 +13,15 @@ export interface AppSettings {
 }
 
  export interface TimerState {
-    isActive: boolean;
-    isPaused: boolean;
-    timeLeft: number;
-    mode: 'focus' | 'shortBreak' | 'longBreak' | 'custom';
-    interval: number; 
-    isBlinking: boolean; 
-    startTime: number | null;
-    endTime: number | null;  
-  }
+  isActive: boolean;
+  isPaused: boolean;
+  timeLeft: number;
+  mode: 'focus' | 'shortBreak' | 'longBreak' | 'custom';
+  interval: number;
+  isBlinking: boolean;
+  startTime?: number | null;
+  endTime?: number | null;
+}
 
 export interface StorageData extends AppSettings {
   statistics: Statistics;

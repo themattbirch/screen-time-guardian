@@ -1,12 +1,13 @@
 {
   "name": "Screen Time Guardian",
-  "short_name": "Screen Guard",
+  "short_name": "ScreenGuard",
   "description": "Stay focused and mindful with customizable timers, inspiring quotes, and gentle reminders to take breaks",
-  "start_url": "/",
+  "start_url": "./index.html",
+  "scope": ".",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#000000",
-  "orientation": "any",
+  "orientation": "portrait",
   "icons": [
     {
       "src": "icons/icon16.png",
@@ -30,20 +31,5 @@
       "purpose": "any maskable"
     }
   ],
-  "categories": ["productivity", "lifestyle", "utilities"],
-  "screenshots": [],
-  "shortcuts": [
-    {
-      "name": "Start Focus Timer",
-      "short_name": "Focus",
-      "description": "Start a focus session",
-      "url": "/?action=focus"
-    },
-    {
-      "name": "Take a Break",
-      "short_name": "Break",
-      "description": "Start a break timer",
-      "url": "/?action=break"
-    }
-  ]
+  "categories": ["productivity", "lifestyle", "utilities"]
 }
