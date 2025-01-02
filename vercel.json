@@ -1,0 +1,9 @@
+{
+  "rewrites": [
+    { "source": "/favicon.ico", "destination": "/favicon.ico" },
+    { "source": "/manifest.webmanifest", "destination": "/manifest.webmanifest" },
+    { "source": "/icons/:path*", "destination": "/icons/:path*" },
+    { "source": "/app/:path*", "destination": "/src/index.html" },
+    { "source": "/:path*", "destination": "/index.html" }
+  ]
+}
