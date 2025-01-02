@@ -23,6 +23,7 @@
   "dependencies": {
     "autoprefixer": "^10.4.18",
     "framer-motion": "^11.15.0",
+    "idb": "^8.0.1",
     "lucide-react": "^0.359.0",
     "postcss": "^8.4.35",
     "react": "^18.2.0",
