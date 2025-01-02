@@ -2,7 +2,7 @@
   "name": "Screen Time Guardian",
   "short_name": "ScreenGuard",
   "description": "Stay focused and mindful with customizable timers, inspiring quotes, and gentle reminders to take breaks",
-  "start_url": "/",
+  "start_url": "/src/",
   "scope": "/",
   "display": "standalone",
   "background_color": "#ffffff",

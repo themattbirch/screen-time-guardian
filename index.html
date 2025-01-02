@@ -1,22 +1,153 @@
-<!DOCTYPE html>
-<html lang="en">
+import React from 'react';
+import { Timer, Smartphone, Moon, Sun, Award, Quote } from 'lucide-react';
 
-<head>
-  <meta charset="UTF-8" />
-  <link rel="icon" href="/icons/icon16.png" sizes="16x16" type="image/png">
-  <link rel="icon" href="/icons/icon32.png" sizes="32x32" type="image/png">
-  <link rel="icon" href="/icons/icon192.png" sizes="192x192" type="image/png">
-  <link rel="manifest" href="/manifest.webmanifest">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#000000">
-  <meta name="description"
-    content="Stay focused and mindful with customizable timers, inspiring quotes, and gentle reminders to take breaks.">
-  <title>Screen Time Guardian</title>
-  <script type="module" src="/src/main.tsx"></script>
-</head>
+const LandingPage = () => {
+return (
+<div className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
+    {/* Navigation */}
+    <nav className="fixed w-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between h-16 items-center">
+                <div className="flex items-center">
+                    <Timer className="w-8 h-8 text-indigo-600 dark:text-indigo-400" />
+                    <span className="ml-2 font-bold text-gray-900 dark:text-white">Screen Time Guardian</span>
+                </div>
+                <div>
+                    <a href="/src"
+                        className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors">
+                        Launch App
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
 
-<body class="bg-white dark:bg-gray-900 text-black dark:text-white">
-  <div id="root"></div>
-</body>
+    {/* Hero Section */}
+    <header className="pt-32 pb-16 px-4">
+        <div className="max-w-7xl mx-auto text-center">
+            <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+                Take Control of Your Screen Time
+            </h1>
+            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mb-8">
+                Stay focused and mindful with customizable timers, inspiring quotes, and gentle reminders to take
+                breaks.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="/src"
+                    className="bg-indigo-600 text-white px-8 py-4 rounded-lg text-lg font-medium hover:bg-indigo-700 transition-colors">
+                    Get Started
+                </a>
+                <a href="#features"
+                    className="bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white px-8 py-4 rounded-lg text-lg font-medium hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                    Learn More
+                </a>
+            </div>
+        </div>
+    </header>
 
-</html>
+    {/* Features Grid */}
+    <section id="features" className="py-16 px-4">
+        <div className="max-w-7xl mx-auto">
+            <h2 className="text-3xl font-bold text-center text-gray-900 dark:text-white mb-12">
+                Key Features
+            </h2>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {[
+                {
+                icon:
+                <Timer className="w-6 h-6" />,
+                title: "Flexible Timer Modes",
+                description: "Focus (25min), Short Break (5min), Long Break (15min), or set your own custom duration."
+                },
+                {
+                icon:
+                <Smartphone className="w-6 h-6" />,
+                title: "Works Offline",
+                description: "Full functionality even without internet connection. Your progress is always saved."
+                },
+                {
+                icon:
+                <Quote className="w-6 h-6" />,
+                title: "Daily Inspiration",
+                description: "Receive mindfulness quotes and motivation to keep you focused and inspired."
+                },
+                {
+                icon:
+                <Award className="w-6 h-6" />,
+                title: "Achievement System",
+                description: "Track your progress and unlock achievements as you build better habits."
+                },
+                {
+                icon:
+                <Moon className="w-6 h-6" />,
+                title: "Dark Mode",
+                description: "Easy on your eyes with automatic dark mode support based on your system preferences."
+                },
+                {
+                icon:
+                <Smartphone className="w-6 h-6" />,
+                title: "Install & Go",
+                description: "Install directly to your device for a native app-like experience."
+                }
+                ].map((feature, index) => (
+                <div key={index} className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
+                    <div
+                        className="w-12 h-12 bg-indigo-100 dark:bg-indigo-900 rounded-lg flex items-center justify-center mb-4">
+                        <div className="text-indigo-600 dark:text-indigo-400">
+                            {feature.icon}
+                        </div>
+                    </div>
+                    <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                        {feature.title}
+                    </h3>
+                    <p className="text-gray-600 dark:text-gray-300">
+                        {feature.description}
+                    </p>
+                </div>
+                ))}
+            </div>
+        </div>
+    </section>
+
+    {/* CTA Section */}
+    <section className="py-16 px-4 bg-indigo-600">
+        <div className="max-w-7xl mx-auto text-center">
+            <h2 className="text-3xl font-bold text-white mb-4">
+                Ready to Transform Your Screen Time?
+            </h2>
+            <p className="text-indigo-100 mb-8 max-w-2xl mx-auto">
+                Join thousands of users who are building better digital habits with Screen Time Guardian.
+            </p>
+            <a href="/src"
+                className="bg-white text-indigo-600 px-8 py-4 rounded-lg text-lg font-medium hover:bg-indigo-50 transition-colors inline-block">
+                Start Your Journey
+            </a>
+        </div>
+    </section>
+
+    {/* Footer */}
+    <footer className="py-8 px-4 bg-gray-50 dark:bg-gray-900">
+        <div className="max-w-7xl mx-auto text-center">
+            <p className="text-gray-600 dark:text-gray-400">
+                © 2024 Screen Time Guardian. All rights reserved.
+            </p>
+            <div className="mt-4 space-x-4">
+                <a href="/privacy"
+                    className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white">
+                    Privacy Policy
+                </a>
+                <a href="/terms" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white">
+                    Terms of Service
+                </a>
+                <a href="/support"
+                    className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white">
+                    Support
+                </a>
+            </div>
+        </div>
+    </footer>
+</div>
+);
+};
+
+export default LandingPage;
