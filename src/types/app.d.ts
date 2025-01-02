@@ -1,3 +1,4 @@
+
 export interface AppSettings {
   interval: number;
   soundEnabled: boolean;
@@ -9,23 +10,27 @@ export interface AppSettings {
   selectedSound: string;
   timerMode: 'focus' | 'shortBreak' | 'longBreak' | 'custom';
   quoteCategory: string;
-  minimalMode?: boolean;
+  minimalMode: boolean;
 }
 
- export interface TimerState {
+export interface TimerState {
   isActive: boolean;
   isPaused: boolean;
   timeLeft: number;
   mode: 'focus' | 'shortBreak' | 'longBreak' | 'custom';
   interval: number;
   isBlinking: boolean;
-  startTime?: number | null;
-  endTime?: number | null;
+  startTime: number | null;
+  endTime: number | null;
 }
 
-export interface StorageData extends AppSettings {
-  statistics: Statistics;
-  timerState: TimerState;
+export interface Achievement {
+  id: string;
+  name: string;
+  description: string;
+  progress: number;
+  target: number;
+  unlockedAt: string | null;
 }
 
 export interface Quote {
@@ -59,22 +64,14 @@ export interface Session {
   focusScore?: number;
 }
 
-export interface Achievement {
-  id: string;
-  name: string;
-  description: string;
-  icon: string;
-  unlockedAt: string | null;
-  progress: number;
-  target: number;
-}
-
 export interface QuoteProps {
   changeInterval: number;
   category: string;
   forceChange: number;
 }
-export interface StorageData extends AppSettings {
-  statistics: Statistics;
+
+export interface StorageData {
+  appSettings: AppSettings;
   timerState: TimerState;
+  achievements: Achievement[];
 }

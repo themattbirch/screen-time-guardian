@@ -1,4 +1,4 @@
-// /src/App.tsx
+// src/App.tsx
 
 import React, { useState, useEffect, useCallback } from 'react';
 import './index.css'; // Ensure Tailwind styles are imported
@@ -18,6 +18,22 @@ import {
   Trophy,
   Settings as SettingsIcon,
 } from 'lucide-react';
+
+// Helper function to get mode seconds
+const getModeSeconds = (mode: AppSettings['timerMode'], interval?: number): number => {
+  switch (mode) {
+    case 'focus':
+      return 25 * 60;
+    case 'shortBreak':
+      return 5 * 60;
+    case 'longBreak':
+      return 15 * 60;
+    case 'custom':
+      return interval ? interval * 60 : 15 * 60; // Default custom interval if not provided
+    default:
+      return 15 * 60;
+  }
+};
 
 // Main App Component
 const App: React.FC = () => {
@@ -60,7 +76,144 @@ const App: React.FC = () => {
   // Quote Change Counter
   const [quoteChangeCounter, setQuoteChangeCounter] = useState(0);
 
-  // Load settings and timer state from storage on mount
+  /**
+   * Update Achievements based on actions
+   */
+  const updateAchievements = useCallback((action: string) => {
+    setAchievements((prevAchievements) =>
+      prevAchievements.map((ach) => {
+        switch (ach.id) {
+          case 'first-session':
+            if (action === 'completeSession' && ach.progress < ach.target) {
+              return {
+                ...ach,
+                progress: ach.progress + 1,
+                unlockedAt: ach.progress + 1 >= ach.target ? new Date().toISOString() : ach.unlockedAt,
+              };
+            }
+            break;
+          case 'ten-sessions':
+            if (action === 'completeSession' && ach.progress < ach.target) {
+              return {
+                ...ach,
+                progress: ach.progress + 1,
+                unlockedAt: ach.progress + 1 >= ach.target ? new Date().toISOString() : ach.unlockedAt,
+              };
+            }
+            break;
+          // Handle other achievements similarly
+          default:
+            return ach;
+        }
+        return ach;
+      })
+    );
+  }, []);
+
+  /**
+   * Handle Timer Completion
+   */
+  const handleTimerComplete = useCallback(() => {
+    if (settings.soundEnabled) {
+      soundManager.setVolume(settings.soundVolume);
+      soundManager.playSound(settings.selectedSound);
+    }
+
+    // Show notification if granted
+    if (Notification.permission === 'granted') {
+      new Notification('Screen Time Guardian', { body: 'Time is up!' });
+    } else {
+      toast.info('Time is up!');
+    }
+
+    setTimerState((prev) => ({
+      ...prev,
+      isActive: false,
+      isPaused: false,
+      timeLeft: 0,
+      isBlinking: true,
+    }));
+
+    // Show a new quote
+    setQuoteChangeCounter((prev) => prev + 1);
+
+    // Update achievements based on session completion
+    updateAchievements('completeSession');
+  }, [settings.soundEnabled, settings.soundVolume, settings.selectedSound, updateAchievements]);
+
+  /**
+   * Handle Start Timer
+   */
+  const handleStartTimer = useCallback(() => {
+    const now = Date.now();
+    const end = now + timerState.timeLeft * 1000;
+    setTimerState((prev) => ({
+      ...prev,
+      isActive: true,
+      isPaused: false,
+      startTime: now,
+      endTime: end,
+    }));
+    updateAchievements('startSession');
+  }, [timerState.timeLeft, updateAchievements]);
+
+  /**
+   * Handle Pause Timer
+   */
+  const handlePauseTimer = useCallback(() => {
+    setTimerState((prev) => ({ ...prev, isPaused: true }));
+    updateAchievements('pauseSession');
+  }, [updateAchievements]);
+
+  /**
+   * Handle Resume Timer
+   */
+  const handleResumeTimer = useCallback(() => {
+    setTimerState((prev) => ({ ...prev, isPaused: false }));
+    updateAchievements('resumeSession');
+  }, [updateAchievements]);
+
+  /**
+   * Handle Reset Timer
+   */
+  const handleResetTimer = useCallback(() => {
+    setTimerState({
+      isActive: false,
+      isPaused: false,
+      timeLeft: getModeSeconds(settings.timerMode, settings.interval),
+      mode: settings.timerMode,
+      interval: settings.interval,
+      isBlinking: false,
+      startTime: null,
+      endTime: null,
+    });
+    updateAchievements('resetSession');
+  }, [settings.timerMode, settings.interval, updateAchievements]);
+
+  /**
+   * Timer countdown logic
+   */
+  useEffect(() => {
+    let intervalId: number | undefined;
+    if (timerState.isActive && !timerState.isPaused && timerState.timeLeft > 0) {
+      intervalId = window.setInterval(() => {
+        setTimerState((prev) => {
+          if (prev.timeLeft <= 1) {
+            handleTimerComplete();
+            return { ...prev, timeLeft: 0, isActive: false };
+          }
+          return { ...prev, timeLeft: prev.timeLeft - 1 };
+        });
+      }, 1000);
+    }
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+    };
+  }, [timerState.isActive, timerState.isPaused, timerState.timeLeft, handleTimerComplete]);
+
+  /**
+   * Load settings and timer state from storage on mount
+   */
   useEffect(() => {
     async function loadData() {
       const storedSettings = await getStorageData(['appSettings']);
@@ -90,22 +243,30 @@ const App: React.FC = () => {
     loadData();
   }, []);
 
-  // Persist settings whenever changed
+  /**
+   * Persist settings whenever changed
+   */
   useEffect(() => {
     setStorageData({ appSettings: settings });
   }, [settings]);
 
-  // Persist timer state whenever changed
+  /**
+   * Persist timer state whenever changed
+   */
   useEffect(() => {
     setStorageData({ timerState });
   }, [timerState]);
 
-  // Persist achievements whenever changed
+  /**
+   * Persist achievements whenever changed
+   */
   useEffect(() => {
     setStorageData({ achievements });
   }, [achievements]);
 
-  // Apply theme changes
+  /**
+   * Apply theme changes
+   */
   useEffect(() => {
     if (settings.theme === 'dark') {
       document.documentElement.classList.add('dark');
@@ -114,7 +275,9 @@ const App: React.FC = () => {
     }
   }, [settings.theme]);
 
-  // Request Notification permission on mount if desired
+  /**
+   * Request Notification permission on mount if desired
+   */
   useEffect(() => {
     if (settings.soundEnabled && Notification.permission !== 'granted') {
       Notification.requestPermission().then((permission) => {
@@ -125,144 +288,9 @@ const App: React.FC = () => {
     }
   }, [settings.soundEnabled]);
 
-  // Timer countdown logic
-  useEffect(() => {
-    let intervalId: number | undefined;
-    if (timerState.isActive && !timerState.isPaused && timerState.timeLeft > 0) {
-      intervalId = window.setInterval(() => {
-        setTimerState((prev) => {
-          if (prev.timeLeft <= 1) {
-            handleTimerComplete();
-            return { ...prev, timeLeft: 0, isActive: false };
-          }
-          return { ...prev, timeLeft: prev.timeLeft - 1 };
-        });
-      }, 1000);
-    }
-    return () => {
-      if (intervalId) clearInterval(intervalId);
-    };
-  }, [timerState.isActive, timerState.isPaused, timerState.timeLeft]);
-
-  // Handle Timer Completion
-  const handleTimerComplete = useCallback(() => {
-    if (settings.soundEnabled) {
-      soundManager.setVolume(settings.soundVolume);
-      soundManager.playSound(settings.selectedSound);
-    }
-
-    // Show notification if granted
-    if (Notification.permission === 'granted') {
-      new Notification('Screen Time Guardian', { body: 'Time is up!' });
-    } else {
-      toast.info('Time is up!');
-    }
-
-    setTimerState((prev) => ({
-      ...prev,
-      isActive: false,
-      isPaused: false,
-      timeLeft: 0,
-      isBlinking: true,
-    }));
-
-    // Show a new quote
-    setQuoteChangeCounter((prev) => prev + 1);
-
-    // Update achievements based on session completion
-    updateAchievements('completeSession');
-  }, [settings.soundEnabled, settings.soundVolume, settings.selectedSound]);
-
-  // Handle Start Timer
-  const handleStartTimer = useCallback(() => {
-    const now = Date.now();
-    const end = now + timerState.timeLeft * 1000;
-    setTimerState((prev) => ({
-      ...prev,
-      isActive: true,
-      isPaused: false,
-      startTime: now,
-      endTime: end,
-    }));
-    updateAchievements('startSession');
-  }, [timerState.timeLeft]);
-
-  // Handle Pause Timer
-  const handlePauseTimer = useCallback(() => {
-    setTimerState((prev) => ({ ...prev, isPaused: true }));
-    updateAchievements('pauseSession');
-  }, []);
-
-  // Handle Resume Timer
-  const handleResumeTimer = useCallback(() => {
-    setTimerState((prev) => ({ ...prev, isPaused: false }));
-    updateAchievements('resumeSession');
-  }, []);
-
-  // Handle Reset Timer
-  const handleResetTimer = useCallback(() => {
-    setTimerState({
-      isActive: false,
-      isPaused: false,
-      timeLeft: getModeSeconds(settings.timerMode),
-      mode: settings.timerMode,
-      interval: settings.interval,
-      isBlinking: false,
-      startTime: null,
-      endTime: null,
-    });
-    updateAchievements('resetSession');
-  }, [settings.timerMode, settings.interval]);
-
-  // Compute seconds from chosen mode
-  function getModeSeconds(mode: AppSettings['timerMode']): number {
-    switch (mode) {
-      case 'focus':
-        return 25 * 60;
-      case 'shortBreak':
-        return 5 * 60;
-      case 'longBreak':
-        return 15 * 60;
-      case 'custom':
-        return settings.interval * 60;
-      default:
-        return 15 * 60;
-    }
-  }
-
-  // Update Achievements based on actions
-  const updateAchievements = (action: string) => {
-    setAchievements((prevAchievements) =>
-      prevAchievements.map((ach) => {
-        switch (ach.id) {
-          case 'first-session':
-            if (action === 'completeSession' && ach.progress < ach.target) {
-              return {
-                ...ach,
-                progress: ach.progress + 1,
-                unlockedAt: ach.progress + 1 >= ach.target ? new Date().toISOString() : ach.unlockedAt,
-              };
-            }
-            break;
-          case 'ten-sessions':
-            if (action === 'completeSession' && ach.progress < ach.target) {
-              return {
-                ...ach,
-                progress: ach.progress + 1,
-                unlockedAt: ach.progress + 1 >= ach.target ? new Date().toISOString() : ach.unlockedAt,
-              };
-            }
-            break;
-          // Handle other achievements similarly
-          default:
-            return ach;
-        }
-        return ach;
-      })
-    );
-  };
-
-  // Handle favorite quotes (if applicable)
+  /**
+   * Handle favorite quotes (if applicable)
+   */
   const handleFavoriteQuote = (quote: Quote) => {
     // Implement favorite logic here
     // For example, toggle favorite status and persist
@@ -470,21 +498,5 @@ const App: React.FC = () => {
     </div>
   );
 };
-
-// Helper function to get mode seconds
-function getModeSeconds(mode: AppSettings['timerMode']): number {
-  switch (mode) {
-    case 'focus':
-      return 25 * 60;
-    case 'shortBreak':
-      return 5 * 60;
-    case 'longBreak':
-      return 15 * 60;
-    case 'custom':
-      return 15 * 60; // Default custom interval
-    default:
-      return 15 * 60;
-  }
-}
 
 export default App;
