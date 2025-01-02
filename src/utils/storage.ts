@@ -1,27 +1,43 @@
+// /src/utils/storage.ts
+
+import { openDB } from 'idb';
 import { StorageData } from '../types/app';
 
+const DB_NAME = 'ScreenTimeGuardianDB';
+const STORE_NAME = 'settings';
+
+const dbPromise = openDB(DB_NAME, 1, {
+  upgrade(db) {
+    db.createObjectStore(STORE_NAME);
+  },
+});
+
 /**
- * Fetches data from Chrome storage.
+ * Fetches data from IndexedDB.
  * @param keys - Array of keys from StorageData to retrieve.
- * @returns A promise that resolves to an object containing the requested keys.
+ * @returns An object containing the requested keys.
  */
-export async function getStorageData<K extends keyof StorageData>(keys: K[]): Promise<Pick<StorageData, K>> {
-  return new Promise((resolve) => {
-    chrome.storage.sync.get(keys, (result) => {
-      resolve(result as Pick<StorageData, K>);
-    });
-  });
+export async function getStorageData<K extends keyof StorageData>(keys: K[]): Promise<Partial<Pick<StorageData, K>>> {
+  const db = await dbPromise;
+  const result: Partial<Pick<StorageData, K>> = {};
+  for (const key of keys) {
+    const value = await db.get(STORE_NAME, key);
+    if (value !== undefined) {
+      result[key] = value;
+    }
+  }
+  return result;
 }
 
 /**
- * Sets data in Chrome storage.
+ * Sets data in IndexedDB.
  * @param data - An object containing key-value pairs from StorageData to set.
- * @returns A promise that resolves when the data is set.
  */
 export async function setStorageData<K extends keyof StorageData>(data: Pick<StorageData, K>): Promise<void> {
-  return new Promise((resolve) => {
-    chrome.storage.sync.set(data, () => {
-      resolve();
-    });
-  });
+  const db = await dbPromise;
+  const tx = db.transaction(STORE_NAME, 'readwrite');
+  for (const [key, value] of Object.entries(data)) {
+    await tx.store.put(value, key);
+  }
+  await tx.done;
 }

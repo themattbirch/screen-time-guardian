@@ -1,17 +1,17 @@
+// /src/components/Timer/Timer.tsx
+
 import React from 'react';
-import './Timer.css';
 
 interface TimerProps {
-  timeLeft: number;                      // Current time left in seconds
-  isActive: boolean;                    // True if the timer is running
-  isPaused: boolean;                    // True if the timer is paused
+  timeLeft: number;
+  isActive: boolean;
+  isPaused: boolean;
   mode: 'focus' | 'shortBreak' | 'longBreak' | 'custom';
-  onStart: () => void;                  // Called when user clicks start/resume
-  onStop: () => void;                   // Called when user clicks pause
-  onComplete: () => void;               // Called when the timer finishes
-  isShrunk: boolean;                    // If the UI is in "minimal" mode
-  isBlinking: boolean;                  // If we should animate a blink effect
-  // Optional: the parent can pass down a "deadline" or a "computeDeadline" if desired
+  onStart: () => void;
+  onStop: () => void;
+  onComplete: () => void;
+  isShrunk: boolean;
+  isBlinking: boolean;
 }
 
 export const Timer: React.FC<TimerProps> = ({
@@ -35,31 +35,27 @@ export const Timer: React.FC<TimerProps> = ({
 
   return (
     <div
-      className={`timer-wrapper flex flex-col items-center text-center
-        ${isBlinking ? 'blinking' : ''}
-        ${isShrunk ? 'p-2' : 'p-4'}`}
+      className={`flex flex-col items-center text-center
+        ${isBlinking ? 'animate-blink' : ''}
+        ${isShrunk ? 'p-2' : 'p-4'}
+      `}
     >
       <div
-        className="timer-display cursor-pointer"
+        className="cursor-pointer"
         onClick={handleClick}
         role="button"
         tabIndex={0}
       >
-        <div className="timer-text text-4xl font-bold">
+        <div className="text-5xl md:text-6xl font-bold">
           {formatTime(timeLeft)}
         </div>
       </div>
 
-      {/* 
-        If not shrunk => show normal Start/Pause/Resume.
-        If shrunk => the parent may handle minimal controls.
-      */}
       {!isShrunk && (
-        <div className="timer-buttons flex justify-center gap-4 mt-4">
-          {/* Not active, not paused => Start */}
+        <div className="flex justify-center gap-4 mt-4">
           {!isActive && !isPaused && (
             <button
-              className="start-button px-6 py-2 text-white rounded-full shadow-md focus:outline-none focus:ring-2 focus:ring-green-300"
+              className="px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded-full shadow-md focus:outline-none focus:ring-2 focus:ring-green-300 transition"
               onClick={onStart}
               aria-label="Start Timer"
             >
@@ -67,10 +63,9 @@ export const Timer: React.FC<TimerProps> = ({
             </button>
           )}
 
-          {/* Active & not paused => Pause */}
           {isActive && !isPaused && (
             <button
-              className="pause-button px-6 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-full shadow-md focus:outline-none focus:ring-2 focus:ring-gray-400"
+              className="px-6 py-2 bg-red-500 hover:bg-red-600 text-white rounded-full shadow-md focus:outline-none focus:ring-2 focus:ring-red-400 transition"
               onClick={onStop}
               aria-label="Pause Timer"
             >
@@ -78,10 +73,9 @@ export const Timer: React.FC<TimerProps> = ({
             </button>
           )}
 
-          {/* Paused => Resume */}
           {isPaused && (
             <button
-              className="resume-button px-6 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-full shadow-md focus:outline-none focus:ring-2 focus:ring-gray-400"
+              className="px-6 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-full shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
               onClick={onStart}
               aria-label="Resume Timer"
             >

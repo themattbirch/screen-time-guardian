@@ -1,5 +1,7 @@
+// /src/components/Settings/Settings.tsx
+
 import React from 'react';
-import { AppSettings, Achievement } from '../../types/app';
+import { AppSettings } from '../../types/app';
 import { achievements } from '../../utils/achievements';
 import { SoundSelector } from './SoundSelector';
 
@@ -20,25 +22,25 @@ export function Settings({ isOpen, onClose, settings, onSettingsChange }: Settin
   };
 
   return (
-<div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-start z-50 p-4 h-screen w-screen">
-  <div className={`
-  ${settings.theme === 'dark' ? 'dark bg-gray-800 text-gray-100' : 'bg-white text-gray-900'}
-  p-6 rounded-lg w-96 relative shadow-lg space-y-4 max-h-[90vh] overflow-y-auto
-`}>
-    <button
-      onClick={onClose}
-      className="absolute top-4 right-4 text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-200 focus:outline-none text-2xl p-2"
-      aria-label="Close Settings"
-    >
-      &times;
-    </button>
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 p-4">
+      <div className={`
+        ${settings.theme === 'dark' ? 'dark bg-gray-800 text-gray-100' : 'bg-white text-gray-900'}
+        p-6 rounded-lg w-full max-w-md relative shadow-lg space-y-4 overflow-y-auto
+      `}>
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-200 focus:outline-none text-2xl p-2"
+          aria-label="Close Settings"
+        >
+          &times;
+        </button>
 
-    <h2 className="text-xl font-bold border-b border-gray-300 dark:border-gray-600 pb-2">
-      Settings
-    </h2>
+        <h2 className="text-xl font-bold border-b border-gray-300 dark:border-gray-600 pb-2">
+          Settings
+        </h2>
 
         <div className="space-y-4">
-          {/* Settings Fields */}
+          {/* Timer Mode */}
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Timer Mode</label>
             <select
@@ -66,6 +68,8 @@ export function Settings({ isOpen, onClose, settings, onSettingsChange }: Settin
             </div>
           )}
 
+          {/* Additional Settings */}
+          {/* Sound Volume */}
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Sound Volume</label>
             <input
@@ -78,6 +82,7 @@ export function Settings({ isOpen, onClose, settings, onSettingsChange }: Settin
             />
           </div>
 
+          {/* Enable Sounds */}
           <div className="flex items-center space-x-2">
             <input
               id="enableSounds"
@@ -89,6 +94,7 @@ export function Settings({ isOpen, onClose, settings, onSettingsChange }: Settin
             <label htmlFor="enableSounds" className="text-sm font-medium text-gray-700 dark:text-gray-200">Enable Sounds</label>
           </div>
 
+          {/* Quote Category */}
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Quote Category</label>
             <select
@@ -103,6 +109,7 @@ export function Settings({ isOpen, onClose, settings, onSettingsChange }: Settin
             </select>
           </div>
 
+          {/* Show Quotes */}
           <div className="flex items-center space-x-2">
             <input
               id="showQuotes"
@@ -114,6 +121,7 @@ export function Settings({ isOpen, onClose, settings, onSettingsChange }: Settin
             <label htmlFor="showQuotes" className="text-sm font-medium text-gray-700 dark:text-gray-200">Show Quotes</label>
           </div>
 
+          {/* Theme Selection */}
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Theme</label>
             <select
@@ -126,6 +134,7 @@ export function Settings({ isOpen, onClose, settings, onSettingsChange }: Settin
             </select>
           </div>
 
+          {/* Sound Selector */}
           <SoundSelector
             selectedSound={settings.selectedSound}
             volume={settings.soundVolume}
@@ -133,7 +142,7 @@ export function Settings({ isOpen, onClose, settings, onSettingsChange }: Settin
             onVolumeChange={(volume) => handleChange('soundVolume', volume)}
           />
 
-          {/* Achievements Button at Bottom */}
+          {/* Achievements Button */}
           <button
             onClick={() => setShowAchievements(!showAchievements)}
             className="w-full border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 bg-transparent rounded-lg py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-sm font-medium"
@@ -141,17 +150,21 @@ export function Settings({ isOpen, onClose, settings, onSettingsChange }: Settin
             {showAchievements ? 'Hide Achievements' : 'View Achievements'}
           </button>
 
+          {/* Achievements List */}
           {showAchievements && (
             <div className="space-y-4 mt-4">
               <h2 className="text-lg font-bold text-gray-800 dark:text-gray-200">Achievements</h2>
               <div className="space-y-2">
-                {achievements.map((ach: Achievement) => (
+                {achievements.map((ach) => (
                   <div 
                     key={ach.id} 
                     className="p-3 border rounded-lg dark:border-gray-600 dark:bg-gray-700 bg-gray-100 flex items-center justify-between"
                   >
                     <div>
-                      <div className="font-semibold text-gray-700 dark:text-gray-200">{ach.name} {ach.icon}</div>
+                      <div className="font-semibold text-gray-700 dark:text-gray-200 flex items-center">
+                        <span className="mr-2">{ach.icon}</span>
+                        {ach.name}
+                      </div>
                       <div className="text-sm text-gray-600 dark:text-gray-300">{ach.description}</div>
                       {ach.progress < ach.target && (
                         <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">

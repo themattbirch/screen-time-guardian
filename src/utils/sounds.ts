@@ -1,3 +1,5 @@
+// /src/utils/sounds.ts
+
 interface Sound {
   id: string;
   name: string;
@@ -9,19 +11,19 @@ const defaultSounds: Sound[] = [
   {
     id: 'gentle-bell',
     name: 'Gentle Bell',
-    url: 'sounds/gentle-bell.mp3',
+    url: '/sounds/gentle-bell.mp3', // Ensure correct path
     category: 'bell'
   },
   {
     id: 'meditation-bowl',
     name: 'Meditation Bowl',
-    url: 'sounds/meditation-bowl.mp3',
+    url: '/sounds/meditation-bowl.mp3',
     category: 'meditation'
   },
   {
     id: 'forest-ambient',
     name: 'Forest Ambience',
-    url: 'sounds/forest-ambient.mp3',
+    url: '/sounds/forest-ambient.mp3',
     category: 'ambient'
   }
 ];
@@ -35,6 +37,13 @@ class SoundManager {
     this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
     this.gainNode = this.audioContext.createGain();
     this.gainNode.connect(this.audioContext.destination);
+
+    // Handle user interaction to resume AudioContext if suspended
+    document.addEventListener('click', () => {
+      if (this.audioContext.state === 'suspended') {
+        this.audioContext.resume();
+      }
+    }, { once: true });
   }
 
   async loadSound(sound: Sound): Promise<void> {
@@ -42,6 +51,7 @@ class SoundManager {
 
     try {
       const response = await fetch(sound.url);
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
       const arrayBuffer = await response.arrayBuffer();
       const audioBuffer = await this.audioContext.decodeAudioData(arrayBuffer);
       this.soundBuffers.set(sound.id, audioBuffer);
@@ -56,7 +66,10 @@ class SoundManager {
 
   async playSound(soundId: string) {
     const buffer = this.soundBuffers.get(soundId);
-    if (!buffer) return;
+    if (!buffer) {
+      console.warn(`Sound with ID "${soundId}" is not loaded.`);
+      return;
+    }
 
     const source = this.audioContext.createBufferSource();
     source.buffer = buffer;
@@ -67,31 +80,3 @@ class SoundManager {
 
 export const soundManager = new SoundManager();
 export const availableSounds = defaultSounds;
-
-const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
-
-export const playSound = async (type: 'click' | 'complete') => {
-  const gainNode = audioContext.createGain();
-  const oscillator = audioContext.createOscillator();
-  
-  gainNode.connect(audioContext.destination);
-  oscillator.connect(gainNode);
-  
-  if (type === 'click') {
-    oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
-    gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
-    oscillator.type = 'sine';
-    
-    oscillator.start();
-    oscillator.stop(audioContext.currentTime + 0.05);
-  } else if (type === 'complete') {
-    oscillator.frequency.setValueAtTime(440, audioContext.currentTime);
-    gainNode.gain.setValueAtTime(0, audioContext.currentTime);
-    gainNode.gain.linearRampToValueAtTime(0.1, audioContext.currentTime + 0.1);
-    gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + 0.5);
-    oscillator.type = 'sine';
-    
-    oscillator.start();
-    oscillator.stop(audioContext.currentTime + 0.5);
-  }
-}; 
