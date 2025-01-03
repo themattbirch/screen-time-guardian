@@ -1,18 +1,54 @@
 @tailwind base;
 @tailwind components;
-@tailwind utilities;/* App.css */
+@tailwind utilities;
+
+/* Base styles */
 html, body, #root {
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
+  height: 100%;
+  width: 100%;
+  font-family: system-ui, -apple-system, sans-serif;
 }
 
-ul,
-li {
-  list-style: none !important;
-  list-style-type: none !important;
+/* Make the app container take full height */
+.h-screen {
+  height: 100vh;
+  height: -webkit-fill-available;
 }
 
+/* Fix bottom navigation on mobile */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Timer styles */
+.timer-container {
+  aspect-ratio: 1;
+  max-width: 300px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #ffffff, #e6e6e6);
+  box-shadow: 
+    8px 8px 16px #d1d1d1,
+    -8px -8px 16px #ffffff;
+}
+
+.dark .timer-container {
+  background: linear-gradient(145deg, #2d3748, #1a202c);
+  box-shadow: 
+    8px 8px 16px #0f1319,
+    -8px -8px 16px #374151;
+}
+
+/* Custom range input styling */
 input[type="range"] {
   -webkit-appearance: none;
   appearance: none;
@@ -20,8 +56,36 @@ input[type="range"] {
   background: #e2e8f0;
   border-radius: 2px;
   outline: none;
+  width: 100%;
 }
 
-.transition-transform {
-  transition: width 0.5s ease, height 0.5s ease;
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  background: #4F46E5;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.dark input[type="range"] {
+  background: #4a5568;
+}
+
+/* Clean list styling */
+ul, li {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Bottom safe area for mobile */
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 16px);
+}
+
+/* Smooth transitions */
+.transition-all {
+  transition: all 0.3s ease;
 }

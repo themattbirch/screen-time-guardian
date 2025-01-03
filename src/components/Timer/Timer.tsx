@@ -1,5 +1,3 @@
-// /src/components/Timer/Timer.tsx
-
 import React from 'react';
 
 interface TimerProps {
@@ -34,28 +32,69 @@ export const Timer: React.FC<TimerProps> = ({
   };
 
   return (
-    <div
-      className={`flex flex-col items-center text-center
-        ${isBlinking ? 'animate-blink' : ''}
-        ${isShrunk ? 'p-2' : 'p-4'}
-      `}
-    >
-      <div
-        className="cursor-pointer"
+    <div className="w-full max-w-xs mx-auto">
+      {/* Timer Circle */}
+      <div 
+        className={`
+          aspect-square w-64 mx-auto
+          rounded-full
+          bg-white dark:bg-gray-800
+          shadow-lg dark:shadow-gray-900
+          flex items-center justify-center
+          cursor-pointer
+          transition-all duration-300
+          hover:shadow-xl
+          ${isBlinking ? 'animate-pulse' : ''}
+          ${isShrunk ? 'scale-75' : 'scale-100'}
+        `}
         onClick={handleClick}
         role="button"
         tabIndex={0}
       >
-        <div className="text-5xl md:text-6xl font-bold">
-          {formatTime(timeLeft)}
+        <div className="flex flex-col items-center">
+          {/* Mode Indicator */}
+          <div className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">
+            {mode === 'focus' ? 'Focus Time' : 
+             mode === 'shortBreak' ? 'Short Break' : 
+             mode === 'longBreak' ? 'Long Break' : 
+             'Custom Timer'}
+          </div>
+          
+          {/* Time Display */}
+          <div className={`
+            text-5xl md:text-6xl font-bold
+            text-gray-900 dark:text-white
+            transition-colors duration-300
+            ${isActive && !isPaused ? 'text-green-600 dark:text-green-400' : ''}
+            ${isPaused ? 'text-yellow-600 dark:text-yellow-400' : ''}
+          `}>
+            {formatTime(timeLeft)}
+          </div>
+
+          {/* Status Text */}
+          <div className="text-sm font-medium text-gray-500 dark:text-gray-400 mt-2">
+            {isActive && !isPaused ? 'Running' : 
+             isPaused ? 'Paused' : 
+             'Ready'}
+          </div>
         </div>
       </div>
 
+      {/* Control Buttons */}
       {!isShrunk && (
-        <div className="flex justify-center gap-4 mt-4">
+        <div className="flex justify-center gap-4 mt-8">
           {!isActive && !isPaused && (
             <button
-              className="px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded-full shadow-md focus:outline-none focus:ring-2 focus:ring-green-300 transition"
+              className="
+                px-8 py-3
+                bg-green-600 hover:bg-green-700
+                text-white font-medium
+                rounded-full
+                shadow-md hover:shadow-lg
+                transform hover:-translate-y-0.5
+                transition-all duration-200
+                focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2
+              "
               onClick={onStart}
               aria-label="Start Timer"
             >
@@ -65,7 +104,16 @@ export const Timer: React.FC<TimerProps> = ({
 
           {isActive && !isPaused && (
             <button
-              className="px-6 py-2 bg-red-500 hover:bg-red-600 text-white rounded-full shadow-md focus:outline-none focus:ring-2 focus:ring-red-400 transition"
+              className="
+                px-8 py-3
+                bg-red-500 hover:bg-red-600
+                text-white font-medium
+                rounded-full
+                shadow-md hover:shadow-lg
+                transform hover:-translate-y-0.5
+                transition-all duration-200
+                focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2
+              "
               onClick={onStop}
               aria-label="Pause Timer"
             >
@@ -75,7 +123,16 @@ export const Timer: React.FC<TimerProps> = ({
 
           {isPaused && (
             <button
-              className="px-6 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-full shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+              className="
+                px-8 py-3
+                bg-blue-500 hover:bg-blue-600
+                text-white font-medium
+                rounded-full
+                shadow-md hover:shadow-lg
+                transform hover:-translate-y-0.5
+                transition-all duration-200
+                focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
+              "
               onClick={onStart}
               aria-label="Resume Timer"
             >

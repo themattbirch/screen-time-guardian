@@ -299,16 +299,19 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-gray-50 dark:bg-gray-900">
-      {/* Main Content Area */}
-      <main className="flex-1 overflow-y-auto px-4 pb-16">
-        {/* Header with App Title */}
-        <div className="sticky top-0 pt-2 pb-4 bg-gray-50 dark:bg-gray-900">
-          <h1 className="text-2xl font-bold text-center dark:text-white">Screen Time Guardian</h1>
-        </div>
+  <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900">
+    {/* Main Content Area with proper padding for bottom nav */}
+    <main className="flex-1 overflow-y-auto px-4 pb-24">
+      {/* App Header */}
+      <div className="sticky top-0 pt-4 pb-2 bg-gray-50 dark:bg-gray-900 z-10">
+        <h1 className="text-2xl font-bold text-center text-gray-900 dark:text-white">
+          Screen Time Guardian
+        </h1>
+      </div>
 
-        {/* Dynamic Content Based on Active Tab */}
-        <div className="max-w-md mx-auto mt-4 space-y-6">
+        
+      {/* Content Container with max width */}
+      <div className="max-w-md mx-auto mt-4 space-y-6">
           {activeTab === 'timer' && (
             <div className="space-y-6">
               {/* Timer Section */}
@@ -436,54 +439,56 @@ const App: React.FC = () => {
         </div>
       </main>
 
-      {/* Bottom Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
-        <div className="flex justify-around items-center h-16">
-          <button
-            onClick={() => setActiveTab('timer')}
-            className={`flex flex-col items-center p-2 ${
-              activeTab === 'timer' ? 'text-blue-600' : 'text-gray-600 dark:text-gray-400'
-            }`}
-            aria-label="Timer"
-          >
-            <TimerIcon className="w-6 h-6" />
-            <span className="text-xs mt-1">Timer</span>
-          </button>
+     Yes, I see the syntax error. There's a misplaced closing div and the h-safe-bottom is in the wrong place. Here's the correct bottom navigation section:
+tsxCopy{/* Bottom Navigation with safe area padding */}
+<nav className="bottom-nav bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
+  <div className="flex justify-around items-center h-16">
+    <button
+      onClick={() => setActiveTab('timer')}
+      className={`flex flex-col items-center p-2 ${
+        activeTab === 'timer' ? 'text-blue-600' : 'text-gray-600 dark:text-gray-400'
+      }`}
+      aria-label="Timer"
+    >
+      <TimerIcon className="w-6 h-6" />
+      <span className="text-xs mt-1">Timer</span>
+    </button>
 
-          <button
-            onClick={() => setActiveTab('stats')}
-            className={`flex flex-col items-center p-2 ${
-              activeTab === 'stats' ? 'text-blue-600' : 'text-gray-600 dark:text-gray-400'
-            }`}
-            aria-label="Stats"
-          >
-            <BarChart className="w-6 h-6" />
-            <span className="text-xs mt-1">Stats</span>
-          </button>
+    <button
+      onClick={() => setActiveTab('stats')}
+      className={`flex flex-col items-center p-2 ${
+        activeTab === 'stats' ? 'text-blue-600' : 'text-gray-600 dark:text-gray-400'
+      }`}
+      aria-label="Stats"
+    >
+      <BarChart className="w-6 h-6" />
+      <span className="text-xs mt-1">Stats</span>
+    </button>
 
-          <button
-            onClick={() => setActiveTab('quotes')}
-            className={`flex flex-col items-center p-2 ${
-              activeTab === 'quotes' ? 'text-blue-600' : 'text-gray-600 dark:text-gray-400'
-            }`}
-            aria-label="Quotes"
-          >
-            <QuoteIcon className="w-6 h-6" />
-            <span className="text-xs mt-1">Quotes</span>
-          </button>
+    <button
+      onClick={() => setActiveTab('quotes')}
+      className={`flex flex-col items-center p-2 ${
+        activeTab === 'quotes' ? 'text-blue-600' : 'text-gray-600 dark:text-gray-400'
+      }`}
+      aria-label="Quotes"
+    >
+      <QuoteIcon className="w-6 h-6" />
+      <span className="text-xs mt-1">Quotes</span>
+    </button>
 
-          <button
-            onClick={() => setActiveTab('achievements')}
-            className={`flex flex-col items-center p-2 ${
-              activeTab === 'achievements' ? 'text-blue-600' : 'text-gray-600 dark:text-gray-400'
-            }`}
-            aria-label="Achievements"
-          >
-            <Trophy className="w-6 h-6" />
-            <span className="text-xs mt-1">Goals</span>
-          </button>
-        </div>
-      </nav>
+    <button
+      onClick={() => setActiveTab('achievements')}
+      className={`flex flex-col items-center p-2 ${
+        activeTab === 'achievements' ? 'text-blue-600' : 'text-gray-600 dark:text-gray-400'
+      }`}
+      aria-label="Achievements"
+    >
+      <Trophy className="w-6 h-6" />
+      <span className="text-xs mt-1">Goals</span>
+    </button>
+  </div>
+  <div className="h-[env(safe-area-inset-bottom)]" />
+</nav>
 
       {/* Settings Modal */}
       <Settings
