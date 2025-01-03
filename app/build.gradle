@@ -23,7 +23,7 @@ plugins {
 def twaManifest = [
     applicationId: 'com.screentimeguardian.twa',
     hostName: 'screentimeguardian.com', // The domain being opened in the TWA.
-    launchUrl: '/public', // The start path for the TWA. Must be relative to the domain.
+    launchUrl: '/', // The start path for the TWA. Must be relative to the domain.
     name: 'Screen Time Guardian', // The application name.
     launcherName: 'ScreenTimer', // The name shown on the Android Launcher.
     themeColor: '#4F46E5', // The color used for the status bar.

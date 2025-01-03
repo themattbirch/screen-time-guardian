@@ -1,10 +1,11 @@
 {
-  "rewrites": [
+    "rewrites": [
     { "source": "/favicon.ico", "destination": "/favicon.ico" },
     { "source": "/manifest.webmanifest", "destination": "/manifest.webmanifest" },
     { "source": "/icons/:path*", "destination": "/icons/:path*" },
     { "source": "/.well-known/assetlinks.json", "destination": "/.well-known/assetlinks.json" },
-    { "source": "/:path*", "destination": "/index.html" }
+    { "source": "/public", "destination": "/public/index.html" },
+    { "source": "/", "destination": "/index.html" }
   ],
   "headers": [
     {
