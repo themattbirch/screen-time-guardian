@@ -11,8 +11,8 @@ export default defineConfig({
       manifest: {
         name: 'Screen Time Guardian',
         short_name: 'ScreenTimer',
-        start_url: '/', 
-        scope: '/',
+        start_url: '/app', 
+        scope: '/app',
         display: 'standalone',
         background_color: '#ffffff',
         theme_color: '#4F46E5',

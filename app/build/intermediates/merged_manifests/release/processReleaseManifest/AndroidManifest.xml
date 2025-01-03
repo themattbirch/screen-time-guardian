@@ -23,8 +23,8 @@
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.screentimeguardian.twa"
-    android:versionCode="1"
-    android:versionName="1" >
+    android:versionCode="2"
+    android:versionName="2" >
 
     <uses-sdk
         android:minSdkVersion="21"
@@ -128,6 +128,7 @@
 
                 <data
                     android:host="@string/hostName"
+                    android:pathPrefix="/app/"
                     android:scheme="https" />
             </intent-filter>
         </activity>
