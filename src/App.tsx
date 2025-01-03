@@ -233,20 +233,20 @@ const App: React.FC = () => {
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900">
-      <main className="flex-1 overflow-y-auto px-4 pb-24">
+      <main className="flex-1 overflow-y-auto px-4 pb-24 w-full max-w-md mx-auto">
         {/* App Header */}
-        <div className="sticky top-0 pt-4 pb-2 bg-gray-50 dark:bg-gray-900 z-10">
-          <div className="flex justify-between items-center px-4 max-w-md mx-auto">
-            <div className="flex items-center gap-3">
+        <div className="sticky top-0 pt-6 pb-4 bg-gray-50 dark:bg-gray-900 z-10">
+          <div className="flex justify-between items-center">
+            <div className="flex items-center gap-4">
               <button
                 onClick={() => handleChange('theme', settings.theme === 'dark' ? 'light' : 'dark')}
-                className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors"
+                className="p-3 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
                 aria-label={`Switch to ${settings.theme === 'dark' ? 'light' : 'dark'} mode`}
               >
                 {settings.theme === 'dark' ? (
-                  <Sun className="w-6 h-6 text-gray-600 dark:text-gray-300" />
+                  <Sun className="w-6 h-6" />
                 ) : (
-                  <Moon className="w-6 h-6 text-gray-600 dark:text-gray-300" />
+                  <Moon className="w-6 h-6" />
                 )}
               </button>
               <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
@@ -256,15 +256,15 @@ const App: React.FC = () => {
 
             <button
               onClick={() => setIsSettingsOpen(true)}
-              className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors"
+              className="p-3 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
               aria-label="Open Settings"
             >
-              <SettingsIcon className="w-6 h-6 text-gray-600 dark:text-gray-300" />
+              <SettingsIcon className="w-6 h-6" />
             </button>
           </div>
         </div>
 
-        <div className="max-w-md mx-auto mt-4 space-y-6">
+        <div className="space-y-6">
           {activeTab === 'timer' && (
             <div className="space-y-6">
               <Timer
@@ -345,9 +345,8 @@ const App: React.FC = () => {
                 {achievements.map((ach) => (
                   <div
                     key={ach.id}
-                    className={`bg-white dark:bg-gray-800 rounded-lg p-4 shadow flex items-center space-x-4 ${
-                      ach.unlockedAt ? 'border-2 border-green-500' : 'border border-gray-300 dark:border-gray-700'
-                    }`}
+                    className={`bg-white dark:bg-gray-800 rounded-lg p-4 shadow flex items-center space-x-4 ${ach.unlockedAt ? 'border-2 border-green-500' : 'border border-gray-300 dark:border-gray-700'
+                      }`}
                   >
                     <div className="bg-blue-100 dark:bg-blue-900 p-3 rounded-full">
                       <Trophy className="w-6 h-6 text-blue-600 dark:text-blue-300" />
@@ -374,65 +373,61 @@ const App: React.FC = () => {
         </div>
       </main>
 
-      <nav className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
-        <div className="flex justify-around items-center h-16">
-  <button
-    onClick={() => setActiveTab('timer')}
-    className={`flex flex-col items-center p-2 ${
-      activeTab === 'timer' ? 'text-blue-600' : 'text-gray-600 dark:text-gray-400'
-    }`}
-    aria-label="Timer"
-  >
-    <TimerIcon className="w-6 h-6" />
-    <span className="text-xs mt-1">Timer</span>
-  </button>
+      <nav className="fixed bottom-0 left-0 right-0 bg-gray-100 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
+        <div className="flex justify-around items-center h-16 max-w-md mx-auto">
+          <button
+            onClick={() => setActiveTab('timer')}
+            className={`flex flex-col items-center p-2 ${activeTab === 'timer' ? 'text-blue-600 dark:text-blue-400' : 'text-gray-600 dark:text-gray-400'
+              }`}
+            aria-label="Timer"
+          >
+            <TimerIcon className="w-6 h-6" />
+            <span className="text-xs mt-1 font-medium">Timer</span>
+          </button>
 
-  <button
-    onClick={() => setActiveTab('stats')}
-    className={`flex flex-col items-center p-2 ${
-      activeTab === 'stats' ? 'text-blue-600' : 'text-gray-600 dark:text-gray-400'
-    }`}
-    aria-label="Stats"
-  >
-    <BarChart className="w-6 h-6" />
-    <span className="text-xs mt-1">Stats</span>
-  </button>
+          <button
+            onClick={() => setActiveTab('stats')}
+            className={`flex flex-col items-center p-2 ${activeTab === 'stats' ? 'text-blue-600 dark:text-blue-400' : 'text-gray-600 dark:text-gray-400'
+              }`}
+            aria-label="Stats"
+          >
+            <BarChart className="w-6 h-6" />
+            <span className="text-xs mt-1">Stats</span>
+          </button>
 
-  <button
-    onClick={() => setActiveTab('quotes')}
-    className={`flex flex-col items-center p-2 ${
-      activeTab === 'quotes' ? 'text-blue-600' : 'text-gray-600 dark:text-gray-400'
-    }`}
-    aria-label="Quotes"
-  >
-    <QuoteIcon className="w-6 h-6" />
-    <span className="text-xs mt-1">Quotes</span>
-  </button>
+          <button
+            onClick={() => setActiveTab('quotes')}
+            className={`flex flex-col items-center p-2 ${activeTab === 'quotes' ? 'text-blue-600 dark:text-blue-400' : 'text-gray-600 dark:text-gray-400'
+              }`}
+            aria-label="Quotes"
+          >
+            <QuoteIcon className="w-6 h-6" />
+            <span className="text-xs mt-1">Quotes</span>
+          </button>
 
-  <button
-    onClick={() => setActiveTab('achievements')}
-    className={`flex flex-col items-center p-2 ${
-      activeTab === 'achievements' ? 'text-blue-600' : 'text-gray-600 dark:text-gray-400'
-    }`}
-    aria-label="Achievements"
-  >
-    <Trophy className="w-6 h-6" />
-    <span className="text-xs mt-1">Goals</span>
-  </button>
-</div>
-<div className="h-[env(safe-area-inset-bottom)]" />
-</nav>
+          <button
+            onClick={() => setActiveTab('achievements')}
+            className={`flex flex-col items-center p-2 ${activeTab === 'achievements' ? 'text-blue-600 dark:text-blue-400' : 'text-gray-600 dark:text-gray-400'
+              }`}
+            aria-label="Achievements"
+          >
+            <Trophy className="w-6 h-6" />
+            <span className="text-xs mt-1">Goals</span>
+          </button>
+        </div>
+        <div className="h-[env(safe-area-inset-bottom)] bg-gray-100 dark:bg-gray-800" />
+      </nav>
 
-<Settings
-  isOpen={isSettingsOpen}
-  onClose={() => setIsSettingsOpen(false)}
-  settings={settings}
-  onSettingsChange={setSettings}
-/>
+      <Settings
+        isOpen={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
+        settings={settings}
+        onSettingsChange={setSettings}
+      />
 
-<ToastContainer position="bottom-right" autoClose={3000} />
-</div>
-);
-};
-
+      <ToastContainer position="bottom-right" autoClose={3000} />
+    </div>
+  );
+}
+  
 export default App;
