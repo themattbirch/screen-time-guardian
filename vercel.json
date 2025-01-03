@@ -3,10 +3,9 @@
     { "source": "/favicon.ico", "destination": "/favicon.ico" },
     { "source": "/manifest.webmanifest", "destination": "/manifest.webmanifest" },
     { "source": "/icons/:path*", "destination": "/icons/:path*" },
-    { "source": "/.well-known/assetlinks.json", "destination": "/.well-known/assetlinks.json" },
-    { "source": "/app", "destination": "/public/index.html" },          
-    { "source": "/app/:path*", "destination": "/public/index.html" },    
-    { "source": "/", "destination": "/index.html" }                   
+    { "source": "/app", "destination": "/public/index.html" },
+    { "source": "/app/:path*", "destination": "/public/index.html" },
+    { "source": "/", "destination": "/index.html" }
   ],
   "headers": [
     {
