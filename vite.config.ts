@@ -11,14 +11,14 @@ export default defineConfig({
       manifest: {
         name: 'Screen Time Guardian',
         short_name: 'ScreenTimer',
-        start_url: '/',
+        start_url: '/', 
         scope: '/',
         display: 'standalone',
         background_color: '#ffffff',
         theme_color: '#4F46E5',
         icons: [
           {
-            src: '/icons/icon16.png',  
+            src: '/icons/icon16.png',
             sizes: '16x16',
             type: 'image/png'
           },
@@ -45,7 +45,8 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        main: resolve(__dirname, 'public/index.html')  
+        website: resolve(__dirname, 'index.html'),          
+        app: resolve(__dirname, 'public/index.html')        
       },
       output: {
         entryFileNames: 'assets/[name].[hash].js',

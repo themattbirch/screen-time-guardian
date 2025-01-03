@@ -1,12 +1,12 @@
 {
-  "name": "Screen Time Guardian",
-  "short_name": "ScreenTimer",
+  "name": "Screen Time Guardian App",
+  "short_name": "ScreenTimerApp",
   "description": "Stay focused and mindful with customizable timers, inspiring quotes, and gentle reminders to take breaks",
-  "start_url": "/",
-  "scope": "/",
+  "start_url": "/app",
+  "scope": "/app/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#000000",
+  "theme_color": "#4F46E5",
   "orientation": "portrait",
   "icons": [
     {
