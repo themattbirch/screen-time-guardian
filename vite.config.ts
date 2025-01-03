@@ -10,27 +10,30 @@ export default defineConfig({
       registerType: 'autoUpdate',
       manifest: {
         name: 'Screen Time Guardian',
-        short_name: 'Screen Guard',
-        description: 'Stay focused and mindful with customizable timers, inspiring quotes, and gentle reminders to take breaks',
-        theme_color: '#ffffff',
+        short_name: 'ScreenTimer',
+        start_url: '/',
+        scope: '/',
+        display: 'standalone',
+        background_color: '#ffffff',
+        theme_color: '#4F46E5',
         icons: [
           {
-            src: 'icons/icon16.png',
+            src: '/icons/icon16.png',
             sizes: '16x16',
             type: 'image/png'
           },
           {
-            src: 'icons/icon48.png',
+            src: '/icons/icon48.png',
             sizes: '48x48',
             type: 'image/png'
           },
           {
-            src: 'icons/icon128.png',
+            src: '/icons/icon128.png',
             sizes: '128x128',
             type: 'image/png'
           },
           {
-            src: 'icons/icon512.png',
+            src: '/icons/icon512.png',
             sizes: '512x512',
             type: 'image/png',
             purpose: 'any maskable'
@@ -42,8 +45,7 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        main: resolve(__dirname, 'index.html'),
-        app: resolve(__dirname, 'src/index.html') 
+        main: resolve(__dirname, 'public/index.html') 
       },
       output: {
         entryFileNames: '[name].js',
