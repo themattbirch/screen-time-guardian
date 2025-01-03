@@ -1,6 +1,5 @@
-// /src/components/Settings/Settings.tsx
-
 import React from 'react';
+import { X } from 'lucide-react';  // Add this import
 import { AppSettings } from '../../types/app';
 import { achievements } from '../../utils/achievements';
 import { SoundSelector } from './SoundSelector';
@@ -22,31 +21,31 @@ export function Settings({ isOpen, onClose, settings, onSettingsChange }: Settin
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 p-4">
-      <div className={`
-        ${settings.theme === 'dark' ? 'dark bg-gray-800 text-gray-100' : 'bg-white text-gray-900'}
-        p-6 rounded-lg w-full max-w-md relative shadow-lg space-y-4 overflow-y-auto
-      `}>
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-200 focus:outline-none text-2xl p-2"
-          aria-label="Close Settings"
-        >
-          &times;
-        </button>
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-start z-50 p-4 overflow-y-auto">
+      <div className="w-full max-w-md bg-white dark:bg-gray-900 rounded-2xl shadow-xl mt-8">
+        {/* Header */}
+        <div className="flex justify-between items-center p-4 border-b border-gray-200 dark:border-gray-800">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Settings</h2>
+          <button
+            onClick={onClose}
+            className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+            aria-label="Close Settings"
+          >
+            <X className="w-6 h-6 text-gray-500 dark:text-gray-400" />
+          </button>
+        </div>
 
-        <h2 className="text-xl font-bold border-b border-gray-300 dark:border-gray-600 pb-2">
-          Settings
-        </h2>
-
-        <div className="space-y-4">
+        {/* Settings Content */}
+        <div className="p-4 space-y-6">
           {/* Timer Mode */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Timer Mode</label>
+          <div className="space-y-2">
+            <label className="text-base font-medium text-gray-900 dark:text-white">
+              Timer Mode
+            </label>
             <select
               value={settings.timerMode}
               onChange={(e) => handleChange('timerMode', e.target.value)}
-              className="w-full p-2 border rounded-lg dark:bg-gray-700 dark:text-gray-200"
+              className="w-full p-3 bg-gray-900 dark:bg-gray-800 text-white rounded-lg border-0 focus:ring-2 focus:ring-blue-500"
             >
               <option value="focus">Focus (25 minutes)</option>
               <option value="shortBreak">Short Break (5 minutes)</option>
@@ -56,51 +55,55 @@ export function Settings({ isOpen, onClose, settings, onSettingsChange }: Settin
           </div>
 
           {settings.timerMode === 'custom' && (
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Custom Duration (minutes)</label>
+            <div className="space-y-2">
+              <label className="text-base font-medium text-gray-900 dark:text-white">
+                Custom Duration (minutes)
+              </label>
               <input
                 type="number"
                 value={settings.interval}
                 onChange={(e) => handleChange('interval', Number(e.target.value))}
-                className="w-full p-2 border rounded-lg dark:bg-gray-700 dark:text-gray-200"
+                className="w-full p-3 bg-gray-900 dark:bg-gray-800 text-white rounded-lg border-0 focus:ring-2 focus:ring-blue-500"
                 min={1}
               />
             </div>
           )}
 
-          {/* Additional Settings */}
           {/* Sound Volume */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Sound Volume</label>
+          <div className="space-y-2">
+            <label className="text-base font-medium text-gray-900 dark:text-white">
+              Sound Volume
+            </label>
             <input
               type="range"
               min="0"
               max="100"
               value={settings.soundVolume}
               onChange={(e) => handleChange('soundVolume', Number(e.target.value))}
-              className="w-full"
+              className="w-full accent-blue-500"
             />
           </div>
 
           {/* Enable Sounds */}
-          <div className="flex items-center space-x-2">
+          <label className="flex items-center gap-3">
             <input
-              id="enableSounds"
               type="checkbox"
               checked={settings.soundEnabled}
               onChange={(e) => handleChange('soundEnabled', e.target.checked)}
-              className="h-4 w-4 text-primary border-gray-300 rounded focus:ring-primary"
+              className="w-5 h-5 rounded border-gray-300 text-blue-500 focus:ring-blue-500"
             />
-            <label htmlFor="enableSounds" className="text-sm font-medium text-gray-700 dark:text-gray-200">Enable Sounds</label>
-          </div>
+            <span className="text-base text-gray-900 dark:text-white">Enable Sounds</span>
+          </label>
 
           {/* Quote Category */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Quote Category</label>
+          <div className="space-y-2">
+            <label className="text-base font-medium text-gray-900 dark:text-white">
+              Quote Category
+            </label>
             <select
               value={settings.quoteCategory}
               onChange={(e) => handleChange('quoteCategory', e.target.value)}
-              className="w-full p-2 border rounded-lg dark:bg-gray-700 dark:text-gray-200"
+              className="w-full p-3 bg-gray-900 dark:bg-gray-800 text-white rounded-lg border-0 focus:ring-2 focus:ring-blue-500"
             >
               <option value="all">All</option>
               <option value="motivation">Motivation</option>
@@ -110,24 +113,25 @@ export function Settings({ isOpen, onClose, settings, onSettingsChange }: Settin
           </div>
 
           {/* Show Quotes */}
-          <div className="flex items-center space-x-2">
+          <label className="flex items-center gap-3">
             <input
-              id="showQuotes"
               type="checkbox"
               checked={settings.showQuotes}
               onChange={(e) => handleChange('showQuotes', e.target.checked)}
-              className="h-4 w-4 text-primary border-gray-300 rounded focus:ring-primary"
+              className="w-5 h-5 rounded border-gray-300 text-blue-500 focus:ring-blue-500"
             />
-            <label htmlFor="showQuotes" className="text-sm font-medium text-gray-700 dark:text-gray-200">Show Quotes</label>
-          </div>
+            <span className="text-base text-gray-900 dark:text-white">Show Quotes</span>
+          </label>
 
           {/* Theme Selection */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Theme</label>
+          <div className="space-y-2">
+            <label className="text-base font-medium text-gray-900 dark:text-white">
+              Theme
+            </label>
             <select
               value={settings.theme}
               onChange={(e) => handleChange('theme', e.target.value)}
-              className="w-full p-2 border rounded-lg dark:bg-gray-700 dark:text-gray-200"
+              className="w-full p-3 bg-gray-900 dark:bg-gray-800 text-white rounded-lg border-0 focus:ring-2 focus:ring-blue-500"
             >
               <option value="light">Light</option>
               <option value="dark">Dark</option>
@@ -141,19 +145,23 @@ export function Settings({ isOpen, onClose, settings, onSettingsChange }: Settin
             onSoundSelect={(soundId) => handleChange('selectedSound', soundId)}
             onVolumeChange={(volume) => handleChange('soundVolume', volume)}
           />
+        </div>
 
-          {/* Achievements Button */}
+        {/* Footer */}
+        <div className="p-4 border-t border-gray-200 dark:border-gray-800">
           <button
             onClick={() => setShowAchievements(!showAchievements)}
-            className="w-full border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 bg-transparent rounded-lg py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-sm font-medium"
+            className="w-full py-3 px-4 bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
           >
-            {showAchievements ? 'Hide Achievements' : 'View Achievements'}
+            View Achievements
           </button>
 
           {/* Achievements List */}
           {showAchievements && (
             <div className="space-y-4 mt-4">
-              <h2 className="text-lg font-bold text-gray-800 dark:text-gray-200">Achievements</h2>
+              <h2 className="text-lg font-bold text-gray-800 dark:text-gray-200">
+                Achievements
+              </h2>
               <div className="space-y-2">
                 {achievements.map((ach) => (
                   <div 
@@ -165,7 +173,9 @@ export function Settings({ isOpen, onClose, settings, onSettingsChange }: Settin
                         <span className="mr-2">{ach.icon}</span>
                         {ach.name}
                       </div>
-                      <div className="text-sm text-gray-600 dark:text-gray-300">{ach.description}</div>
+                      <div className="text-sm text-gray-600 dark:text-gray-300">
+                        {ach.description}
+                      </div>
                       {ach.progress < ach.target && (
                         <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                           Progress: {ach.progress}/{ach.target}
@@ -173,9 +183,13 @@ export function Settings({ isOpen, onClose, settings, onSettingsChange }: Settin
                       )}
                     </div>
                     {ach.unlockedAt ? (
-                      <span className="text-green-600 dark:text-green-400 font-bold">Unlocked</span>
+                      <span className="text-green-600 dark:text-green-400 font-bold">
+                        Unlocked
+                      </span>
                     ) : (
-                      <span className="text-gray-500 dark:text-gray-400">Locked</span>
+                      <span className="text-gray-500 dark:text-gray-400">
+                        Locked
+                      </span>
                     )}
                   </div>
                 ))}

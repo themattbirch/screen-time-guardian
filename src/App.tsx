@@ -1,11 +1,9 @@
-// src/App.tsx
-
 import React, { useState, useEffect, useCallback } from 'react';
-import './index.css'; // Ensure Tailwind styles are imported
+import './index.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { getStorageData, setStorageData } from './utils/storage';
-import { soundManager, availableSounds } from './utils/sounds';
+import { soundManager } from './utils/sounds';
 import { Timer } from './components/Timer/Timer';
 import { Quote as QuoteComponent } from './components/Quote/Quote';
 import { Settings } from './components/Settings/Settings';
@@ -17,6 +15,8 @@ import {
   Quote as QuoteIcon,
   Trophy,
   Settings as SettingsIcon,
+  Sun,
+  Moon
 } from 'lucide-react';
 
 // Helper function to get mode seconds
@@ -29,15 +29,14 @@ const getModeSeconds = (mode: AppSettings['timerMode'], interval?: number): numb
     case 'longBreak':
       return 15 * 60;
     case 'custom':
-      return interval ? interval * 60 : 15 * 60; // Default custom interval if not provided
+      return interval ? interval * 60 : 15 * 60;
     default:
       return 15 * 60;
   }
 };
 
-// Main App Component
 const App: React.FC = () => {
-  // Basic settings state
+  // States
   const [settings, setSettings] = useState<AppSettings>({
     interval: 15,
     soundEnabled: true,
@@ -52,7 +51,6 @@ const App: React.FC = () => {
     minimalMode: false,
   });
 
-  // Timer state
   const [timerState, setTimerState] = useState<TimerState>({
     isActive: false,
     isPaused: false,
@@ -64,34 +62,21 @@ const App: React.FC = () => {
     endTime: null,
   });
 
-  // Achievements state
   const [achievements, setAchievements] = useState<Achievement[]>(predefinedAchievements);
-
-  // Active Tab State
   const [activeTab, setActiveTab] = useState<'timer' | 'stats' | 'quotes' | 'achievements'>('timer');
-
-  // Settings Modal State
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-
-  // Quote Change Counter
   const [quoteChangeCounter, setQuoteChangeCounter] = useState(0);
 
-  /**
-   * Update Achievements based on actions
-   */
+  // Handlers
+  const handleChange = (key: keyof AppSettings, value: any) => {
+    setSettings(prev => ({ ...prev, [key]: value }));
+  };
+
   const updateAchievements = useCallback((action: string) => {
     setAchievements((prevAchievements) =>
       prevAchievements.map((ach) => {
         switch (ach.id) {
           case 'first-session':
-            if (action === 'completeSession' && ach.progress < ach.target) {
-              return {
-                ...ach,
-                progress: ach.progress + 1,
-                unlockedAt: ach.progress + 1 >= ach.target ? new Date().toISOString() : ach.unlockedAt,
-              };
-            }
-            break;
           case 'ten-sessions':
             if (action === 'completeSession' && ach.progress < ach.target) {
               return {
@@ -101,25 +86,18 @@ const App: React.FC = () => {
               };
             }
             break;
-          // Handle other achievements similarly
-          default:
-            return ach;
         }
         return ach;
       })
     );
   }, []);
 
-  /**
-   * Handle Timer Completion
-   */
   const handleTimerComplete = useCallback(() => {
     if (settings.soundEnabled) {
       soundManager.setVolume(settings.soundVolume);
       soundManager.playSound(settings.selectedSound);
     }
 
-    // Show notification if granted
     if (Notification.permission === 'granted') {
       new Notification('Screen Time Guardian', { body: 'Time is up!' });
     } else {
@@ -134,16 +112,10 @@ const App: React.FC = () => {
       isBlinking: true,
     }));
 
-    // Show a new quote
     setQuoteChangeCounter((prev) => prev + 1);
-
-    // Update achievements based on session completion
     updateAchievements('completeSession');
   }, [settings.soundEnabled, settings.soundVolume, settings.selectedSound, updateAchievements]);
 
-  /**
-   * Handle Start Timer
-   */
   const handleStartTimer = useCallback(() => {
     const now = Date.now();
     const end = now + timerState.timeLeft * 1000;
@@ -157,25 +129,16 @@ const App: React.FC = () => {
     updateAchievements('startSession');
   }, [timerState.timeLeft, updateAchievements]);
 
-  /**
-   * Handle Pause Timer
-   */
   const handlePauseTimer = useCallback(() => {
     setTimerState((prev) => ({ ...prev, isPaused: true }));
     updateAchievements('pauseSession');
   }, [updateAchievements]);
 
-  /**
-   * Handle Resume Timer
-   */
   const handleResumeTimer = useCallback(() => {
     setTimerState((prev) => ({ ...prev, isPaused: false }));
     updateAchievements('resumeSession');
   }, [updateAchievements]);
 
-  /**
-   * Handle Reset Timer
-   */
   const handleResetTimer = useCallback(() => {
     setTimerState({
       isActive: false,
@@ -190,9 +153,11 @@ const App: React.FC = () => {
     updateAchievements('resetSession');
   }, [settings.timerMode, settings.interval, updateAchievements]);
 
-  /**
-   * Timer countdown logic
-   */
+  const handleFavoriteQuote = (quote: Quote) => {
+    toast.success(`Added "${quote.text}" to favorites!`);
+  };
+
+  // Effects
   useEffect(() => {
     let intervalId: number | undefined;
     if (timerState.isActive && !timerState.isPaused && timerState.timeLeft > 0) {
@@ -211,9 +176,6 @@ const App: React.FC = () => {
     };
   }, [timerState.isActive, timerState.isPaused, timerState.timeLeft, handleTimerComplete]);
 
-  /**
-   * Load settings and timer state from storage on mount
-   */
   useEffect(() => {
     async function loadData() {
       const storedSettings = await getStorageData(['appSettings']);
@@ -243,30 +205,18 @@ const App: React.FC = () => {
     loadData();
   }, []);
 
-  /**
-   * Persist settings whenever changed
-   */
   useEffect(() => {
     setStorageData({ appSettings: settings });
   }, [settings]);
 
-  /**
-   * Persist timer state whenever changed
-   */
   useEffect(() => {
     setStorageData({ timerState });
   }, [timerState]);
 
-  /**
-   * Persist achievements whenever changed
-   */
   useEffect(() => {
     setStorageData({ achievements });
   }, [achievements]);
 
-  /**
-   * Apply theme changes
-   */
   useEffect(() => {
     if (settings.theme === 'dark') {
       document.documentElement.classList.add('dark');
@@ -275,58 +225,48 @@ const App: React.FC = () => {
     }
   }, [settings.theme]);
 
-  /**
-   * Request Notification permission on mount if desired
-   */
   useEffect(() => {
     if (settings.soundEnabled && Notification.permission !== 'granted') {
-      Notification.requestPermission().then((permission) => {
-        if (permission === 'granted') {
-          console.log('Notification permission granted.');
-        }
-      });
+      Notification.requestPermission();
     }
   }, [settings.soundEnabled]);
 
-  /**
-   * Handle favorite quotes (if applicable)
-   */
-  const handleFavoriteQuote = (quote: Quote) => {
-    // Implement favorite logic here
-    // For example, toggle favorite status and persist
-    // This is a placeholder implementation
-    toast.success(`Added "${quote.text}" to favorites!`);
-  };
-
   return (
-  <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900">
-    {/* Main Content Area with proper padding for bottom nav */}
-    <main className="flex-1 overflow-y-auto px-4 pb-24">
-      {/* App Header */}
-      <div className="sticky top-0 pt-4 pb-2 bg-gray-50 dark:bg-gray-900 z-10">
-        <h1 className="text-2xl font-bold text-center text-gray-900 dark:text-white">
-          Screen Time Guardian
-        </h1>
-      </div>
+    <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900">
+      <main className="flex-1 overflow-y-auto px-4 pb-24">
+        {/* App Header */}
+        <div className="sticky top-0 pt-4 pb-2 bg-gray-50 dark:bg-gray-900 z-10">
+          <div className="flex justify-between items-center px-4 max-w-md mx-auto">
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => handleChange('theme', settings.theme === 'dark' ? 'light' : 'dark')}
+                className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors"
+                aria-label={`Switch to ${settings.theme === 'dark' ? 'light' : 'dark'} mode`}
+              >
+                {settings.theme === 'dark' ? (
+                  <Sun className="w-6 h-6 text-gray-600 dark:text-gray-300" />
+                ) : (
+                  <Moon className="w-6 h-6 text-gray-600 dark:text-gray-300" />
+                )}
+              </button>
+              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+                Screen Time Guardian
+              </h1>
+            </div>
 
-        
-      {/* Content Container with max width */}
-      <div className="max-w-md mx-auto mt-4 space-y-6">
+            <button
+              onClick={() => setIsSettingsOpen(true)}
+              className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors"
+              aria-label="Open Settings"
+            >
+              <SettingsIcon className="w-6 h-6 text-gray-600 dark:text-gray-300" />
+            </button>
+          </div>
+        </div>
+
+        <div className="max-w-md mx-auto mt-4 space-y-6">
           {activeTab === 'timer' && (
             <div className="space-y-6">
-              {/* Timer Section */}
-              <div className="flex justify-between items-center">
-                <h2 className="text-xl font-semibold dark:text-white">Focus Timer</h2>
-                <button
-                  onClick={() => setIsSettingsOpen(true)}
-                  className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800"
-                  aria-label="Open Settings"
-                >
-                  <SettingsIcon className="w-6 h-6 text-gray-600 dark:text-gray-300" />
-                </button>
-              </div>
-
-              {/* Timer Component */}
               <Timer
                 timeLeft={timerState.timeLeft}
                 isActive={timerState.isActive}
@@ -339,7 +279,6 @@ const App: React.FC = () => {
                 isBlinking={timerState.isBlinking}
               />
 
-              {/* Timer Controls */}
               <div className="flex justify-center space-x-4">
                 {timerState.isActive && !timerState.isPaused ? (
                   <button
@@ -372,7 +311,6 @@ const App: React.FC = () => {
           {activeTab === 'stats' && (
             <div className="space-y-4">
               <h2 className="text-xl font-semibold dark:text-white">Your Progress</h2>
-              {/* Stats Component */}
               <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="text-center">
@@ -384,7 +322,6 @@ const App: React.FC = () => {
                     <div className="text-sm text-gray-600 dark:text-gray-300">Completion Rate</div>
                   </div>
                 </div>
-                {/* Additional stats can be added here */}
               </div>
             </div>
           )}
@@ -392,7 +329,6 @@ const App: React.FC = () => {
           {activeTab === 'quotes' && settings.showQuotes && (
             <div className="space-y-4">
               <h2 className="text-xl font-semibold dark:text-white">Daily Quote</h2>
-              {/* Quote Component */}
               <QuoteComponent
                 changeInterval={settings.quoteChangeInterval}
                 category={settings.quoteCategory}
@@ -405,7 +341,6 @@ const App: React.FC = () => {
           {activeTab === 'achievements' && (
             <div className="space-y-4">
               <h2 className="text-xl font-semibold dark:text-white">Achievements</h2>
-              {/* Achievements List */}
               <div className="space-y-3">
                 {achievements.map((ach) => (
                   <div
@@ -439,69 +374,65 @@ const App: React.FC = () => {
         </div>
       </main>
 
-     Yes, I see the syntax error. There's a misplaced closing div and the h-safe-bottom is in the wrong place. Here's the correct bottom navigation section:
-tsxCopy{/* Bottom Navigation with safe area padding */}
-<nav className="bottom-nav bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
-  <div className="flex justify-around items-center h-16">
-    <button
-      onClick={() => setActiveTab('timer')}
-      className={`flex flex-col items-center p-2 ${
-        activeTab === 'timer' ? 'text-blue-600' : 'text-gray-600 dark:text-gray-400'
-      }`}
-      aria-label="Timer"
-    >
-      <TimerIcon className="w-6 h-6" />
-      <span className="text-xs mt-1">Timer</span>
-    </button>
+      <nav className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
+        <div className="flex justify-around items-center h-16">
+  <button
+    onClick={() => setActiveTab('timer')}
+    className={`flex flex-col items-center p-2 ${
+      activeTab === 'timer' ? 'text-blue-600' : 'text-gray-600 dark:text-gray-400'
+    }`}
+    aria-label="Timer"
+  >
+    <TimerIcon className="w-6 h-6" />
+    <span className="text-xs mt-1">Timer</span>
+  </button>
 
-    <button
-      onClick={() => setActiveTab('stats')}
-      className={`flex flex-col items-center p-2 ${
-        activeTab === 'stats' ? 'text-blue-600' : 'text-gray-600 dark:text-gray-400'
-      }`}
-      aria-label="Stats"
-    >
-      <BarChart className="w-6 h-6" />
-      <span className="text-xs mt-1">Stats</span>
-    </button>
+  <button
+    onClick={() => setActiveTab('stats')}
+    className={`flex flex-col items-center p-2 ${
+      activeTab === 'stats' ? 'text-blue-600' : 'text-gray-600 dark:text-gray-400'
+    }`}
+    aria-label="Stats"
+  >
+    <BarChart className="w-6 h-6" />
+    <span className="text-xs mt-1">Stats</span>
+  </button>
 
-    <button
-      onClick={() => setActiveTab('quotes')}
-      className={`flex flex-col items-center p-2 ${
-        activeTab === 'quotes' ? 'text-blue-600' : 'text-gray-600 dark:text-gray-400'
-      }`}
-      aria-label="Quotes"
-    >
-      <QuoteIcon className="w-6 h-6" />
-      <span className="text-xs mt-1">Quotes</span>
-    </button>
+  <button
+    onClick={() => setActiveTab('quotes')}
+    className={`flex flex-col items-center p-2 ${
+      activeTab === 'quotes' ? 'text-blue-600' : 'text-gray-600 dark:text-gray-400'
+    }`}
+    aria-label="Quotes"
+  >
+    <QuoteIcon className="w-6 h-6" />
+    <span className="text-xs mt-1">Quotes</span>
+  </button>
 
-    <button
-      onClick={() => setActiveTab('achievements')}
-      className={`flex flex-col items-center p-2 ${
-        activeTab === 'achievements' ? 'text-blue-600' : 'text-gray-600 dark:text-gray-400'
-      }`}
-      aria-label="Achievements"
-    >
-      <Trophy className="w-6 h-6" />
-      <span className="text-xs mt-1">Goals</span>
-    </button>
-  </div>
-  <div className="h-[env(safe-area-inset-bottom)]" />
+  <button
+    onClick={() => setActiveTab('achievements')}
+    className={`flex flex-col items-center p-2 ${
+      activeTab === 'achievements' ? 'text-blue-600' : 'text-gray-600 dark:text-gray-400'
+    }`}
+    aria-label="Achievements"
+  >
+    <Trophy className="w-6 h-6" />
+    <span className="text-xs mt-1">Goals</span>
+  </button>
+</div>
+<div className="h-[env(safe-area-inset-bottom)]" />
 </nav>
 
-      {/* Settings Modal */}
-      <Settings
-        isOpen={isSettingsOpen}
-        onClose={() => setIsSettingsOpen(false)}
-        settings={settings}
-        onSettingsChange={(newSettings) => setSettings(newSettings)}
-      />
+<Settings
+  isOpen={isSettingsOpen}
+  onClose={() => setIsSettingsOpen(false)}
+  settings={settings}
+  onSettingsChange={setSettings}
+/>
 
-      {/* Toast Notifications */}
-      <ToastContainer position="bottom-right" autoClose={3000} />
-    </div>
-  );
+<ToastContainer position="bottom-right" autoClose={3000} />
+</div>
+);
 };
 
 export default App;
