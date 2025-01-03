@@ -18,7 +18,7 @@ export default defineConfig({
         theme_color: '#4F46E5',
         icons: [
           {
-            src: '/icons/icon16.png',
+            src: '/icons/icon16.png',  
             sizes: '16x16',
             type: 'image/png'
           },
@@ -45,12 +45,12 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        main: resolve(__dirname, 'public/index.html') 
+        main: resolve(__dirname, 'public/index.html')  
       },
       output: {
-        entryFileNames: '[name].js',
-        chunkFileNames: '[name].js',
-        assetFileNames: '[name].[ext]',
+        entryFileNames: 'assets/[name].[hash].js',
+        chunkFileNames: 'assets/[name].[hash].js',
+        assetFileNames: 'assets/[name].[hash].[ext]',
       },
     },
     outDir: 'dist',

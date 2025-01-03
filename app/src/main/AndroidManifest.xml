@@ -140,8 +140,6 @@
                 <data android:scheme="https"
                     android:host="@string/hostName"
                 
-                    android:pathPrefix="/src/"
-                
                 />
             </intent-filter>
 

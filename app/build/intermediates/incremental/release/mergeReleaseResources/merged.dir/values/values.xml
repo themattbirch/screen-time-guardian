@@ -7,7 +7,7 @@
     <color name="browser_actions_divider_color">#1E000000</color>
     <color name="browser_actions_text_color">#DE000000</color>
     <color name="browser_actions_title_color">#646464</color>
-    <color name="colorPrimary">#FFFFFF</color>
+    <color name="colorPrimary">#4F46E5</color>
     <color name="colorPrimaryDark">#000000</color>
     <color name="navigationColor">#000000</color>
     <color name="navigationColorDark">#000000</color>
@@ -109,10 +109,10 @@
     <string name="fallback_menu_item_copy_link">Copy link</string>
     <string name="fallback_menu_item_open_in_browser">Open in browser</string>
     <string name="fallback_menu_item_share_link">Share link</string>
-    <string name="fullScopeUrl" translatable="false">https://screentimeguardian.com/src/</string>
+    <string name="fullScopeUrl" translatable="false">https://screentimeguardian.com/</string>
     <string name="generatorApp" translatable="false">bubblewrap-cli</string>
     <string name="hostName" translatable="false">screentimeguardian.com</string>
-    <string name="launchUrl" translatable="false">https://screentimeguardian.com/src</string>
+    <string name="launchUrl" translatable="false">https://screentimeguardian.com/</string>
     <string name="launcherName" translatable="false">ScreenTimer</string>
     <string name="manage_space_no_data_toast">This app holds no browsing data.</string>
     <string name="manage_space_not_supported_toast">This app\'s data is stored in %1$s.</string>
