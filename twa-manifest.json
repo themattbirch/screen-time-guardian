@@ -12,7 +12,7 @@
   "navigationDividerColorDark": "#000000",
   "backgroundColor": "#FFFFFF",
   "enableNotifications": true,
-  "startUrl": "/public",
+  "startUrl": "/",
   "iconUrl": "https://screentimeguardian.com/icons/icon512.png",
   "maskableIconUrl": "https://screentimeguardian.com/icons/icon512.png",
   "splashScreenFadeOutDuration": 300,

@@ -26,7 +26,7 @@
     <string name="fullScopeUrl" translatable="false">https://screentimeguardian.com/</string>
     <string name="generatorApp" translatable="false">bubblewrap-cli</string>
     <string name="hostName" translatable="false">screentimeguardian.com</string>
-    <string name="launchUrl" translatable="false">https://screentimeguardian.com/</string>
+    <string name="launchUrl" translatable="false">https://screentimeguardian.com/public</string>
     <string name="launcherName" translatable="false">ScreenTimer</string>
     <string name="orientation" translatable="false">default</string>
     <string name="providerAuthority" translatable="false">com.screentimeguardian.twa.fileprovider</string>
