@@ -1,5 +1,5 @@
 import React from 'react';
-import { X } from 'lucide-react';  // Add this import
+import { X } from 'lucide-react';
 import { AppSettings } from '../../types/app';
 import { achievements } from '../../utils/achievements';
 import { SoundSelector } from './SoundSelector';
@@ -45,7 +45,14 @@ export function Settings({ isOpen, onClose, settings, onSettingsChange }: Settin
             <select
               value={settings.timerMode}
               onChange={(e) => handleChange('timerMode', e.target.value)}
-              className="w-full p-3 bg-gray-900 dark:bg-gray-800 text-white rounded-lg border-0 focus:ring-2 focus:ring-blue-500"
+              className="
+                w-full p-3
+                bg-gray-50 dark:bg-gray-800
+                text-gray-800 dark:text-gray-100
+                border border-gray-300 dark:border-gray-700
+                rounded-lg
+                focus:ring-2 focus:ring-blue-500
+              "
             >
               <option value="focus">Focus (25 minutes)</option>
               <option value="shortBreak">Short Break (5 minutes)</option>
@@ -63,8 +70,15 @@ export function Settings({ isOpen, onClose, settings, onSettingsChange }: Settin
                 type="number"
                 value={settings.interval}
                 onChange={(e) => handleChange('interval', Number(e.target.value))}
-                className="w-full p-3 bg-gray-900 dark:bg-gray-800 text-white rounded-lg border-0 focus:ring-2 focus:ring-blue-500"
                 min={1}
+                className="
+                  w-full p-3
+                  bg-gray-50 dark:bg-gray-800
+                  text-gray-800 dark:text-gray-100
+                  border border-gray-300 dark:border-gray-700
+                  rounded-lg
+                  focus:ring-2 focus:ring-blue-500
+                "
               />
             </div>
           )}
@@ -80,7 +94,7 @@ export function Settings({ isOpen, onClose, settings, onSettingsChange }: Settin
               max="100"
               value={settings.soundVolume}
               onChange={(e) => handleChange('soundVolume', Number(e.target.value))}
-              className="w-full accent-blue-500"
+              className="w-full accent-blue-500 cursor-pointer"
             />
           </div>
 
@@ -90,7 +104,14 @@ export function Settings({ isOpen, onClose, settings, onSettingsChange }: Settin
               type="checkbox"
               checked={settings.soundEnabled}
               onChange={(e) => handleChange('soundEnabled', e.target.checked)}
-              className="w-5 h-5 rounded border-gray-300 text-blue-500 focus:ring-blue-500"
+              className="
+                w-5 h-5
+                border border-gray-300 dark:border-gray-600
+                rounded
+                text-blue-500
+                focus:ring-blue-500
+                cursor-pointer
+              "
             />
             <span className="text-base text-gray-900 dark:text-white">Enable Sounds</span>
           </label>
@@ -103,7 +124,14 @@ export function Settings({ isOpen, onClose, settings, onSettingsChange }: Settin
             <select
               value={settings.quoteCategory}
               onChange={(e) => handleChange('quoteCategory', e.target.value)}
-              className="w-full p-3 bg-gray-900 dark:bg-gray-800 text-white rounded-lg border-0 focus:ring-2 focus:ring-blue-500"
+              className="
+                w-full p-3
+                bg-gray-50 dark:bg-gray-800
+                text-gray-800 dark:text-gray-100
+                border border-gray-300 dark:border-gray-700
+                rounded-lg
+                focus:ring-2 focus:ring-blue-500
+              "
             >
               <option value="all">All</option>
               <option value="motivation">Motivation</option>
@@ -118,12 +146,19 @@ export function Settings({ isOpen, onClose, settings, onSettingsChange }: Settin
               type="checkbox"
               checked={settings.showQuotes}
               onChange={(e) => handleChange('showQuotes', e.target.checked)}
-              className="w-5 h-5 rounded border-gray-300 text-blue-500 focus:ring-blue-500"
+              className="
+                w-5 h-5
+                border border-gray-300 dark:border-gray-600
+                rounded
+                text-blue-500
+                focus:ring-blue-500
+                cursor-pointer
+              "
             />
             <span className="text-base text-gray-900 dark:text-white">Show Quotes</span>
           </label>
 
-          {/* Theme Selection */}
+          {/* Theme */}
           <div className="space-y-2">
             <label className="text-base font-medium text-gray-900 dark:text-white">
               Theme
@@ -131,7 +166,14 @@ export function Settings({ isOpen, onClose, settings, onSettingsChange }: Settin
             <select
               value={settings.theme}
               onChange={(e) => handleChange('theme', e.target.value)}
-              className="w-full p-3 bg-gray-900 dark:bg-gray-800 text-white rounded-lg border-0 focus:ring-2 focus:ring-blue-500"
+              className="
+                w-full p-3
+                bg-gray-50 dark:bg-gray-800
+                text-gray-800 dark:text-gray-100
+                border border-gray-300 dark:border-gray-700
+                rounded-lg
+                focus:ring-2 focus:ring-blue-500
+              "
             >
               <option value="light">Light</option>
               <option value="dark">Dark</option>
@@ -156,7 +198,6 @@ export function Settings({ isOpen, onClose, settings, onSettingsChange }: Settin
             View Achievements
           </button>
 
-          {/* Achievements List */}
           {showAchievements && (
             <div className="space-y-4 mt-4">
               <h2 className="text-lg font-bold text-gray-800 dark:text-gray-200">
@@ -164,9 +205,14 @@ export function Settings({ isOpen, onClose, settings, onSettingsChange }: Settin
               </h2>
               <div className="space-y-2">
                 {achievements.map((ach) => (
-                  <div 
-                    key={ach.id} 
-                    className="p-3 border rounded-lg dark:border-gray-600 dark:bg-gray-700 bg-gray-100 flex items-center justify-between"
+                  <div
+                    key={ach.id}
+                    className="
+                      p-3 border rounded-lg
+                      dark:border-gray-600 dark:bg-gray-700
+                      bg-gray-50 border-gray-300
+                      flex items-center justify-between
+                    "
                   >
                     <div>
                       <div className="font-semibold text-gray-700 dark:text-gray-200 flex items-center">
@@ -183,13 +229,9 @@ export function Settings({ isOpen, onClose, settings, onSettingsChange }: Settin
                       )}
                     </div>
                     {ach.unlockedAt ? (
-                      <span className="text-green-600 dark:text-green-400 font-bold">
-                        Unlocked
-                      </span>
+                      <span className="text-green-600 dark:text-green-400 font-bold">Unlocked</span>
                     ) : (
-                      <span className="text-gray-500 dark:text-gray-400">
-                        Locked
-                      </span>
+                      <span className="text-gray-500 dark:text-gray-400">Locked</span>
                     )}
                   </div>
                 ))}

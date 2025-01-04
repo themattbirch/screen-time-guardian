@@ -19,7 +19,7 @@ import {
   Moon
 } from 'lucide-react';
 
-// Helper function to get mode seconds
+// Helper function
 const getModeSeconds = (mode: AppSettings['timerMode'], interval?: number): number => {
   switch (mode) {
     case 'focus':
@@ -36,7 +36,6 @@ const getModeSeconds = (mode: AppSettings['timerMode'], interval?: number): numb
 };
 
 const App: React.FC = () => {
-  // States
   const [settings, setSettings] = useState<AppSettings>({
     interval: 15,
     soundEnabled: true,
@@ -67,11 +66,7 @@ const App: React.FC = () => {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [quoteChangeCounter, setQuoteChangeCounter] = useState(0);
 
-  // Handlers
-  const handleChange = (key: keyof AppSettings, value: any) => {
-    setSettings(prev => ({ ...prev, [key]: value }));
-  };
-
+  // Update achievements
   const updateAchievements = useCallback((action: string) => {
     setAchievements((prevAchievements) =>
       prevAchievements.map((ach) => {
@@ -82,7 +77,8 @@ const App: React.FC = () => {
               return {
                 ...ach,
                 progress: ach.progress + 1,
-                unlockedAt: ach.progress + 1 >= ach.target ? new Date().toISOString() : ach.unlockedAt,
+                unlockedAt:
+                  ach.progress + 1 >= ach.target ? new Date().toISOString() : ach.unlockedAt,
               };
             }
             break;
@@ -92,12 +88,20 @@ const App: React.FC = () => {
     );
   }, []);
 
+  // Timer complete handler
   const handleTimerComplete = useCallback(() => {
     if (settings.soundEnabled) {
       soundManager.setVolume(settings.soundVolume);
       soundManager.playSound(settings.selectedSound);
     }
 
+    // Haptic feedback – subtle vibration
+    // Some devices or browsers may not support vibrate
+    if ('vibrate' in navigator) {
+      navigator.vibrate(150); // Vibrate for 150ms
+    }
+
+    // Optional: Notification fallback
     if (Notification.permission === 'granted') {
       new Notification('Screen Time Guardian', { body: 'Time is up!' });
     } else {
@@ -116,6 +120,7 @@ const App: React.FC = () => {
     updateAchievements('completeSession');
   }, [settings.soundEnabled, settings.soundVolume, settings.selectedSound, updateAchievements]);
 
+  // Timer start/pause/resume handlers
   const handleStartTimer = useCallback(() => {
     const now = Date.now();
     const end = now + timerState.timeLeft * 1000;
@@ -153,11 +158,12 @@ const App: React.FC = () => {
     updateAchievements('resetSession');
   }, [settings.timerMode, settings.interval, updateAchievements]);
 
+  // Favorite quote
   const handleFavoriteQuote = (quote: Quote) => {
     toast.success(`Added "${quote.text}" to favorites!`);
   };
 
-  // Effects
+  // Timer countdown
   useEffect(() => {
     let intervalId: number | undefined;
     if (timerState.isActive && !timerState.isPaused && timerState.timeLeft > 0) {
@@ -176,6 +182,7 @@ const App: React.FC = () => {
     };
   }, [timerState.isActive, timerState.isPaused, timerState.timeLeft, handleTimerComplete]);
 
+  // Load from storage on mount
   useEffect(() => {
     async function loadData() {
       const storedSettings = await getStorageData(['appSettings']);
@@ -205,6 +212,7 @@ const App: React.FC = () => {
     loadData();
   }, []);
 
+  // Persist whenever changed
   useEffect(() => {
     setStorageData({ appSettings: settings });
   }, [settings]);
@@ -217,6 +225,7 @@ const App: React.FC = () => {
     setStorageData({ achievements });
   }, [achievements]);
 
+  // Theme toggling
   useEffect(() => {
     if (settings.theme === 'dark') {
       document.documentElement.classList.add('dark');
@@ -225,23 +234,32 @@ const App: React.FC = () => {
     }
   }, [settings.theme]);
 
+  // Notification permission
   useEffect(() => {
     if (settings.soundEnabled && Notification.permission !== 'granted') {
       Notification.requestPermission();
     }
   }, [settings.soundEnabled]);
 
+  // Toggle theme
+  const handleThemeToggle = () => {
+    setSettings((prev) => ({
+      ...prev,
+      theme: prev.theme === 'dark' ? 'light' : 'dark',
+    }));
+  };
+
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
       <main className="flex-1 overflow-y-auto px-4 pb-24 w-full max-w-md mx-auto">
-        {/* App Header */}
+        {/* Header */}
         <div className="sticky top-0 pt-6 pb-4 bg-gray-50 dark:bg-gray-900 z-10">
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-4">
               <button
-                onClick={() => handleChange('theme', settings.theme === 'dark' ? 'light' : 'dark')}
+                onClick={handleThemeToggle}
                 className="p-3 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-                aria-label={`Switch to ${settings.theme === 'dark' ? 'light' : 'dark'} mode`}
+                aria-label={`Switch theme`}
               >
                 {settings.theme === 'dark' ? (
                   <Sun className="w-6 h-6" />
@@ -253,7 +271,6 @@ const App: React.FC = () => {
                 Screen Time Guardian
               </h1>
             </div>
-
             <button
               onClick={() => setIsSettingsOpen(true)}
               className="p-3 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
@@ -264,6 +281,7 @@ const App: React.FC = () => {
           </div>
         </div>
 
+        {/* Main Content */}
         <div className="space-y-6">
           {activeTab === 'timer' && (
             <div className="space-y-6">
@@ -319,7 +337,9 @@ const App: React.FC = () => {
                   </div>
                   <div className="text-center">
                     <div className="text-2xl font-bold text-green-600">85%</div>
-                    <div className="text-sm text-gray-600 dark:text-gray-300">Completion Rate</div>
+                    <div className="text-sm text-gray-600 dark:text-gray-300">
+                      Completion Rate
+                    </div>
                   </div>
                 </div>
               </div>
@@ -345,8 +365,9 @@ const App: React.FC = () => {
                 {achievements.map((ach) => (
                   <div
                     key={ach.id}
-                    className={`bg-white dark:bg-gray-800 rounded-lg p-4 shadow flex items-center space-x-4 ${ach.unlockedAt ? 'border-2 border-green-500' : 'border border-gray-300 dark:border-gray-700'
-                      }`}
+                    className={`bg-white dark:bg-gray-800 rounded-lg p-4 shadow flex items-center space-x-4 ${
+                      ach.unlockedAt ? 'border-2 border-green-500' : 'border border-gray-300 dark:border-gray-700'
+                    }`}
                   >
                     <div className="bg-blue-100 dark:bg-blue-900 p-3 rounded-full">
                       <Trophy className="w-6 h-6 text-blue-600 dark:text-blue-300" />
@@ -373,12 +394,16 @@ const App: React.FC = () => {
         </div>
       </main>
 
+      {/* Bottom Nav */}
       <nav className="fixed bottom-0 left-0 right-0 bg-gray-100 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
         <div className="flex justify-around items-center h-16 max-w-md mx-auto">
           <button
             onClick={() => setActiveTab('timer')}
-            className={`flex flex-col items-center p-2 ${activeTab === 'timer' ? 'text-blue-600 dark:text-blue-400' : 'text-gray-600 dark:text-gray-400'
-              }`}
+            className={`flex flex-col items-center p-2 ${
+              activeTab === 'timer'
+                ? 'text-blue-600 dark:text-blue-400'
+                : 'text-gray-600 dark:text-gray-400'
+            }`}
             aria-label="Timer"
           >
             <TimerIcon className="w-6 h-6" />
@@ -387,8 +412,11 @@ const App: React.FC = () => {
 
           <button
             onClick={() => setActiveTab('stats')}
-            className={`flex flex-col items-center p-2 ${activeTab === 'stats' ? 'text-blue-600 dark:text-blue-400' : 'text-gray-600 dark:text-gray-400'
-              }`}
+            className={`flex flex-col items-center p-2 ${
+              activeTab === 'stats'
+                ? 'text-blue-600 dark:text-blue-400'
+                : 'text-gray-600 dark:text-gray-400'
+            }`}
             aria-label="Stats"
           >
             <BarChart className="w-6 h-6" />
@@ -397,8 +425,11 @@ const App: React.FC = () => {
 
           <button
             onClick={() => setActiveTab('quotes')}
-            className={`flex flex-col items-center p-2 ${activeTab === 'quotes' ? 'text-blue-600 dark:text-blue-400' : 'text-gray-600 dark:text-gray-400'
-              }`}
+            className={`flex flex-col items-center p-2 ${
+              activeTab === 'quotes'
+                ? 'text-blue-600 dark:text-blue-400'
+                : 'text-gray-600 dark:text-gray-400'
+            }`}
             aria-label="Quotes"
           >
             <QuoteIcon className="w-6 h-6" />
@@ -407,8 +438,11 @@ const App: React.FC = () => {
 
           <button
             onClick={() => setActiveTab('achievements')}
-            className={`flex flex-col items-center p-2 ${activeTab === 'achievements' ? 'text-blue-600 dark:text-blue-400' : 'text-gray-600 dark:text-gray-400'
-              }`}
+            className={`flex flex-col items-center p-2 ${
+              activeTab === 'achievements'
+                ? 'text-blue-600 dark:text-blue-400'
+                : 'text-gray-600 dark:text-gray-400'
+            }`}
             aria-label="Achievements"
           >
             <Trophy className="w-6 h-6" />
@@ -418,6 +452,7 @@ const App: React.FC = () => {
         <div className="h-[env(safe-area-inset-bottom)] bg-gray-100 dark:bg-gray-800" />
       </nav>
 
+      {/* Settings Modal */}
       <Settings
         isOpen={isSettingsOpen}
         onClose={() => setIsSettingsOpen(false)}
@@ -428,6 +463,6 @@ const App: React.FC = () => {
       <ToastContainer position="bottom-right" autoClose={3000} />
     </div>
   );
-}
-  
+};
+
 export default App;

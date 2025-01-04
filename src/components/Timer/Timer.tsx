@@ -31,10 +31,16 @@ export const Timer: React.FC<TimerProps> = ({
     }
   };
 
+  const statusLabel = () => {
+    if (timeLeft === 0) return 'Completed!';
+    if (isActive && !isPaused) return 'Running';
+    if (isPaused) return 'Paused';
+    return 'Ready';
+  };
+
   return (
     <div className="w-full max-w-xs mx-auto">
-      {/* Timer Circle */}
-      <div 
+      <div
         className={`
           aspect-square w-64 mx-auto
           rounded-full
@@ -52,35 +58,35 @@ export const Timer: React.FC<TimerProps> = ({
         tabIndex={0}
       >
         <div className="flex flex-col items-center">
-          {/* Mode Indicator */}
           <div className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">
-            {mode === 'focus' ? 'Focus Time' : 
-             mode === 'shortBreak' ? 'Short Break' : 
-             mode === 'longBreak' ? 'Long Break' : 
-             'Custom Timer'}
+            {mode === 'focus'
+              ? 'Focus Time'
+              : mode === 'shortBreak'
+              ? 'Short Break'
+              : mode === 'longBreak'
+              ? 'Long Break'
+              : 'Custom Timer'}
           </div>
-          
-          {/* Time Display */}
-          <div className={`
-            text-5xl md:text-6xl font-bold
-            text-gray-900 dark:text-white
-            transition-colors duration-300
-            ${isActive && !isPaused ? 'text-green-600 dark:text-green-400' : ''}
-            ${isPaused ? 'text-yellow-600 dark:text-yellow-400' : ''}
-          `}>
+
+          <div
+            className={`
+              text-5xl md:text-6xl font-bold
+              text-gray-900 dark:text-white
+              transition-colors duration-300
+              ${isActive && !isPaused ? 'text-green-600 dark:text-green-400' : ''}
+              ${isPaused ? 'text-yellow-600 dark:text-yellow-400' : ''}
+            `}
+          >
             {formatTime(timeLeft)}
           </div>
 
-          {/* Status Text */}
+          {/* Status label */}
           <div className="text-sm font-medium text-gray-500 dark:text-gray-400 mt-2">
-            {isActive && !isPaused ? 'Running' : 
-             isPaused ? 'Paused' : 
-             'Ready'}
+            {statusLabel()}
           </div>
         </div>
       </div>
 
-      {/* Control Buttons */}
       {!isShrunk && (
         <div className="flex justify-center gap-4 mt-8">
           {!isActive && !isPaused && (
@@ -145,7 +151,6 @@ export const Timer: React.FC<TimerProps> = ({
   );
 };
 
-// Helper function
 function formatTime(totalSeconds: number): string {
   const m = Math.floor(totalSeconds / 60).toString().padStart(2, '0');
   const s = (totalSeconds % 60).toString().padStart(2, '0');
