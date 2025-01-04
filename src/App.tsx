@@ -21,7 +21,7 @@ import {
   Moon
 } from 'lucide-react';
 
-// Helper function
+// Helper function to determine timer duration based on mode
 const getModeSeconds = (mode: AppSettings['timerMode'], interval?: number): number => {
   switch (mode) {
     case 'focus':
@@ -38,6 +38,7 @@ const getModeSeconds = (mode: AppSettings['timerMode'], interval?: number): numb
 };
 
 const App: React.FC = () => {
+  // State for application settings
   const [settings, setSettings] = useState<AppSettings>({
     interval: 15,
     soundEnabled: true,
@@ -52,6 +53,7 @@ const App: React.FC = () => {
     minimalMode: false,
   });
 
+  // State for timer
   const [timerState, setTimerState] = useState<TimerState>({
     isActive: false,
     isPaused: false,
@@ -63,12 +65,19 @@ const App: React.FC = () => {
     endTime: null,
   });
 
+  // State for achievements
   const [achievements, setAchievements] = useState<Achievement[]>(predefinedAchievements);
+
+  // State for active tab
   const [activeTab, setActiveTab] = useState<'timer' | 'stats' | 'quotes' | 'achievements'>('timer');
+
+  // State for settings modal
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+
+  // Counter to force quote change
   const [quoteChangeCounter, setQuoteChangeCounter] = useState(0);
 
-  // Update achievements
+  // Function to update achievements based on actions
   const updateAchievements = useCallback((action: string) => {
     setAchievements((prevAchievements) =>
       prevAchievements.map((ach) => {
@@ -90,7 +99,7 @@ const App: React.FC = () => {
     );
   }, []);
 
-  // Timer complete handler
+  // Handler for when the timer completes
   const handleTimerComplete = useCallback(() => {
     if (settings.soundEnabled) {
       soundManager.setVolume(settings.soundVolume);
@@ -98,18 +107,18 @@ const App: React.FC = () => {
     }
 
     // Haptic feedback – subtle vibration
-    // Some devices or browsers may not support vibrate
     if ('vibrate' in navigator) {
       navigator.vibrate(150); // Vibrate for 150ms
     }
 
-    // Optional: Notification fallback
+    // Notification fallback
     if (Notification.permission === 'granted') {
       new Notification('Screen Time Guardian', { body: 'Time is up!' });
     } else {
       toast.info('Time is up!');
     }
 
+    // Update timer state
     setTimerState((prev) => ({
       ...prev,
       isActive: false,
@@ -118,11 +127,14 @@ const App: React.FC = () => {
       isBlinking: true,
     }));
 
+    // Trigger quote change
     setQuoteChangeCounter((prev) => prev + 1);
+
+    // Update achievements
     updateAchievements('completeSession');
   }, [settings.soundEnabled, settings.soundVolume, settings.selectedSound, updateAchievements]);
 
-  // Timer start/pause/resume handlers
+  // Handlers for timer controls
   const handleStartTimer = useCallback(() => {
     const now = Date.now();
     const end = now + timerState.timeLeft * 1000;
@@ -160,12 +172,12 @@ const App: React.FC = () => {
     updateAchievements('resetSession');
   }, [settings.timerMode, settings.interval, updateAchievements]);
 
-  // Favorite quote
+  // Handler for favoriting a quote
   const handleFavoriteQuote = (quote: Quote) => {
     toast.success(`Added "${quote.text}" to favorites!`);
   };
 
-  // Timer countdown
+  // Timer countdown effect
   useEffect(() => {
     let intervalId: number | undefined;
     if (timerState.isActive && !timerState.isPaused && timerState.timeLeft > 0) {
@@ -184,7 +196,7 @@ const App: React.FC = () => {
     };
   }, [timerState.isActive, timerState.isPaused, timerState.timeLeft, handleTimerComplete]);
 
-  // Load from storage on mount
+  // Load data from storage on mount
   useEffect(() => {
     async function loadData() {
       const storedSettings = await getStorageData(['appSettings']);
@@ -214,20 +226,22 @@ const App: React.FC = () => {
     loadData();
   }, []);
 
-  // Persist whenever changed
+  // Persist settings to storage
   useEffect(() => {
     setStorageData({ appSettings: settings });
   }, [settings]);
 
+  // Persist timer state to storage
   useEffect(() => {
     setStorageData({ timerState });
   }, [timerState]);
 
+  // Persist achievements to storage
   useEffect(() => {
     setStorageData({ achievements });
   }, [achievements]);
 
-  // Theme toggling
+  // Theme toggling effect
   useEffect(() => {
     if (settings.theme === 'dark') {
       document.documentElement.classList.add('dark');
@@ -236,14 +250,14 @@ const App: React.FC = () => {
     }
   }, [settings.theme]);
 
-  // Notification permission
+  // Notification permission effect
   useEffect(() => {
     if (settings.soundEnabled && Notification.permission !== 'granted') {
       Notification.requestPermission();
     }
   }, [settings.soundEnabled]);
 
-  // Toggle theme
+  // Handler to toggle theme
   const handleThemeToggle = () => {
     setSettings((prev) => ({
       ...prev,
@@ -285,9 +299,10 @@ const App: React.FC = () => {
 
         {/* Main Content */}
         <div className="space-y-6">
+          {/* Timer Tab */}
           {activeTab === 'timer' && (
             <div className="space-y-6">
-              {/* Timer Circle + built-in Start/Pause/Resume button (from Timer.tsx) */}
+              {/* Timer Component */}
               <Timer
                 timeLeft={timerState.timeLeft}
                 isActive={timerState.isActive}
@@ -300,6 +315,7 @@ const App: React.FC = () => {
                 isBlinking={timerState.isBlinking}
               />
 
+              {/* Timer Controls */}
               <div className="flex justify-center space-x-4">
                 {timerState.isActive && !timerState.isPaused ? (
                   <button
@@ -329,9 +345,30 @@ const App: React.FC = () => {
             </div>
           )}
 
-          {/* Quotes Below Reset Button */}
-          {settings.showQuotes && (
-            <div className="mt-6">
+          {/* Stats Tab */}
+          {activeTab === 'stats' && (
+            <div className="space-y-4">
+              <h2 className="text-xl font-semibold dark:text-white">Your Progress</h2>
+              <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-blue-600">12</div>
+                    <div className="text-sm text-gray-600 dark:text-gray-300">Sessions Today</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-green-600">85%</div>
+                    <div className="text-sm text-gray-600 dark:text-gray-300">
+                      Completion Rate
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Quotes Tab */}
+          {activeTab === 'quotes' && settings.showQuotes && (
+            <div className="space-y-4">
               <QuoteComponent
                 changeInterval={settings.quoteChangeInterval}
                 category={settings.quoteCategory}
@@ -340,76 +377,45 @@ const App: React.FC = () => {
               />
             </div>
           )}
-        </div>
 
-        {activeTab === 'stats' && (
-          <div className="space-y-4">
-            <h2 className="text-xl font-semibold dark:text-white">Your Progress</h2>
-            <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-blue-600">12</div>
-                  <div className="text-sm text-gray-600 dark:text-gray-300">Sessions Today</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-green-600">85%</div>
-                  <div className="text-sm text-gray-600 dark:text-gray-300">
-                    Completion Rate
+          {/* Achievements Tab */}
+          {activeTab === 'achievements' && (
+            <div className="space-y-4">
+              <h2 className="text-xl font-semibold dark:text-white">Achievements</h2>
+              <div className="space-y-3">
+                {achievements.map((ach) => (
+                  <div
+                    key={ach.id}
+                    className={`bg-white dark:bg-gray-800 rounded-lg p-4 shadow flex items-center space-x-4 ${
+                      ach.unlockedAt ? 'border-2 border-green-500' : 'border border-gray-300 dark:border-gray-700'
+                    }`}
+                  >
+                    <div className="bg-blue-100 dark:bg-blue-900 p-3 rounded-full">
+                      <Trophy className="w-6 h-6 text-blue-600 dark:text-blue-300" />
+                    </div>
+                    <div>
+                      <h3 className="font-medium dark:text-white">{ach.name}</h3>
+                      <p className="text-sm text-gray-600 dark:text-gray-300">{ach.description}</p>
+                      {ach.progress < ach.target && (
+                        <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                          Progress: {ach.progress}/{ach.target}
+                        </div>
+                      )}
+                      {ach.unlockedAt && (
+                        <div className="text-xs text-green-500 dark:text-green-400 mt-1">
+                          Unlocked on {new Date(ach.unlockedAt).toLocaleDateString()}
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
+                ))}
               </div>
             </div>
-          </div>
-        )}
-
-        {activeTab === 'quotes' && settings.showQuotes && (
-          <div className="space-y-4">
-            <h2 className="text-xl font-semibold dark:text-white">Daily Quote</h2>
-            <QuoteComponent
-              changeInterval={settings.quoteChangeInterval}
-              category={settings.quoteCategory}
-              forceChange={quoteChangeCounter}
-              onFavorite={handleFavoriteQuote}
-            />
-          </div>
-        )}
-
-        {activeTab === 'achievements' && (
-          <div className="space-y-4">
-            <h2 className="text-xl font-semibold dark:text-white">Achievements</h2>
-            <div className="space-y-3">
-              {achievements.map((ach) => (
-                <div
-                  key={ach.id}
-                  className={`bg-white dark:bg-gray-800 rounded-lg p-4 shadow flex items-center space-x-4 ${
-                    ach.unlockedAt ? 'border-2 border-green-500' : 'border border-gray-300 dark:border-gray-700'
-                  }`}
-                >
-                  <div className="bg-blue-100 dark:bg-blue-900 p-3 rounded-full">
-                    <Trophy className="w-6 h-6 text-blue-600 dark:text-blue-300" />
-                  </div>
-                  <div>
-                    <h3 className="font-medium dark:text-white">{ach.name}</h3>
-                    <p className="text-sm text-gray-600 dark:text-gray-300">{ach.description}</p>
-                    {ach.progress < ach.target && (
-                      <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                        Progress: {ach.progress}/{ach.target}
-                      </div>
-                    )}
-                    {ach.unlockedAt && (
-                      <div className="text-xs text-green-500 dark:text-green-400 mt-1">
-                        Unlocked on {new Date(ach.unlockedAt).toLocaleDateString()}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+          )}
+        </div>
       </main>
 
-      {/* Bottom Nav */}
+      {/* Bottom Navigation */}
       <nav className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
         <div className="flex justify-around items-center h-16 max-w-md mx-auto">
           <button
@@ -476,6 +482,7 @@ const App: React.FC = () => {
         onSettingsChange={setSettings}
       />
 
+      {/* Toast Notifications */}
       <ToastContainer position="bottom-right" autoClose={3000} />
     </div>
   );
