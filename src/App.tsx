@@ -284,45 +284,47 @@ const App: React.FC = () => {
         {/* Main Content */}
         <div className="space-y-6">
           {activeTab === 'timer' && (
-  <div className="space-y-6">
-    {/* Timer Circle + built-in Start/Pause/Resume button (from Timer.tsx) */}
-    <Timer
-      timeLeft={timerState.timeLeft}
-      isActive={timerState.isActive}
-      isPaused={timerState.isPaused}
-      mode={timerState.mode}
-      onStart={timerState.isPaused ? handleResumeTimer : handleStartTimer}
-      onStop={handlePauseTimer}
-      onComplete={handleTimerComplete}
-      isShrunk={false}
-      isBlinking={timerState.isBlinking}
-    />
+            <div className="space-y-6">
+              <Timer
+                timeLeft={timerState.timeLeft}
+                isActive={timerState.isActive}
+                isPaused={timerState.isPaused}
+                mode={timerState.mode}
+                onStart={timerState.isPaused ? handleResumeTimer : handleStartTimer}
+                onStop={handlePauseTimer}
+                onComplete={handleTimerComplete}
+                isShrunk={false}
+                isBlinking={timerState.isBlinking}
+              />
 
-    {/* Centered Reset Button */}
-    <div className="flex justify-center">
-      <button
-        onClick={handleResetTimer}
-        className="px-6 py-2 bg-gray-500 text-white rounded-full shadow hover:bg-gray-600 transition"
-        aria-label="Reset Timer"
-      >
-        Reset
-      </button>
-    </div>
-
-    {/* Quotes Below Reset Button */}
-    {settings.showQuotes && (
-      <div className="mt-6">
-        <QuoteComponent
-          changeInterval={settings.quoteChangeInterval}
-          category={settings.quoteCategory}
-          forceChange={quoteChangeCounter}
-          onFavorite={handleFavoriteQuote}
-        />
-      </div>
-    )}
-  </div>
-)}
-
+              <div className="flex justify-center space-x-4">
+                {timerState.isActive && !timerState.isPaused ? (
+                  <button
+                    onClick={handlePauseTimer}
+                    className="px-6 py-2 bg-red-500 text-white rounded-full shadow hover:bg-red-600 transition"
+                    aria-label="Pause Timer"
+                  >
+                    Pause
+                  </button>
+                ) : (
+                  <button
+                    onClick={handleStartTimer}
+                    className="px-6 py-2 bg-green-600 text-white rounded-full shadow hover:bg-green-700 transition"
+                    aria-label="Start Timer"
+                  >
+                    Start
+                  </button>
+                )}
+                <button
+                  onClick={handleResetTimer}
+                  className="px-6 py-2 bg-gray-500 text-white rounded-full shadow hover:bg-gray-600 transition"
+                  aria-label="Reset Timer"
+                >
+                  Reset
+                </button>
+              </div>
+            </div>
+          )}
 
           {activeTab === 'stats' && (
             <div className="space-y-4">
