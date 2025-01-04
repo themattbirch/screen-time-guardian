@@ -323,6 +323,7 @@ const App: React.FC = () => {
   </div>
 )}
 
+
           {activeTab === 'stats' && (
             <div className="space-y-4">
               <h2 className="text-xl font-semibold dark:text-white">Your Progress</h2>
@@ -392,28 +393,62 @@ const App: React.FC = () => {
       </main>
 
       {/* Bottom Nav */}
-     <nav className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
-  <div className="flex justify-around items-center h-16 max-w-md mx-auto">
-    <button
-      onClick={() => setActiveTab('timer')}
-      className={`flex flex-col items-center p-2 ${
-        activeTab === 'timer'
-          ? 'text-blue-600 dark:text-blue-400'
-          : 'text-gray-600 dark:text-gray-400'
-      }`}
-      aria-label="Timer"
-    >
-      <TimerIcon className="w-6 h-6" />
-      <span className="text-xs mt-1 font-medium">Timer</span>
-    </button>
+      <nav className="fixed bottom-0 left-0 right-0 bg-gray-100 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
+        <div className="flex justify-around items-center h-16 max-w-md mx-auto">
+          <button
+            onClick={() => setActiveTab('timer')}
+            className={`flex flex-col items-center p-2 ${
+              activeTab === 'timer'
+                ? 'text-blue-600 dark:text-blue-400'
+                : 'text-gray-600 dark:text-gray-400'
+            }`}
+            aria-label="Timer"
+          >
+            <TimerIcon className="w-6 h-6" />
+            <span className="text-xs mt-1 font-medium">Timer</span>
+          </button>
 
-    {/* ... Stats, Quotes, Achievements buttons omitted for brevity ... */}
-    
-  </div>
-  {/* Safe area inset */}
-  <div className="h-[env(safe-area-inset-bottom)] bg-white dark:bg-gray-800" />
-</nav>
+          <button
+            onClick={() => setActiveTab('stats')}
+            className={`flex flex-col items-center p-2 ${
+              activeTab === 'stats'
+                ? 'text-blue-600 dark:text-blue-400'
+                : 'text-gray-600 dark:text-gray-400'
+            }`}
+            aria-label="Stats"
+          >
+            <BarChart className="w-6 h-6" />
+            <span className="text-xs mt-1">Stats</span>
+          </button>
 
+          <button
+            onClick={() => setActiveTab('quotes')}
+            className={`flex flex-col items-center p-2 ${
+              activeTab === 'quotes'
+                ? 'text-blue-600 dark:text-blue-400'
+                : 'text-gray-600 dark:text-gray-400'
+            }`}
+            aria-label="Quotes"
+          >
+            <QuoteIcon className="w-6 h-6" />
+            <span className="text-xs mt-1">Quotes</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('achievements')}
+            className={`flex flex-col items-center p-2 ${
+              activeTab === 'achievements'
+                ? 'text-blue-600 dark:text-blue-400'
+                : 'text-gray-600 dark:text-gray-400'
+            }`}
+            aria-label="Achievements"
+          >
+            <Trophy className="w-6 h-6" />
+            <span className="text-xs mt-1">Goals</span>
+          </button>
+        </div>
+        <div className="h-[env(safe-area-inset-bottom)] bg-gray-100 dark:bg-gray-800" />
+      </nav>
 
       {/* Settings Modal */}
       <Settings
