@@ -31,7 +31,7 @@ export function Settings({ isOpen, onClose, settings, onSettingsChange }: Settin
             className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
             aria-label="Close Settings"
           >
-            <X className="w-6 h-6 text-gray-500 dark:text-gray-400" />
+            <X className="w-6 h-6 text-gray-300 dark:text-gray-400" />
           </button>
         </div>
 
