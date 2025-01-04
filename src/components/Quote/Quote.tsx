@@ -130,7 +130,7 @@ export const Quote: React.FC<QuoteProps> = ({
       {onFavorite && (
         <button
           onClick={() => onFavorite(currentQuote)}
-          className="mt-2 px-3 py-1 bg-gray-300 dark:bg-gray-600 text-sm rounded hover:bg-gray-300 dark:hover:bg-gray-500 transition"
+          className="mt-2 px-3 py-1 bg-gray-400 dark:bg-gray-600 text-sm rounded hover:bg-gray-300 dark:hover:bg-gray-500 transition"
         >
           Favorite
         </button>
