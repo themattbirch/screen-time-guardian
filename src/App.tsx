@@ -21,7 +21,7 @@ import {
   Moon
 } from 'lucide-react';
 
-// Helper function to get timer duration.
+// Helper function to determine timer duration based on mode
 const getModeSeconds = (mode: AppSettings['timerMode'], interval?: number): number => {
   switch (mode) {
     case 'focus':
@@ -106,7 +106,7 @@ const App: React.FC = () => {
     }
     // Haptic feedback if available
     if ('vibrate' in navigator) {
-      navigator.vibrate(150);
+      navigator.vibrate(150); // Vibrate for 150ms
     }
     // Notification fallback
     if (Notification.permission === 'granted') {
@@ -114,7 +114,7 @@ const App: React.FC = () => {
     } else {
       toast.info('Time is up!');
     }
-    // Timer state
+    // Update timer state
     setTimerState((prev) => ({
       ...prev,
       isActive: false,
@@ -122,13 +122,39 @@ const App: React.FC = () => {
       timeLeft: 0,
       isBlinking: true,
     }));
-    // Force a quote refresh
+    // Trigger quote change
     setQuoteChangeCounter((prev) => prev + 1);
-    // Achievements
+    // Update achievements
     updateAchievements('completeSession');
   }, [settings, updateAchievements]);
 
-  // Just a helper if we want to reset from the Timer tab
+  // Handler for starting the timer
+  const handleStartTimer = useCallback(() => {
+    const now = Date.now();
+    const end = now + timerState.timeLeft * 1000;
+    setTimerState((prev) => ({
+      ...prev,
+      isActive: true,
+      isPaused: false,
+      startTime: now,
+      endTime: end,
+    }));
+    updateAchievements('startSession');
+  }, [timerState.timeLeft, updateAchievements]);
+
+  // Handler for pausing the timer
+  const handlePauseTimer = useCallback(() => {
+    setTimerState((prev) => ({ ...prev, isPaused: true }));
+    updateAchievements('pauseSession');
+  }, [updateAchievements]);
+
+  // Handler for resuming the timer
+  const handleResumeTimer = useCallback(() => {
+    setTimerState((prev) => ({ ...prev, isPaused: false }));
+    updateAchievements('resumeSession');
+  }, [updateAchievements]);
+
+  // Handler for resetting the timer
   const handleResetTimer = useCallback(() => {
     setTimerState({
       isActive: false,
@@ -141,7 +167,7 @@ const App: React.FC = () => {
       endTime: null,
     });
     updateAchievements('resetSession');
-  }, [settings, updateAchievements]);
+  }, [settings.timerMode, settings.interval, updateAchievements]);
 
   // -------------------
   // Favorite quote
@@ -154,7 +180,7 @@ const App: React.FC = () => {
   // -------------------
   // Effects: Timer countdown, load from storage, theme
   // -------------------
-    useEffect(() => {
+  useEffect(() => {
     let intervalId: NodeJS.Timeout | undefined;
     if (timerState.isActive && !timerState.isPaused && timerState.timeLeft > 0) {
       intervalId = setInterval(() => {
@@ -172,7 +198,7 @@ const App: React.FC = () => {
     };
   }, [timerState.isActive, timerState.isPaused, timerState.timeLeft, handleTimerComplete]);
 
-  // Load from storage on mount
+  // Load data from storage on mount
   useEffect(() => {
     async function loadData() {
       const storedSettings = await getStorageData(['appSettings']);
@@ -209,20 +235,22 @@ const App: React.FC = () => {
     loadData();
   }, []);
 
-  // Persist changes
+  // Persist settings to storage
   useEffect(() => {
     setStorageData({ appSettings: settings });
   }, [settings]);
 
+  // Persist timer state to storage
   useEffect(() => {
     setStorageData({ timerState });
   }, [timerState]);
 
+  // Persist achievements to storage
   useEffect(() => {
     setStorageData({ achievements });
   }, [achievements]);
 
-  // Theme handling
+  // Theme toggling effect
   useEffect(() => {
     if (settings.theme === 'dark') {
       document.documentElement.classList.add('dark');
@@ -238,6 +266,7 @@ const App: React.FC = () => {
     }
   }, [settings.soundEnabled]);
 
+  // Handler to toggle theme
   const handleThemeToggle = () => {
     setSettings((prev) => ({
       ...prev,
@@ -281,39 +310,41 @@ const App: React.FC = () => {
 
         {/* Tabs Content */}
         <div className="space-y-6">
+          {/* Timer Tab */}
           {activeTab === 'timer' && (
             <div className="space-y-6">
-              {/* Timer w/ single set of buttons inside Timer.tsx */}
+              {/* Timer Component */}
               <Timer
                 timeLeft={timerState.timeLeft}
                 isActive={timerState.isActive}
                 isPaused={timerState.isPaused}
                 mode={timerState.mode}
-                onStart={() => {
-                  // This triggers Start or Resume inside Timer
-                  const now = Date.now();
-                  const end = now + timerState.timeLeft * 1000;
-                  setTimerState((prev) => ({
-                    ...prev,
-                    isActive: true,
-                    isPaused: false,
-                    startTime: now,
-                    endTime: end,
-                  }));
-                  updateAchievements('startSession');
-                }}
-                onStop={() => {
-                  // This triggers Pause inside Timer
-                  setTimerState((prev) => ({ ...prev, isPaused: true }));
-                  updateAchievements('pauseSession');
-                }}
+                onStart={timerState.isPaused ? handleResumeTimer : handleStartTimer}
+                onStop={handlePauseTimer}
                 onComplete={handleTimerComplete}
                 isShrunk={false}
                 isBlinking={timerState.isBlinking}
               />
 
-              {/* Reset button, or any other Timer control if you want */}
-              <div className="flex justify-center">
+              {/* Timer Controls */}
+              <div className="flex justify-center space-x-4">
+                {timerState.isActive && !timerState.isPaused ? (
+                  <button
+                    onClick={handlePauseTimer}
+                    className="px-6 py-2 bg-red-500 text-white rounded-full shadow hover:bg-red-600 transition"
+                    aria-label="Pause Timer"
+                  >
+                    Pause
+                  </button>
+                ) : (
+                  <button
+                    onClick={handleStartTimer}
+                    className="px-6 py-2 bg-green-600 text-white rounded-full shadow hover:bg-green-700 transition"
+                    aria-label="Start Timer"
+                  >
+                    Start
+                  </button>
+                )}
                 <button
                   onClick={handleResetTimer}
                   className="px-6 py-2 bg-gray-500 text-white rounded-full shadow hover:bg-gray-600 transition"
@@ -324,7 +355,7 @@ const App: React.FC = () => {
               </div>
 
               {/* Show quotes under the Reset button if showQuotes = true */}
-              {settings.showQuotes && (
+              {settings.showQuotes && activeTab === 'timer' && (
                 <div className="mt-4">
                   <QuoteComponent
                     changeInterval={settings.quoteChangeInterval}
@@ -337,6 +368,7 @@ const App: React.FC = () => {
             </div>
           )}
 
+          {/* Stats Tab */}
           {activeTab === 'stats' && (
             <div className="space-y-4">
               <h2 className="text-xl font-semibold dark:text-white">Your Progress</h2>
@@ -357,6 +389,7 @@ const App: React.FC = () => {
             </div>
           )}
 
+          {/* Quotes Tab */}
           {activeTab === 'quotes' && settings.showQuotes && (
             <div className="space-y-4">
               <h2 className="text-xl font-semibold dark:text-white">Daily Quote</h2>
@@ -369,6 +402,7 @@ const App: React.FC = () => {
             </div>
           )}
 
+          {/* Achievements Tab */}
           {activeTab === 'achievements' && (
             <div className="space-y-4">
               <h2 className="text-xl font-semibold dark:text-white">Achievements</h2>
@@ -407,8 +441,8 @@ const App: React.FC = () => {
         </div>
       </main>
 
-      {/* Bottom Nav */}
-      <nav 
+      {/* Bottom Navigation */}
+      <nav
         className="
           fixed bottom-0 left-0 right-0 
           bg-white dark:bg-gray-800
@@ -480,6 +514,7 @@ const App: React.FC = () => {
         onSettingsChange={setSettings}
       />
 
+      {/* Toast Notifications */}
       <ToastContainer position="bottom-right" autoClose={3000} />
     </div>
   );
