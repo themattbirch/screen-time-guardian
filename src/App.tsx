@@ -1,3 +1,5 @@
+// App.tsx
+
 import React, { useState, useEffect, useCallback } from 'react';
 import './index.css';
 import { ToastContainer, toast } from 'react-toastify';
@@ -285,6 +287,7 @@ const App: React.FC = () => {
         <div className="space-y-6">
           {activeTab === 'timer' && (
             <div className="space-y-6">
+              {/* Timer Circle + built-in Start/Pause/Resume button (from Timer.tsx) */}
               <Timer
                 timeLeft={timerState.timeLeft}
                 isActive={timerState.isActive}
@@ -326,29 +329,9 @@ const App: React.FC = () => {
             </div>
           )}
 
-          {activeTab === 'stats' && (
-            <div className="space-y-4">
-              <h2 className="text-xl font-semibold dark:text-white">Your Progress</h2>
-              <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-blue-600">12</div>
-                    <div className="text-sm text-gray-600 dark:text-gray-300">Sessions Today</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-green-600">85%</div>
-                    <div className="text-sm text-gray-600 dark:text-gray-300">
-                      Completion Rate
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {activeTab === 'quotes' && settings.showQuotes && (
-            <div className="space-y-4">
-              <h2 className="text-xl font-semibold dark:text-white">Daily Quote</h2>
+          {/* Quotes Below Reset Button */}
+          {settings.showQuotes && (
+            <div className="mt-6">
               <QuoteComponent
                 changeInterval={settings.quoteChangeInterval}
                 category={settings.quoteCategory}
@@ -357,45 +340,77 @@ const App: React.FC = () => {
               />
             </div>
           )}
+        </div>
 
-          {activeTab === 'achievements' && (
-            <div className="space-y-4">
-              <h2 className="text-xl font-semibold dark:text-white">Achievements</h2>
-              <div className="space-y-3">
-                {achievements.map((ach) => (
-                  <div
-                    key={ach.id}
-                    className={`bg-white dark:bg-gray-800 rounded-lg p-4 shadow flex items-center space-x-4 ${
-                      ach.unlockedAt ? 'border-2 border-green-500' : 'border border-gray-300 dark:border-gray-700'
-                    }`}
-                  >
-                    <div className="bg-blue-100 dark:bg-blue-900 p-3 rounded-full">
-                      <Trophy className="w-6 h-6 text-blue-600 dark:text-blue-300" />
-                    </div>
-                    <div>
-                      <h3 className="font-medium dark:text-white">{ach.name}</h3>
-                      <p className="text-sm text-gray-600 dark:text-gray-300">{ach.description}</p>
-                      {ach.progress < ach.target && (
-                        <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                          Progress: {ach.progress}/{ach.target}
-                        </div>
-                      )}
-                      {ach.unlockedAt && (
-                        <div className="text-xs text-green-500 dark:text-green-400 mt-1">
-                          Unlocked on {new Date(ach.unlockedAt).toLocaleDateString()}
-                        </div>
-                      )}
-                    </div>
+        {activeTab === 'stats' && (
+          <div className="space-y-4">
+            <h2 className="text-xl font-semibold dark:text-white">Your Progress</h2>
+            <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-blue-600">12</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-300">Sessions Today</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-green-600">85%</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-300">
+                    Completion Rate
                   </div>
-                ))}
+                </div>
               </div>
             </div>
-          )}
-        </div>
+          </div>
+        )}
+
+        {activeTab === 'quotes' && settings.showQuotes && (
+          <div className="space-y-4">
+            <h2 className="text-xl font-semibold dark:text-white">Daily Quote</h2>
+            <QuoteComponent
+              changeInterval={settings.quoteChangeInterval}
+              category={settings.quoteCategory}
+              forceChange={quoteChangeCounter}
+              onFavorite={handleFavoriteQuote}
+            />
+          </div>
+        )}
+
+        {activeTab === 'achievements' && (
+          <div className="space-y-4">
+            <h2 className="text-xl font-semibold dark:text-white">Achievements</h2>
+            <div className="space-y-3">
+              {achievements.map((ach) => (
+                <div
+                  key={ach.id}
+                  className={`bg-white dark:bg-gray-800 rounded-lg p-4 shadow flex items-center space-x-4 ${
+                    ach.unlockedAt ? 'border-2 border-green-500' : 'border border-gray-300 dark:border-gray-700'
+                  }`}
+                >
+                  <div className="bg-blue-100 dark:bg-blue-900 p-3 rounded-full">
+                    <Trophy className="w-6 h-6 text-blue-600 dark:text-blue-300" />
+                  </div>
+                  <div>
+                    <h3 className="font-medium dark:text-white">{ach.name}</h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-300">{ach.description}</p>
+                    {ach.progress < ach.target && (
+                      <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                        Progress: {ach.progress}/{ach.target}
+                      </div>
+                    )}
+                    {ach.unlockedAt && (
+                      <div className="text-xs text-green-500 dark:text-green-400 mt-1">
+                        Unlocked on {new Date(ach.unlockedAt).toLocaleDateString()}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </main>
 
       {/* Bottom Nav */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-gray-100 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
+      <nav className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
         <div className="flex justify-around items-center h-16 max-w-md mx-auto">
           <button
             onClick={() => setActiveTab('timer')}
@@ -449,7 +464,8 @@ const App: React.FC = () => {
             <span className="text-xs mt-1">Goals</span>
           </button>
         </div>
-        <div className="h-[env(safe-area-inset-bottom)] bg-gray-100 dark:bg-gray-800" />
+        {/* Safe area inset */}
+        <div className="h-[env(safe-area-inset-bottom)] bg-white dark:bg-gray-800" />
       </nav>
 
       {/* Settings Modal */}
