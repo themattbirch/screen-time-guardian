@@ -44,6 +44,8 @@ export function Settings({
           </button>
         </div>
 
+        console.log("Settings isOpen:", isOpen);
+
         {/* Settings Content */}
         <div className="p-4 space-y-6">
           {/* Timer Mode */}
