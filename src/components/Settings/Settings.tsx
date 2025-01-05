@@ -1,5 +1,3 @@
-// src/components/Settings/Settings.tsx
-
 import React from 'react';
 import { X } from 'lucide-react';
 import { AppSettings, Achievement } from '../../types/app';
