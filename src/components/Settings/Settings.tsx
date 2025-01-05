@@ -1,4 +1,4 @@
-// Settings.tsx
+// src/components/Settings/Settings.tsx
 
 import React from 'react';
 import { X } from 'lucide-react';
@@ -203,7 +203,7 @@ export function Settings({
         {/* Footer */}
         <div className="p-4 border-t border-gray-200 dark:border-gray-800">
           <button
-            onClick={() => setShowAchievements(!showAchievements)}
+            onClick={() => setShowAchievements((prev) => !prev)}
             className="w-full py-3 px-4 bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
           >
             {showAchievements ? 'Hide Achievements' : 'View Achievements'}
