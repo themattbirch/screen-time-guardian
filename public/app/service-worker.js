@@ -1,11 +1,9 @@
 /* public/service-worker.js */
-
 const CACHE_NAME = "screen-time-guardian-v2";
 
-// Add '/offline.html' to your precache list
 const PRECACHE_URLS = [
-  "/app",
-  "/index.html",
+  "/app", // Your SPA route
+  "/index.html", // The root index
   "/offline.html",
   "/manifest.webmanifest",
   "/icons/icon16.png",
@@ -14,8 +12,6 @@ const PRECACHE_URLS = [
   "/icons/icon192.png",
   "/icons/icon512.png",
 ];
-
-// The path to your offline fallback
 const OFFLINE_FALLBACK_URL = "/offline.html";
 
 self.addEventListener("install", (event) => {
@@ -59,7 +55,6 @@ self.addEventListener("fetch", (event) => {
         }
         return networkResponse;
       } catch (err) {
-        // for navigations, return offline fallback
         if (request.mode === "navigate") {
           const fallback = await caches.match(OFFLINE_FALLBACK_URL);
           return fallback || new Response("Offline", { status: 503 });

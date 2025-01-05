@@ -1,6 +1,8 @@
 {
   "rewrites": [
-        {
+    {
+      "handle": "filesystem"
+    },    {
       "source": "/app",
       "destination": "/public/index.html"
     },
@@ -24,7 +26,6 @@
       "source": "/icons/:path*",
       "destination": "/icons/:path*"
     }
-    
   ],
   "headers": [
     {
@@ -45,7 +46,6 @@
         }
       ]
     },
-    
     {
       "source": "/icons/:path*",
       "headers": [
