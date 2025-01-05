@@ -6,18 +6,20 @@ import App from './App';
 import './index.css';
 
 // src/main.tsx
+// main.tsx
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker
       .register('/app/service-worker.js', { scope: '/app/' })
-      .then((reg) => {
-        console.log('SW registered, scope:', reg.scope);
+      .then((registration) => {
+        console.log('Service Worker registered with scope:', registration.scope);
       })
       .catch((err) => {
-        console.error('SW registration failed:', err);
+        console.error('Service Worker registration failed:', err);
       });
   });
 }
+
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
