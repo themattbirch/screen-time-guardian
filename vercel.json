@@ -1,5 +1,17 @@
 {
   "rewrites": [
+        {
+      "source": "/app",
+      "destination": "/public/index.html"
+    },
+    {
+      "source": "/app/:path*",
+      "destination": "/public/index.html"
+    },
+    {
+      "source": "/",
+      "destination": "/index.html"
+    },
     {
       "source": "/.well-known/assetlinks.json",
       "destination": "/public/.well-known/assetlinks.json"
@@ -11,23 +23,8 @@
     {
       "source": "/icons/:path*",
       "destination": "/icons/:path*"
-    },
-    {
-      "source": "/app",
-      "destination": "/public/index.html"
-    },
-    {
-      "source": "/app/:path*",
-      "destination": "/public/index.html"
-    },
-     {
-      "source": "/app/service-worker.js",
-      "destination": "/app/service-worker.js"
-    },
-    {
-      "source": "/",
-      "destination": "/index.html"
     }
+    
   ],
   "headers": [
     {
@@ -36,15 +33,6 @@
         {
           "key": "Content-Type",
           "value": "application/json"
-        }
-      ]
-    },
-    {
-      "source": "/app/service-worker.js",
-      "headers": [
-        {
-          "key": "Content-Type",
-          "value": "application/javascript; charset=utf-8"
         }
       ]
     },
