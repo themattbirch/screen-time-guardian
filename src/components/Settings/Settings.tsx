@@ -22,12 +22,13 @@ export function Settings({
   setAchievements,
 }: SettingsProps) {
   const [showAchievements, setShowAchievements] = React.useState(false);
-
+  console.log("Settings isOpen:", isOpen)
   if (!isOpen) return null;
 
   const handleChange = (key: keyof AppSettings, value: any) => {
     onSettingsChange({ ...settings, [key]: value });
   };
+console.log("LOADED: REAL Settings component from X path");
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-start z-50 p-4 overflow-y-auto">
@@ -43,8 +44,6 @@ export function Settings({
             <X className="w-6 h-6 text-gray-600 dark:text-gray-400" />
           </button>
         </div>
-
-        console.log("Settings isOpen:", isOpen);
 
         {/* Settings Content */}
         <div className="p-4 space-y-6">
