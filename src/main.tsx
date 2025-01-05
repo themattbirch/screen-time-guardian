@@ -9,15 +9,11 @@ import './index.css';
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', async () => {
     try {
+      // Keep service-worker.js in /public, but set scope to /app
       const registration = await navigator.serviceWorker.register('/service-worker.js', {
-        scope: '/app' // Add this to match your app's path
+        scope: '/app'
       });
       console.log('ServiceWorker registered with scope:', registration.scope);
-      
-      // Force activation if needed
-      if (registration.waiting) {
-        registration.waiting.postMessage({ type: 'SKIP_WAITING' });
-      }
     } catch (err) {
       console.error('ServiceWorker registration failed:', err);
     }

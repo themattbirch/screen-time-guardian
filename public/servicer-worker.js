@@ -3,9 +3,9 @@
 const CACHE_NAME = "screen-time-guardian-v2";
 
 const PRECACHE_URLS = [
-  "/app",
+  "/app", 
   "/app/",
-  "/app/index.html",
+  "/index.html",
   "/offline.html",
   "/manifest.webmanifest",
   "/icons/icon16.png",
