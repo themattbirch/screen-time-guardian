@@ -4,6 +4,7 @@ import React from 'react';
 import { X } from 'lucide-react';
 import { AppSettings, Achievement } from '../../types/app';
 import { SoundSelector } from './SoundSelector';
+import { IconMapper } from '../IconMapper';
 
 interface SettingsProps {
   isOpen: boolean;
@@ -226,7 +227,9 @@ export function Settings({
                   >
                     <div>
                       <div className="font-semibold text-gray-700 dark:text-gray-200 flex items-center">
-                        <span className="mr-2">{ach.icon}</span>
+                        <span className="mr-2">
+                          <IconMapper iconName={ach.icon} className="w-6 h-6" />
+                        </span>
                         {ach.name}
                       </div>
                       <div className="text-sm text-gray-600 dark:text-gray-300">
