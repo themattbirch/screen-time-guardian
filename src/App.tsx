@@ -304,17 +304,19 @@ const App: React.FC = () => {
           <div className="flex justify-between items-center">
             {/* Left side: theme toggle + title */}
             <div className="flex items-center gap-4">
-              <button
-                onClick={handleThemeToggle}
-                className="p-3 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-                aria-label="Switch theme"
-              >
-                {settings.theme === 'dark' ? <Sun className="w-6 h-6" /> : <Moon className="w-6 h-6" />}
-              </button>
-              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                Screen Time Guardian
-              </h1>
-            </div>
+  <button
+    onClick={handleThemeToggle}
+    className="p-3 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+    aria-label="Switch theme"
+  >
+    {settings.theme === 'dark' ? <Sun className="w-6 h-6" /> : <Moon className="w-6 h-6" />}
+  </button>
+  {/* Logo here */}
+  <img src="/icons/logo.svg" alt="Screen Time Guardian" className="h-8 w-auto" />
+  <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+    Screen Time Guardian
+  </h1>
+</div>
 
             {/* Right side: settings btn */}
             <button
