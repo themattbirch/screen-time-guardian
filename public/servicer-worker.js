@@ -3,9 +3,9 @@
 const CACHE_NAME = "screen-time-guardian-v2";
 
 const PRECACHE_URLS = [
-  "/",
   "/app",
-  "/index.html",
+  "/app/",
+  "/app/index.html",
   "/offline.html",
   "/manifest.webmanifest",
   "/icons/icon16.png",
@@ -78,4 +78,10 @@ self.addEventListener("fetch", (event) => {
       }
     })()
   );
+});
+
+self.addEventListener("message", (event) => {
+  if (event.data && event.data.type === "SKIP_WAITING") {
+    self.skipWaiting();
+  }
 });
