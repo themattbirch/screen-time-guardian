@@ -5,20 +5,21 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import './index.css'; 
 
-// In src/main.tsx, update the registration:
+// src/main.tsx
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', async () => {
-    try {
-      // Keep service-worker.js in /public, but set scope to /app
-      const registration = await navigator.serviceWorker.register('/service-worker.js', {
-        scope: '/app'
+  window.addEventListener('load', () => {
+   navigator.serviceWorker.register('/app/service-worker.js', { scope: '/app/' })
+
+      .then((registration) => {
+        console.log('Service Worker registered with scope:', registration.scope);
+      })
+      .catch((err) => {
+        console.error('Service Worker registration failed:', err);
       });
-      console.log('ServiceWorker registered with scope:', registration.scope);
-    } catch (err) {
-      console.error('ServiceWorker registration failed:', err);
-    }
   });
 }
+
+
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>

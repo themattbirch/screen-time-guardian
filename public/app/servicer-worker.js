@@ -2,9 +2,9 @@
 
 const CACHE_NAME = "screen-time-guardian-v2";
 
+// Add '/offline.html' to your precache list
 const PRECACHE_URLS = [
-  "/app", 
-  "/app/",
+  "/app",
   "/index.html",
   "/offline.html",
   "/manifest.webmanifest",
@@ -15,25 +15,21 @@ const PRECACHE_URLS = [
   "/icons/icon512.png",
 ];
 
-// Path to my offline fallback
+// The path to your offline fallback
 const OFFLINE_FALLBACK_URL = "/offline.html";
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(PRECACHE_URLS).catch((err) => {
-        console.error("Pre-caching failed:", err);
-      });
+      return cache.addAll(PRECACHE_URLS);
     })
   );
-  // Activate worker immediately after install
   self.skipWaiting();
 });
 
 self.addEventListener("activate", (event) => {
   event.waitUntil(
     (async () => {
-      // Delete old caches
       const keys = await caches.keys();
       for (const key of keys) {
         if (key !== CACHE_NAME) {
@@ -42,7 +38,6 @@ self.addEventListener("activate", (event) => {
       }
     })()
   );
-  // Take control of clients after activation
   self.clients.claim();
 });
 
@@ -52,36 +47,25 @@ self.addEventListener("fetch", (event) => {
 
   event.respondWith(
     (async () => {
-      // Check if the request is in cache
       const cachedResponse = await caches.match(request);
       if (cachedResponse) {
         return cachedResponse;
       }
-
-      // Else, go to network
       try {
         const networkResponse = await fetch(request);
         if (networkResponse && networkResponse.ok) {
-          // Optionally add network response to cache
           const cache = await caches.open(CACHE_NAME);
           cache.put(request, networkResponse.clone());
         }
         return networkResponse;
       } catch (err) {
-        // If it fails, serve offline fallback for navigations
-        if (request.mode === "navigate" || request.destination === "document") {
+        // for navigations, return offline fallback
+        if (request.mode === "navigate") {
           const fallback = await caches.match(OFFLINE_FALLBACK_URL);
           return fallback || new Response("Offline", { status: 503 });
         }
-        // For non-navigation requests, just return an error
         return new Response("Offline", { status: 503 });
       }
     })()
   );
-});
-
-self.addEventListener("message", (event) => {
-  if (event.data && event.data.type === "SKIP_WAITING") {
-    self.skipWaiting();
-  }
 });
