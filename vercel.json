@@ -20,6 +20,10 @@
       "source": "/app/:path*",
       "destination": "/public/index.html"
     },
+     {
+      "source": "/app/service-worker.js",
+      "destination": "/app/service-worker.js"
+    },
     {
       "source": "/",
       "destination": "/index.html"
@@ -36,6 +40,15 @@
       ]
     },
     {
+      "source": "/app/service-worker.js",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/javascript; charset=utf-8"
+        }
+      ]
+    },
+    {
       "source": "/manifest.webmanifest",
       "headers": [
         {
@@ -44,6 +57,7 @@
         }
       ]
     },
+    
     {
       "source": "/icons/:path*",
       "headers": [
