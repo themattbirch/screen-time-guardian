@@ -1,9 +1,6 @@
 {
   "rewrites": [
-     {
-      "source": "/app/service-worker.js",
-      "destination": "/app/service-worker.js"
-    },
+      { "handle": "filesystem" },
     {
       "source": "/app",
       "destination": "/public/index.html"
