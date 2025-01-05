@@ -1,3 +1,5 @@
+// src/components/Settings/Settings.tsx
+
 import React from 'react';
 import { X } from 'lucide-react';
 import { AppSettings, Achievement } from '../../types/app';
@@ -21,14 +23,17 @@ export function Settings({
   achievements,
   setAchievements,
 }: SettingsProps) {
-  const [showAchievements, setShowAchievements] = React.useState(false);
-  console.log("Settings isOpen:", isOpen)
+  console.log("LOADED: REAL Settings component from X path");
+  console.log("Settings isOpen:", isOpen);
+
+  // If isOpen is false, we immediately return null.
   if (!isOpen) return null;
+
+  const [showAchievements, setShowAchievements] = React.useState(false);
 
   const handleChange = (key: keyof AppSettings, value: any) => {
     onSettingsChange({ ...settings, [key]: value });
   };
-console.log("LOADED: REAL Settings component from X path");
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-start z-50 p-4 overflow-y-auto">
@@ -201,18 +206,18 @@ console.log("LOADED: REAL Settings component from X path");
 
         {/* Footer */}
         <div className="p-4 border-t border-gray-200 dark:border-gray-800">
-         <button
-  onClick={() => {
-    setShowAchievements((prev) => {
-      const newVal = !prev;
-      console.log("New showAchievements value:", newVal);
-      return newVal;
-    });
-  }}
-  className="..."
->
-  {showAchievements ? 'Hide Achievements' : 'View Achievements'}
-</button>
+          <button
+            onClick={() => {
+              setShowAchievements((prev) => {
+                const newVal = !prev;
+                console.log("New showAchievements value:", newVal);
+                return newVal;
+              });
+            }}
+            className="w-full py-3 px-4 bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+          >
+            {showAchievements ? 'Hide Achievements' : 'View Achievements'}
+          </button>
 
           {showAchievements && (
             <div className="space-y-4 mt-4">
