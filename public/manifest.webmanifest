@@ -2,7 +2,7 @@
   "name": "Screen Time Guardian App",
   "short_name": "ScreenTimerApp",
   "description": "Stay focused and mindful with customizable timers, inspiring quotes, and gentle reminders to take breaks",
-  "start_url": "/app",
+  "start_url": "/app/",
   "scope": "/app/",
   "display": "standalone",
   "background_color": "#ffffff",
@@ -33,7 +33,21 @@
       "src": "/icons/icon512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    }
+  ],
+   "screenshots": [
+    {
+      "src": "/screenshots/screen1.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "wide"
+    },
+    {
+      "src": "/screenshots/screen2.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "wide"
     }
   ],
   "categories": ["productivity", "lifestyle", "utilities"]
