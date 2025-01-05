@@ -1,7 +1,8 @@
+// Settings.tsx
+
 import React from 'react';
 import { X } from 'lucide-react';
-import { AppSettings } from '../../types/app';
-import { achievements } from '../../utils/achievements';
+import { AppSettings, Achievement } from '../../types/app';
 import { SoundSelector } from './SoundSelector';
 
 interface SettingsProps {
@@ -9,9 +10,18 @@ interface SettingsProps {
   onClose: () => void;
   settings: AppSettings;
   onSettingsChange: (newSettings: AppSettings) => void;
+  achievements: Achievement[];
+  setAchievements: React.Dispatch<React.SetStateAction<Achievement[]>>;
 }
 
-export function Settings({ isOpen, onClose, settings, onSettingsChange }: SettingsProps) {
+export function Settings({
+  isOpen,
+  onClose,
+  settings,
+  onSettingsChange,
+  achievements,
+  setAchievements,
+}: SettingsProps) {
   const [showAchievements, setShowAchievements] = React.useState(false);
 
   if (!isOpen) return null;
@@ -191,12 +201,12 @@ export function Settings({ isOpen, onClose, settings, onSettingsChange }: Settin
 
         {/* Footer */}
         <div className="p-4 border-t border-gray-200 dark:border-gray-800">
-  <button
-    onClick={() => setShowAchievements(!showAchievements)}
-    className="w-full py-3 px-4 bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-  >
-    {showAchievements ? 'Hide Achievements' : 'View Achievements'}
-  </button>
+          <button
+            onClick={() => setShowAchievements(!showAchievements)}
+            className="w-full py-3 px-4 bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+          >
+            {showAchievements ? 'Hide Achievements' : 'View Achievements'}
+          </button>
 
           {showAchievements && (
             <div className="space-y-4 mt-4">

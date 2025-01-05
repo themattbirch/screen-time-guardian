@@ -506,11 +506,13 @@ const App: React.FC = () => {
 
       {/* SETTINGS MODAL */}
       <Settings
-        isOpen={isSettingsOpen}
-        onClose={() => setIsSettingsOpen(false)}
-        settings={settings}
-        onSettingsChange={setSettings}
-      />
+  isOpen={isSettingsOpen}
+  onClose={() => setIsSettingsOpen(false)}
+  settings={settings}
+  onSettingsChange={setSettings}
+  achievements={achievements}
+  setAchievements={setAchievements}
+/>
 
       <ToastContainer position="bottom-right" autoClose={3000} />
     </div>
