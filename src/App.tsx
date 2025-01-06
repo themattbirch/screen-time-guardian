@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import './index.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Settings } from './components/Settings/Settings';
 
 // Your local imports
 import { getStorageData, setStorageData } from './utils/storage';
