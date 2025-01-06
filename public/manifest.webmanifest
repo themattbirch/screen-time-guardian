@@ -10,6 +10,17 @@
   "orientation": "portrait",
   "prefer_related_applications": false,
   "id": "/app/",
+    "launch_handler": {
+    "client_mode": ["navigate-existing", "auto"]
+  },
+  "dir": "ltr",  
+  "lang": "en", 
+  "related_applications": [], 
+  "scope_extensions": [
+    {
+      "origin": "*.screentimeguardian.com"
+    }
+  ],
   "icons": [
     {
       "src": "/icons/icon192.png",
