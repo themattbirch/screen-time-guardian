@@ -1,6 +1,5 @@
 {
   "rewrites": [
-      { "handle": "filesystem" },
     {
       "source": "/app",
       "destination": "/public/index.html"
