@@ -69,7 +69,7 @@ export function SoundSelector({
               </label>
               <button
                 onClick={() => handlePreview(sound.id)}
-                className={`flex items-center px-3 py-1 text-sm bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-md transition-colors ${
+                className={`flex items-center px-3 py-1 text-sm bg-gray-4b00 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-md transition-colors ${
                   previewingSound === sound.id ? 'opacity-50 cursor-not-allowed' : ''
                 }`}
                 disabled={previewingSound !== null}
