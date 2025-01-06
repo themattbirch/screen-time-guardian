@@ -9,6 +9,7 @@ import { soundManager } from './utils/sounds';
 import { Timer } from './components/Timer/Timer';
 import { Quote as QuoteComponent } from './components/Quote/Quote';
 import { Settings } from './components/Settings/Settings';
+console.log("Checking path: imported Settings from './components/Settings/Settings'");
 import { achievements as predefinedAchievements } from './utils/achievements';
 import { AppSettings, TimerState, Achievement, Quote } from './types/app';
 
@@ -506,8 +507,8 @@ const App: React.FC = () => {
 
       {/* SETTINGS MODAL */}
       <Settings
-  isOpen={isSettingsOpen}
-  onClose={() => setIsSettingsOpen(false)}
+  isOpen={true}
+  onClose={() => {}}
   settings={settings}
   onSettingsChange={setSettings}
   achievements={achievements}
