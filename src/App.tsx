@@ -530,21 +530,41 @@ const App: React.FC = () => {
     <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
       {/* Joyride Component */}
       <Joyride
-        steps={joyrideSteps}
-        run={runJoyride}
-        continuous
-        showProgress
-        showSkipButton
-        hideCloseButton
-        callback={handleJoyrideCallback}
-        styles={{
-          options: {
-            zIndex: 1000,
-            primaryColor: '#3b82f6',
-            textColor: '#1f2937'
-          }
-        }}
-      />
+  steps={joyrideSteps}
+  run={runJoyride}
+  continuous
+  showProgress
+  showSkipButton
+  hideCloseButton
+  callback={handleJoyrideCallback}
+  styles={{
+    options: {
+      zIndex: 1000,
+      primaryColor: '#3b82f6',
+      textColor: '#1f2937',
+      width: 290, 
+      backgroundColor: 'white',
+    },
+    tooltip: {
+      padding: '12px',
+      fontSize: '14px',
+      maxWidth: '100%',
+    },
+    tooltipContent: {
+      padding: '8px 0',
+      textAlign: 'left',
+    },
+    tooltipTitle: {
+      margin: '0 0 8px 0',
+      fontSize: '14px',
+      fontWeight: 'bold',
+    },
+    tooltipContainer: {
+      textAlign: 'left',
+      wordBreak: 'break-word'  
+    }
+  }}
+/>
       {/* MAIN CONTENT */}
       <main className="flex-1 overflow-y-auto px-4 pb-24 w-full max-w-md mx-auto">
         {/* HEADER */}

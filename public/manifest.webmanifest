@@ -85,8 +85,5 @@
     "productivity",
     "lifestyle",
     "utilities"
-  ],
-  "permissions": [
-    "vibrate"
   ]
-}
+  }
