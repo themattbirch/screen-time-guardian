@@ -131,11 +131,6 @@ const App: React.FC = () => {
       disableBeacon: true
     },
     {
-      target: '.settings-button',
-      content: 'Adjust your preferences and timer settings here.',
-      disableBeacon: true
-    },
-    {
       target: '.favorite-quotes',
       content: 'Access your favorite quotes here.',
       disableBeacon: true
@@ -542,7 +537,7 @@ const App: React.FC = () => {
       zIndex: 1000,
       primaryColor: '#3b82f6',
       textColor: '#1f2937',
-      width: 250, 
+      width: 290, 
       backgroundColor: 'white',
     },
     tooltip: {
