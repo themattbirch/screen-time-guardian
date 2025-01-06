@@ -2,7 +2,7 @@
 
 import { openDB } from 'idb';
 import { StorageData, Statistics, Session } from '../types/app';
-import { achievements as predefinedAchievements } from './achievements'; // Ensure this import exists
+import { achievements as predefinedAchievements } from './achievements'; 
 
 const DB_NAME = 'ScreenTimeGuardianDB';
 const STORE_NAME = 'settings';
@@ -19,7 +19,7 @@ const initialStatistics: Statistics = {
   focusScore: 0,
   weeklyMinutes: 0,
   monthlyMinutes: 0,
-  achievements: predefinedAchievements, // Ensure this matches your achievements setup
+  achievements: predefinedAchievements, 
   sessionHistory: [],
 };
 

@@ -7,15 +7,13 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Settings } from './components/Settings/Settings';
 import Joyride, { CallBackProps } from 'react-joyride';
 
-// Your local imports
+// Local imports
 import { getStorageData, setStorageData } from './utils/storage';
 import { soundManager } from './utils/sounds';
 import { Timer } from './components/Timer/Timer';
 import { Quote as QuoteComponent } from './components/Quote/Quote';
 import { achievements as predefinedAchievements } from './utils/achievements';
 import { AppSettings, TimerState, Achievement, Quote, Statistics, Session } from './types/app';
-
-// Import the Stats component
 import { Stats } from './components/Stats/Stats';
 
 // Icons from lucide-react
@@ -42,7 +40,7 @@ const initialStatistics: Statistics = {
   focusScore: 0,
   weeklyMinutes: 0,
   monthlyMinutes: 0,
-  achievements: predefinedAchievements, // Ensure this matches your achievements setup
+  achievements: predefinedAchievements, 
   sessionHistory: [],
 };
 
@@ -172,7 +170,6 @@ const App: React.FC = () => {
               };
             }
             break;
-          // Add more cases as needed
         }
         return ach;
       })
@@ -215,16 +212,16 @@ const App: React.FC = () => {
     let sessionDuration = 0;
     switch (timerState.mode) {
       case 'focus':
-        sessionDuration = 25; // minutes
+        sessionDuration = 25; 
         break;
       case 'shortBreak':
-        sessionDuration = 5; // minutes
+        sessionDuration = 5; 
         break;
       case 'longBreak':
-        sessionDuration = 15; // minutes
+        sessionDuration = 15; 
         break;
       case 'custom':
-        sessionDuration = settings.interval; // minutes
+        sessionDuration = settings.interval; 
         break;
       default:
         sessionDuration = 15;
@@ -232,7 +229,7 @@ const App: React.FC = () => {
 
     const sessionMinutes = sessionDuration;
 
-    const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
+    const today = new Date().toISOString().split('T')[0]; 
     const lastSessionDate = statistics.lastSessionDate;
 
     let newDailyStreak = statistics.dailyStreak;
@@ -264,9 +261,9 @@ const App: React.FC = () => {
     const newSession: Session = {
       date: new Date().toISOString(),
       duration: sessionMinutes,
-      completedBreaks: 0, // Update as per your logic
-      skippedBreaks: 0,    // Update as per your logic
-      focusScore: sessionMinutes, // Simplistic focus score
+      completedBreaks: 0, 
+      skippedBreaks: 0,    
+      focusScore: sessionMinutes, 
     };
 
     const updatedSessionHistory = [newSession, ...statistics.sessionHistory].slice(0, 100); // Keep last 100 sessions
@@ -279,9 +276,8 @@ const App: React.FC = () => {
       bestStreak: newBestStreak,
       lastSessionDate: today,
       averageSessionDuration: newAverageSessionDuration,
-      completionRate: newCompletionRate, // Update calculation as needed
+      completionRate: newCompletionRate, 
       sessionHistory: updatedSessionHistory,
-      // Update other statistics as needed
     }));
   }, [settings, updateAchievements, timerState.mode, statistics]);
 
