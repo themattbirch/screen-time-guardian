@@ -4,6 +4,16 @@ import { resolve } from 'path';
 
 export default defineConfig({
   plugins: [react()],
+    server: {
+    open: '/app/',
+    proxy: {
+      '/app': {
+        target: 'https://localhost:5173/public',
+        rewrite: (path) => path.replace(/^\/app/, ''),
+        secure: true 
+      }
+    }
+  },
   build: {
     rollupOptions: {
       input: {
@@ -18,15 +28,6 @@ export default defineConfig({
     },
     outDir: 'dist',
     emptyOutDir: true,
-  },
-  server: {
-    open: '/app/',
-    proxy: {
-      '/app': {
-        target: 'https://localhost:5173/public',
-        rewrite: (path) => path.replace(/^\/app/, '')
-      }
-    }
   },
   esbuild: {
     logOverride: { 'module level directives cause errors': 'silent' },
