@@ -542,7 +542,7 @@ const App: React.FC = () => {
       zIndex: 1000,
       primaryColor: '#3b82f6',
       textColor: '#1f2937',
-      width: 290, 
+      width: 250, 
       backgroundColor: 'white',
     },
     tooltip: {
