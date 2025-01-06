@@ -8,8 +8,7 @@ import { getStorageData, setStorageData } from './utils/storage';
 import { soundManager } from './utils/sounds';
 import { Timer } from './components/Timer/Timer';
 import { Quote as QuoteComponent } from './components/Quote/Quote';
-import { Settings } from './components/Settings/Settings';
-console.log("Checking path: imported Settings from './components/Settings/Settings'");
+import { SettingsNew } from './components/Settings/SettingsNew';
 import { achievements as predefinedAchievements } from './utils/achievements';
 import { AppSettings, TimerState, Achievement, Quote } from './types/app';
 
@@ -506,9 +505,9 @@ const App: React.FC = () => {
       </nav>
 
       {/* SETTINGS MODAL */}
-      <Settings
-  isOpen={true}
-  onClose={() => {}}
+      <SettingsNew
+  isOpen={isSettingsOpen}
+  onClose={() => setIsSettingsOpen(false)}
   settings={settings}
   onSettingsChange={setSettings}
   achievements={achievements}

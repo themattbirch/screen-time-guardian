@@ -15,7 +15,7 @@ interface SettingsProps {
   setAchievements: React.Dispatch<React.SetStateAction<Achievement[]>>;
 }
 
-export function Settings({
+export function SettingsNew({
   isOpen,
   onClose,
   settings,
