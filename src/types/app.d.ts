@@ -1,3 +1,4 @@
+// src/types/app.d.ts
 
 export interface AppSettings {
   interval: number;
@@ -9,7 +10,7 @@ export interface AppSettings {
   quoteChangeInterval: number;
   selectedSound: string;
   timerMode: 'focus' | 'shortBreak' | 'longBreak' | 'custom';
-  quoteCategory: string;
+  quoteCategory: 'all' | 'motivation' | 'relaxation' | 'gratitude';
   minimalMode: boolean;
 }
 
@@ -47,7 +48,7 @@ export interface Statistics {
   totalMinutes: number;
   dailyStreak: number;
   bestStreak: number;
-  lastSessionDate: string;
+  lastSessionDate: string | null;
   averageSessionDuration: number;
   completionRate: number;
   focusScore: number;
@@ -55,6 +56,14 @@ export interface Statistics {
   monthlyMinutes: number;
   achievements: Achievement[];
   sessionHistory: Session[];
+}
+
+export interface StorageData {
+  appSettings: AppSettings;
+  timerState: TimerState;
+  achievements: Achievement[];
+  favoriteQuotes?: Quote[];
+  statistics?: Statistics; 
 }
 
 export interface Session {
@@ -69,10 +78,4 @@ export interface QuoteProps {
   changeInterval: number;
   category: string;
   forceChange: number;
-}
-
-export interface StorageData {
-  appSettings: AppSettings;
-  timerState: TimerState;
-  achievements: Achievement[];
 }

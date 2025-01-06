@@ -1,16 +1,35 @@
 // src/utils/storage.ts
 
 import { openDB } from 'idb';
-import { StorageData } from '../types/app';
+import { StorageData, Statistics, Session } from '../types/app';
+import { achievements as predefinedAchievements } from './achievements'; // Ensure this import exists
 
 const DB_NAME = 'ScreenTimeGuardianDB';
 const STORE_NAME = 'settings';
+
+// Define initial statistics
+const initialStatistics: Statistics = {
+  totalSessions: 0,
+  totalMinutes: 0,
+  dailyStreak: 0,
+  bestStreak: 0,
+  lastSessionDate: null,
+  averageSessionDuration: 0,
+  completionRate: 0,
+  focusScore: 0,
+  weeklyMinutes: 0,
+  monthlyMinutes: 0,
+  achievements: predefinedAchievements, // Ensure this matches your achievements setup
+  sessionHistory: [],
+};
 
 // Initialize the IndexedDB database with the StorageData interface
 const dbPromise = openDB<StorageData>(DB_NAME, 1, {
   upgrade(db) {
     // Create an object store named 'settings'
-    db.createObjectStore(STORE_NAME);
+    if (!db.objectStoreNames.contains(STORE_NAME)) {
+      db.createObjectStore(STORE_NAME);
+    }
   },
 });
 
@@ -24,16 +43,23 @@ export async function getStorageData<K extends keyof StorageData>(
 ): Promise<Pick<StorageData, K>> {
   try {
     const db = await dbPromise;
-    const result: Partial<Pick<StorageData, K>> = {};
+    const result = {} as Pick<StorageData, K>;
 
     for (const key of keys) {
       const value = await db.get(STORE_NAME, key);
       if (value !== undefined) {
-        result[key] = value;
+        (result[key] as any) = value;
       }
     }
 
-    return result as Pick<StorageData, K>;
+    // If 'statistics' is requested and not present, initialize it
+    if (keys.includes('statistics' as K) && !('statistics' in result)) {
+      const stats = { ...initialStatistics };
+      await setStorageData({ statistics: stats } as Partial<StorageData>);
+      (result as any).statistics = stats;
+    }
+
+    return result;
   } catch (error) {
     console.error('Failed to get storage data:', error);
     return {} as Pick<StorageData, K>;

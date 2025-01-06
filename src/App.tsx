@@ -1,8 +1,11 @@
+// src/App.tsx
+
 import React, { useState, useEffect, useCallback } from 'react';
 import './index.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Settings } from './components/Settings/Settings';
+import Joyride, { CallBackProps } from 'react-joyride';
 
 // Your local imports
 import { getStorageData, setStorageData } from './utils/storage';
@@ -10,7 +13,10 @@ import { soundManager } from './utils/sounds';
 import { Timer } from './components/Timer/Timer';
 import { Quote as QuoteComponent } from './components/Quote/Quote';
 import { achievements as predefinedAchievements } from './utils/achievements';
-import { AppSettings, TimerState, Achievement, Quote } from './types/app';
+import { AppSettings, TimerState, Achievement, Quote, Statistics, Session } from './types/app';
+
+// Import the Stats component
+import { Stats } from './components/Stats/Stats';
 
 // Icons from lucide-react
 import {
@@ -20,8 +26,25 @@ import {
   Trophy,
   Settings as SettingsIcon,
   Sun,
-  Moon
+  Moon,
+  Star,
 } from 'lucide-react';
+
+// Define initialStatistics within App.tsx
+const initialStatistics: Statistics = {
+  totalSessions: 0,
+  totalMinutes: 0,
+  dailyStreak: 0,
+  bestStreak: 0,
+  lastSessionDate: null,
+  averageSessionDuration: 0,
+  completionRate: 0,
+  focusScore: 0,
+  weeklyMinutes: 0,
+  monthlyMinutes: 0,
+  achievements: predefinedAchievements, // Ensure this matches your achievements setup
+  sessionHistory: [],
+};
 
 // Helper to compute initial seconds for each mode
 const getModeSeconds = (mode: AppSettings['timerMode'], interval?: number): number => {
@@ -70,6 +93,12 @@ const App: React.FC = () => {
 
   const [achievements, setAchievements] = useState<Achievement[]>(predefinedAchievements);
 
+  // New State: Favorite Quotes
+  const [favoriteQuotes, setFavoriteQuotes] = useState<Quote[]>([]);
+
+  // New State: Statistics
+  const [statistics, setStatistics] = useState<Statistics>(initialStatistics);
+
   // The currently active tab in your bottom nav
   const [activeTab, setActiveTab] = useState<'timer' | 'stats' | 'quotes' | 'achievements'>('timer');
 
@@ -78,6 +107,50 @@ const App: React.FC = () => {
 
   // Force re-render in the Quote component when the timer completes
   const [quoteChangeCounter, setQuoteChangeCounter] = useState(0);
+
+  const [runJoyride, setRunJoyride] = useState(false);
+
+  // Define Joyride steps
+  const joyrideSteps = [
+    {
+      target: '.start-button',
+      content: "Click here to start your Screen Time Guardian session.",
+      disableBeacon: true
+    },
+    {
+      target: '.timer-container',
+      content: "Click anywhere on the timer to pause when it's running.",
+      disableBeacon: true
+    },
+    {
+      target: '.quote-container',
+      content: 'A random motivational quote will appear before the timer starts and when it completes.',
+      disableBeacon: true
+    },
+    {
+      target: '.reset-timer',
+      content: "Reset the timer to start a new session when it finishes. Or whenever you want to start over.",
+      disableBeacon: true
+    },
+    {
+      target: '.settings-button',
+      content: 'Adjust your preferences and timer settings here.',
+      disableBeacon: true
+    },
+    {
+      target: '.favorite-quotes',
+      content: 'Access your favorite quotes here.',
+      disableBeacon: true
+    }
+  ];
+
+  // Joyride callback
+  const handleJoyrideCallback = (data: CallBackProps) => {
+    const { status } = data;
+    if (status === 'finished' || status === 'skipped') {
+      setRunJoyride(false);
+    }
+  };
 
   // -------------------
   // 2) Achievements
@@ -99,6 +172,7 @@ const App: React.FC = () => {
               };
             }
             break;
+          // Add more cases as needed
         }
         return ach;
       })
@@ -136,7 +210,80 @@ const App: React.FC = () => {
     setQuoteChangeCounter((prev) => prev + 1);
     // 6. Achievements
     updateAchievements('completeSession');
-  }, [settings, updateAchievements]);
+
+    // 7. Update Statistics
+    let sessionDuration = 0;
+    switch (timerState.mode) {
+      case 'focus':
+        sessionDuration = 25; // minutes
+        break;
+      case 'shortBreak':
+        sessionDuration = 5; // minutes
+        break;
+      case 'longBreak':
+        sessionDuration = 15; // minutes
+        break;
+      case 'custom':
+        sessionDuration = settings.interval; // minutes
+        break;
+      default:
+        sessionDuration = 15;
+    }
+
+    const sessionMinutes = sessionDuration;
+
+    const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
+    const lastSessionDate = statistics.lastSessionDate;
+
+    let newDailyStreak = statistics.dailyStreak;
+    let newBestStreak = statistics.bestStreak;
+
+    if (lastSessionDate === today) {
+      // Session already recorded today; do not increment
+    } else {
+      const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
+      if (lastSessionDate === yesterday) {
+        newDailyStreak += 1;
+        if (newDailyStreak > newBestStreak) {
+          newBestStreak = newDailyStreak;
+        }
+      } else {
+        newDailyStreak = 1;
+        if (newDailyStreak > newBestStreak) {
+          newBestStreak = newDailyStreak;
+        }
+      }
+    }
+
+    const newTotalSessions = statistics.totalSessions + 1;
+    const newTotalMinutes = statistics.totalMinutes + sessionMinutes;
+    const newAverageSessionDuration = newTotalSessions === 0 ? 0 : newTotalMinutes / newTotalSessions;
+    const newCompletionRate = 100; // Assuming each session is a completion
+
+    // Update session history
+    const newSession: Session = {
+      date: new Date().toISOString(),
+      duration: sessionMinutes,
+      completedBreaks: 0, // Update as per your logic
+      skippedBreaks: 0,    // Update as per your logic
+      focusScore: sessionMinutes, // Simplistic focus score
+    };
+
+    const updatedSessionHistory = [newSession, ...statistics.sessionHistory].slice(0, 100); // Keep last 100 sessions
+
+    setStatistics((prev) => ({
+      ...prev,
+      totalSessions: newTotalSessions,
+      totalMinutes: newTotalMinutes,
+      dailyStreak: newDailyStreak,
+      bestStreak: newBestStreak,
+      lastSessionDate: today,
+      averageSessionDuration: newAverageSessionDuration,
+      completionRate: newCompletionRate, // Update calculation as needed
+      sessionHistory: updatedSessionHistory,
+      // Update other statistics as needed
+    }));
+  }, [settings, updateAchievements, timerState.mode, statistics]);
 
   const handleResetTimer = useCallback(() => {
     setTimerState({
@@ -179,12 +326,23 @@ const App: React.FC = () => {
   }, [updateAchievements]);
 
   // -------------------
-  // 4) Favorite Quote Handler
+  // 4) Favorite Quote Handlers
   // -------------------
   const handleFavoriteQuote = (quote?: Quote) => {
     if (!quote) return;
+    const isAlreadyFavorite = favoriteQuotes.some((q) => q.id === quote.id);
+    if (isAlreadyFavorite) {
+      toast.info(`"${quote.text}" is already in your favorites.`);
+      return;
+    }
+
     toast.success(`Added "${quote.text}" to favorites!`);
-    // You can also store or track favorites here
+    setFavoriteQuotes((prev) => [...prev, quote]);
+  };
+
+  const handleRemoveFavorite = (quoteId: string) => {
+    setFavoriteQuotes((prev) => prev.filter((quote) => quote.id !== quoteId));
+    toast.info('Removed quote from favorites.');
   };
 
   // -------------------
@@ -249,6 +407,22 @@ const App: React.FC = () => {
       if (storedAchievements.achievements) {
         setAchievements(storedAchievements.achievements);
       }
+
+      // Load favorite quotes
+      const storedFavorites = await getStorageData(['favoriteQuotes']);
+      if (storedFavorites.favoriteQuotes) {
+        setFavoriteQuotes(storedFavorites.favoriteQuotes);
+      }
+
+      // Load statistics
+      const storedStatistics = await getStorageData(['statistics']);
+      if (storedStatistics.statistics) {
+        setStatistics(storedStatistics.statistics);
+      } else {
+        // Initialize statistics if not present
+        setStatistics(initialStatistics);
+        await setStorageData({ statistics: initialStatistics });
+      }
     }
     loadData();
   }, []);
@@ -267,6 +441,14 @@ const App: React.FC = () => {
   useEffect(() => {
     setStorageData({ achievements });
   }, [achievements]);
+
+  useEffect(() => {
+    setStorageData({ favoriteQuotes });
+  }, [favoriteQuotes]);
+
+  useEffect(() => {
+    setStorageData({ statistics });
+  }, [statistics]);
 
   // -------------------
   // 8) Theme & Notification request
@@ -297,35 +479,56 @@ const App: React.FC = () => {
   // -------------------
   return (
     <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
+      {/* Joyride Component */}
+      <Joyride
+        steps={joyrideSteps}
+        run={runJoyride}
+        continuous
+        showProgress
+        showSkipButton
+        hideCloseButton
+        callback={handleJoyrideCallback}
+        styles={{
+          options: {
+            zIndex: 1000,
+            primaryColor: '#3b82f6',
+            textColor: '#1f2937'
+          }
+        }}
+      />
       {/* MAIN CONTENT */}
       <main className="flex-1 overflow-y-auto px-4 pb-24 w-full max-w-md mx-auto">
         {/* HEADER */}
         <div className="sticky top-0 pt-6 pb-4 bg-gray-50 dark:bg-gray-900 z-10">
-          <div className="flex justify-between items-center">
-            {/* Left side: theme toggle + title */}
-            <div className="flex items-center gap-4">
-  <button
-    onClick={handleThemeToggle}
-    className="p-3 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-    aria-label="Switch theme"
-  >
-    {settings.theme === 'dark' ? <Sun className="w-6 h-6" /> : <Moon className="w-6 h-6" />}
-  </button>
-  {/* Logo here */}
-  <img src="/icons/logo.svg" alt="Screen Time Guardian" className="h-8 w-auto" />
-  <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-    Screen Time Guardian
-  </h1>
-</div>
+          <div className="grid grid-cols-[48px_1fr_48px] gap-4 items-center">
+            {/* Left side: theme toggle - fixed width */}
+            <div>
+              <button
+                onClick={handleThemeToggle}
+                className="p-3 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                aria-label="Switch theme"
+              >
+                {settings.theme === 'dark' ? <Sun className="w-6 h-6" /> : <Moon className="w-6 h-6" />}
+              </button>
+            </div>
 
-            {/* Right side: settings btn */}
-            <button
-              onClick={() => setIsSettingsOpen(true)}
-              className="p-3 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-              aria-label="Open Settings"
-            >
-              <SettingsIcon className="w-6 h-6" />
-            </button>
+            {/* Center: title */}
+            <div className="flex justify-center items-center">
+              <h1 className="text-2xl font-bold text-gray-900 dark:text-white whitespace-nowrap">
+                Screen Time Guardian
+              </h1>
+            </div>
+
+            {/* Right side: settings btn - fixed width */}
+            <div className="flex justify-end">
+              <button
+                onClick={() => setIsSettingsOpen(true)}
+                className="settings-button p-3 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                aria-label="Open Settings"
+              >
+                <SettingsIcon className="w-6 h-6" />
+              </button>
+            </div>
           </div>
         </div>
 
@@ -334,35 +537,46 @@ const App: React.FC = () => {
           {activeTab === 'timer' && (
             <div className="space-y-6">
               {/* Timer Component */}
-              <Timer
-                timeLeft={timerState.timeLeft}
-                isActive={timerState.isActive}
-                isPaused={timerState.isPaused}
-                mode={timerState.mode}
-                onStart={handleStartOrResume}
-                onStop={handlePause}
-                onComplete={handleTimerComplete}
-                isShrunk={false}
-                isBlinking={timerState.isBlinking}
-              />
+              <div className="timer-container">
+                <Timer
+                  timeLeft={timerState.timeLeft}
+                  isActive={timerState.isActive}
+                  isPaused={timerState.isPaused}
+                  mode={timerState.mode}
+                  onStart={handleStartOrResume}
+                  onStop={handlePause}
+                  onComplete={handleTimerComplete}
+                  isShrunk={false}
+                  isBlinking={timerState.isBlinking}
+                />
+              </div>
 
-              <div className="flex justify-center">
+              {/* Reset and How To Use buttons */}
+              <div className="flex justify-center space-x-4">
                 <button
                   onClick={handleResetTimer}
-                  className="px-6 py-2 bg-gray-500 text-white rounded-full shadow hover:bg-gray-600 transition"
+                  className="reset-timer px-6 py-2 bg-gray-600 text-white rounded-full shadow hover:bg-gray-700 transition"
                   aria-label="Reset Timer"
                 >
                   Reset
                 </button>
+                <button
+                  onClick={() => setRunJoyride(true)}
+                  className="px-6 py-2 bg-blue-800 text-white rounded-full shadow hover:bg-blue-900 transition"
+                  aria-label="How To Use"
+                >
+                  How To Use
+                </button>
               </div>
 
               {settings.showQuotes && (
-                <div className="mt-4">
+                <div className="quote-container mt-4">
                   <QuoteComponent
                     changeInterval={settings.quoteChangeInterval}
                     category={settings.quoteCategory}
                     forceChange={quoteChangeCounter}
-                    onFavorite={handleFavoriteQuote} 
+                    onFavorite={handleFavoriteQuote}
+                    favoriteQuotes={favoriteQuotes}
                   />
                 </div>
               )}
@@ -370,34 +584,50 @@ const App: React.FC = () => {
           )}
 
           {activeTab === 'stats' && (
-            <div className="space-y-4">
-              <h2 className="text-xl font-semibold dark:text-white">Your Progress</h2>
-              <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-blue-600">12</div>
-                    <div className="text-sm text-gray-600 dark:text-gray-300">Sessions Today</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-green-600">85%</div>
-                    <div className="text-sm text-gray-600 dark:text-gray-300">
-                      Completion Rate
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <Stats statistics={statistics} />
           )}
 
           {activeTab === 'quotes' && settings.showQuotes && (
             <div className="space-y-4">
-              <h2 className="text-xl font-semibold dark:text-white">Daily Quote</h2>
-              <QuoteComponent
-                changeInterval={settings.quoteChangeInterval}
-                category={settings.quoteCategory}
-                forceChange={quoteChangeCounter}
-                onFavorite={handleFavoriteQuote} 
-              />
+              {/* Heading */}
+              <h2 className="text-xl font-semibold text-gray-700 dark:text-white text-center">Favorite Quotes</h2>
+
+              {/* Favorite Quotes List or Message */}
+              {favoriteQuotes.length > 0 ? (
+                <div className="space-y-2">
+                  {favoriteQuotes.map((quote) => (
+                    <div
+                      key={quote.id}
+                      className="
+                        p-3 border rounded-lg
+                        dark:border-gray-600 dark:bg-gray-700
+                        bg-gray-50 border-gray-300
+                        flex items-start justify-between
+                      "
+                    >
+                      <div className="flex items-start">
+                        <span className="mr-2">
+                          <Star className="w-6 h-6 text-yellow-400" />
+                        </span>
+                        <div>
+                          <p className="text-sm text-gray-800 dark:text-gray-200">"{quote.text}"</p>
+                          <p className="text-xs text-gray-600 dark:text-gray-400">- {quote.author}</p>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => handleRemoveFavorite(quote.id)}
+                        className="text-red-500 dark:text-red-400 font-medium hover:text-red-600 dark:hover:text-red-300 transition-colors"
+                        aria-label="Remove Favorite"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                // Center-aligned message when no favorites
+                <p className="text-gray-600 dark:text-gray-300 text-center mx-auto">You have no favorite quotes.</p>
+              )}
             </div>
           )}
 
@@ -476,7 +706,7 @@ const App: React.FC = () => {
 
           <button
             onClick={() => setActiveTab('quotes')}
-            className={`flex flex-col items-center p-2 ${
+            className={`flex flex-col favorite-quotes items-center p-2 ${
               activeTab === 'quotes'
                 ? 'text-blue-600 dark:text-blue-400'
                 : 'text-gray-600 dark:text-gray-400'
@@ -506,13 +736,13 @@ const App: React.FC = () => {
 
       {/* SETTINGS MODAL */}
       <Settings
-  isOpen={isSettingsOpen}
-  onClose={() => setIsSettingsOpen(false)}
-  settings={settings}
-  onSettingsChange={setSettings}
-  achievements={achievements}
-  setAchievements={setAchievements}
-/>
+        isOpen={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
+        settings={settings}
+        onSettingsChange={setSettings}
+        achievements={achievements}
+        setAchievements={setAchievements}
+      />
 
       <ToastContainer position="bottom-right" autoClose={3000} />
     </div>

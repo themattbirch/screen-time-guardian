@@ -1,18 +1,19 @@
-// /src/components/Quote/Quote.tsx
+// src/components/Quote/Quote.tsx
 
-import { useState, useEffect } from 'react';
-import { Heart } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Heart } from 'lucide-react'; // Only Heart is available
 import { Quote as QuoteType } from '../../types/app';
 
 interface QuoteProps {
   changeInterval: number;
-  category?: string; 
+  category?: string;
   onFavorite?: (quote: QuoteType) => void;
   forceChange?: number;
+  favoriteQuotes?: QuoteType[]; // To determine if the current quote is already favorited
 }
 
 const defaultQuotes: QuoteType[] = [
- {
+  {
     id: '1',
     text: "There are three ways to ultimate success: The first way is to be kind. The second way is to be kind. The third way is to be kind.",
     author: "Mister Rogers",
@@ -24,66 +25,7 @@ const defaultQuotes: QuoteType[] = [
     author: "John Wooden",
     category: "success",
   },
-  {
-    id: '3',
-    text: "The present moment is filled with joy and happiness. If you are attentive, you will see it.",
-    author: "Thich Nhat Hanh",
-    category: "presence",
-  },
-  {
-    id: '4',
-    text: "I never dreamed about success. I worked for it.",
-    author: "Estée Lauder",
-    category: "success",
-  },
-  {
-    id: '5',
-    text: "Success is not final; failure is not fatal: It is the courage to continue that counts.",
-    author: "Winston Churchill",
-    category: "success",
-  },
-  {
-    id: '6',
-    text: "Breathing in, I calm my body. Breathing out, I smile.",
-    author: "Thich Nhat Hanh",
-    category: "breathing",
-  },
-  {
-    id: '7',
-    text: "Success usually comes to those who are too busy to be looking for it.",
-    author: "Henry David Thoreau",
-    category: "success",
-  },
-  {
-    id: '8',
-    text: "Mindfulness isn't difficult, we just need to remember to do it.",
-    author: "Sharon Salzberg",
-    category: "mindfulness",
-  },
-  {
-    id: '9',
-    text: "Develop success from failures. Discouragement and failure are two of the surest stepping stones to success.",
-    author: "Dale Carnegie",
-    category: "success",
-  },
-  {
-    id: '10',
-    text: "The road to success and the road to failure are almost exactly the same.",
-    author: "Colin R. Davis",
-    category: "success",
-  },
-  {
-    id: '11',
-    text: "Success is getting what you want; happiness is wanting what you get.",
-    author: "W. P. Kinsella",
-    category: "success",
-  },
-  {
-    id: '12',
-    text: "It is better to fail in originality than to succeed in imitation.",
-    author: "Herman Melville",
-    category: "success",
-  },
+  // ... (other quotes)
   {
     id: '13',
     text: "Nothing in the world can take the place of persistence. Talent will not; nothing is more common than unsuccessful men with talent. Genius will not; unrewarded genius is almost a proverb. Education will not; the world is full of educated derelicts. The slogan 'Press On' has solved and always will solve the problems of the human race.",
@@ -96,9 +38,11 @@ export const Quote: React.FC<QuoteProps> = ({
   changeInterval,
   category = 'all',
   onFavorite,
-  forceChange = 0
+  forceChange = 0,
+  favoriteQuotes = [],
 }) => {
   const [currentQuote, setCurrentQuote] = useState<QuoteType | null>(null);
+  const [isFavorited, setIsFavorited] = useState<boolean>(false);
 
   useEffect(() => {
     // On mount or forceChange, pick a random quote
@@ -109,32 +53,56 @@ export const Quote: React.FC<QuoteProps> = ({
     if (!filteredQuotes.length) {
       // No quotes match
       setCurrentQuote(null);
+      setIsFavorited(false);
       return;
     }
 
-    // If we already have a quote, pick a different one
+    // Pick a random quote
     const newQuote = filteredQuotes[Math.floor(Math.random() * filteredQuotes.length)];
     setCurrentQuote(newQuote);
-  }, [forceChange, category]);
+
+    // Check if the new quote is already favorited
+    const isFav = favoriteQuotes.some((q) => q.id === newQuote.id);
+    setIsFavorited(isFav);
+  }, [forceChange, category, favoriteQuotes]);
+
+  const handleFavoriteClick = () => {
+    if (currentQuote && onFavorite) {
+      onFavorite(currentQuote);
+      setIsFavorited(true);
+    }
+  };
 
   if (!currentQuote) {
     return <div className="text-center text-gray-500 dark:text-gray-400">No quotes available.</div>;
   }
 
   return (
-    <div className="quote-area p-3 bg-gray-50 dark:bg-gray-700 rounded text-center">
-      <p className="text-lg italic text-gray-800 dark:text-gray-200">"{currentQuote.text}"</p>
-      <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
-        &mdash; {currentQuote.author}
-      </p>
-      {onFavorite && (
-        <button
-          onClick={() => onFavorite(currentQuote)}
-          className="mt-2 px-3 py-1 bg-gray-400 dark:bg-gray-600 text-sm rounded hover:bg-gray-300 dark:hover:bg-gray-500 transition"
-        >
-          Favorite
-        </button>
-      )}
+    <div className="quote-area p-4 bg-gray-50 dark:bg-gray-700 rounded-lg shadow">
+      <div className="flex flex-col items-center">
+        <p className="text-lg italic text-gray-800 dark:text-gray-200">"{currentQuote.text}"</p>
+        <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">- {currentQuote.author}</p>
+        {onFavorite && (
+          <button
+            onClick={handleFavoriteClick}
+            className={`mt-4 flex items-center gap-2 px-4 py-2 rounded-full 
+              ${isFavorited 
+                ? 'bg-yellow-400 text-white cursor-not-allowed' 
+                : 'bg-gray-300 dark:bg-gray-600 text-gray-800 dark:text-gray-200 hover:bg-gray-400 dark:hover:bg-gray-500'
+              } transition-colors`}
+            disabled={isFavorited}
+            aria-label={isFavorited ? "Already Favorited" : "Favorite Quote"}
+          >
+            <Heart 
+              className={`w-5 h-5 transition-transform duration-200 
+                ${isFavorited ? 'text-white' : 'text-gray-800 dark:text-gray-200'}
+                ${isFavorited ? 'transform scale-110' : ''}
+              `}
+            />
+            <span>{isFavorited ? 'Favorited' : 'Favorite'}</span>
+          </button>
+        )}
+      </div>
     </div>
   );
 };

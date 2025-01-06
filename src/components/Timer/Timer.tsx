@@ -42,7 +42,7 @@ export const Timer: React.FC<TimerProps> = ({
     <div className="w-full max-w-xs mx-auto">
       <div
         className={`
-          aspect-square w-64 mx-auto
+          start-button aspect-square w-64 mx-auto
           rounded-full
           bg-white dark:bg-gray-800
           shadow-lg dark:shadow-gray-900
