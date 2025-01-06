@@ -23,7 +23,7 @@ export default defineConfig({
     open: '/app/',
     proxy: {
       '/app': {
-        target: 'http://localhost:5173/public',
+        target: 'https://localhost:5173/public',
         rewrite: (path) => path.replace(/^\/app/, '')
       }
     }

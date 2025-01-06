@@ -175,7 +175,7 @@ task generateShorcutsFile {
     def xmlMarkup = new MarkupBuilder(new IndentPrinter(xmlWriter, "    ", true))
 
     xmlMarkup
-        .'shortcuts'('xmlns:android': 'http://schemas.android.com/apk/res/android') {
+        .'shortcuts'('xmlns:android': 'https://schemas.android.com/apk/res/android') {
             twaManifest.shortcuts.eachWithIndex { s, i ->
                 'shortcut'(
                         'android:shortcutId': 'shortcut' + i,
