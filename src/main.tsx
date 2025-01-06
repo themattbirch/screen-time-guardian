@@ -5,15 +5,15 @@ import './index.css';
 
 // src/main.tsx
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', async () => {
-    try {
-      const registration = await navigator.serviceWorker.register('/app/service-worker.js', {
-        scope: '/app/'
+  window.addEventListener('load', () => {
+    navigator.serviceWorker
+      .register('/app/service-worker.js', { scope: '/app/' })
+      .then((registration) => {
+        console.log('Service Worker registered with scope:', registration.scope);
+      })
+      .catch((err) => {
+        console.error('Service Worker registration failed:', err);
       });
-      console.log('Service Worker registered with scope:', registration.scope);
-    } catch (err) {
-      console.error('Service Worker registration failed:', err);
-    }
   });
 }
 
