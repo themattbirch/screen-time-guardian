@@ -2,7 +2,7 @@
 
 import { openDB } from 'idb';
 import { StorageData, Statistics, Session } from '../types/app';
-import { achievements as predefinedAchievements } from './achievements'; 
+import { achievements as predefinedAchievements } from './achievements'; // Ensure this import exists
 
 const DB_NAME = 'ScreenTimeGuardianDB';
 const STORE_NAME = 'settings';
@@ -19,7 +19,7 @@ const initialStatistics: Statistics = {
   focusScore: 0,
   weeklyMinutes: 0,
   monthlyMinutes: 0,
-  achievements: predefinedAchievements, 
+  achievements: predefinedAchievements, // Ensure this matches your achievements setup
   sessionHistory: [],
 };
 
@@ -43,23 +43,23 @@ export async function getStorageData<K extends keyof StorageData>(
 ): Promise<Pick<StorageData, K>> {
   try {
     const db = await dbPromise;
-    const result = {} as Pick<StorageData, K>;
+    const result: Partial<Pick<StorageData, K>> = {};
 
     for (const key of keys) {
       const value = await db.get(STORE_NAME, key);
       if (value !== undefined) {
-        (result[key] as any) = value;
+        result[key] = value;
       }
     }
 
     // If 'statistics' is requested and not present, initialize it
-    if (keys.includes('statistics' as K) && !('statistics' in result)) {
-      const stats = { ...initialStatistics };
-      await setStorageData({ statistics: stats } as Partial<StorageData>);
-      (result as any).statistics = stats;
-    }
+if (keys.includes('statistics' as K) && !('statistics' in result)) {
+  const stats = { ...initialStatistics };
+  result['statistics' as K] = stats as any;
+  await setStorageData({ statistics: stats } as Partial<StorageData>);
+}
 
-    return result;
+    return result as Pick<StorageData, K>;
   } catch (error) {
     console.error('Failed to get storage data:', error);
     return {} as Pick<StorageData, K>;

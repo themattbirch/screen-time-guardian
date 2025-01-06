@@ -9,7 +9,7 @@ import Joyride, { CallBackProps } from 'react-joyride';
 
 // Local imports
 import { getStorageData, setStorageData } from './utils/storage';
-import { soundManager } from './utils/sounds';
+import { soundManager, availableSounds } from './utils/sounds';
 import { Timer } from './components/Timer/Timer';
 import { Quote as QuoteComponent } from './components/Quote/Quote';
 import { achievements as predefinedAchievements } from './utils/achievements';
@@ -170,6 +170,7 @@ const App: React.FC = () => {
               };
             }
             break;
+          // Add more cases as needed
         }
         return ach;
       })
@@ -180,21 +181,41 @@ const App: React.FC = () => {
   // 3) Timer logic
   // -------------------
   const handleTimerComplete = useCallback(() => {
-    // 1. Play sound if enabled
+    // 1. Play sound if enabled and AudioContext is active
     if (settings.soundEnabled) {
-      soundManager.setVolume(settings.soundVolume);
-      soundManager.playSound(settings.selectedSound);
+      if (soundManager.audioContext.state === 'suspended') {
+        // Attempt to resume AudioContext
+        soundManager.audioContext.resume().then(() => {
+          soundManager.playSound(settings.selectedSound);
+        }).catch((error) => {
+          console.error('AudioContext resume failed:', error);
+        });
+      } else {
+        soundManager.playSound(settings.selectedSound);
+      }
     }
-    // 2. Try haptic feedback
+
+    // 2. Vibrate if supported and allowed
     if ('vibrate' in navigator) {
       navigator.vibrate(150);
     }
-    // 3. Notification fallback
+
+    // 3. Send a Web Notification via Service Worker
     if (Notification.permission === 'granted') {
-      new Notification('Screen Time Guardian', { body: 'Time is up!' });
+      navigator.serviceWorker.ready.then((registration) => {
+        registration.active?.postMessage({
+          type: 'SHOW_NOTIFICATION',
+          payload: {
+            title: 'Screen Time Guardian',
+            body: 'Time is up!',
+            icon: '/icons/icon192.png',
+          },
+        });
+      });
     } else {
       toast.info('Time is up!');
     }
+
     // 4. Update the local timer state
     setTimerState((prev) => ({
       ...prev,
@@ -203,12 +224,14 @@ const App: React.FC = () => {
       timeLeft: 0,
       isBlinking: true,
     }));
+
     // 5. Force a quote refresh
     setQuoteChangeCounter((prev) => prev + 1);
-    // 6. Achievements
+
+    // 6. Update achievements
     updateAchievements('completeSession');
 
-    // 7. Update Statistics
+    // 7. Update Statistics (as per your existing logic)
     let sessionDuration = 0;
     switch (timerState.mode) {
       case 'focus':
@@ -278,6 +301,7 @@ const App: React.FC = () => {
       averageSessionDuration: newAverageSessionDuration,
       completionRate: newCompletionRate, 
       sessionHistory: updatedSessionHistory,
+      // Update other statistics as needed
     }));
   }, [settings, updateAchievements, timerState.mode, statistics]);
 
@@ -345,25 +369,54 @@ const App: React.FC = () => {
   // 5) Timer countdown effect
   // -------------------
   useEffect(() => {
-    let intervalId: NodeJS.Timeout | undefined;
-    if (timerState.isActive && !timerState.isPaused && timerState.timeLeft > 0) {
-      intervalId = setInterval(() => {
-        setTimerState((prev) => {
-          if (prev.timeLeft <= 1) {
-            handleTimerComplete();
-            return { ...prev, timeLeft: 0, isActive: false };
-          }
-          return { ...prev, timeLeft: prev.timeLeft - 1 };
-        });
-      }, 1000);
-    }
-    return () => {
-      if (intervalId) clearInterval(intervalId);
-    };
-  }, [timerState.isActive, timerState.isPaused, timerState.timeLeft, handleTimerComplete]);
+  let intervalId: NodeJS.Timeout | undefined;
+  if (timerState.isActive && !timerState.isPaused && timerState.endTime !== null) {
+    intervalId = setInterval(() => {
+      const now = Date.now();
+      const remainingTime = Math.floor((timerState.endTime! - now) / 1000);
+      if (remainingTime <= 0) {
+        handleTimerComplete();
+        clearInterval(intervalId);
+      } else {
+        setTimerState((prev) => ({
+          ...prev,
+          timeLeft: remainingTime > 0 ? remainingTime : 0,
+        }));
+      }
+    }, 1000);
+  }
+  return () => {
+    if (intervalId) clearInterval(intervalId);
+  };
+}, [timerState.isActive, timerState.isPaused, timerState.endTime, handleTimerComplete]);
 
   // -------------------
-  // 6) Load data from storage on mount
+  // 6) Handle App Visibility Changes
+  // -------------------
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (!document.hidden && timerState.isActive && timerState.endTime) {
+        const now = Date.now();
+        if (timerState.endTime <= now) {
+          handleTimerComplete();
+        } else {
+          const remainingTime = Math.floor((timerState.endTime - now) / 1000);
+          setTimerState((prev) => ({
+            ...prev,
+            timeLeft: remainingTime > 0 ? remainingTime : 0,
+            isActive: remainingTime > 0,
+          }));
+        }
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, [timerState.isActive, timerState.endTime, handleTimerComplete]);
+
+  // -------------------
+  // 7) Load data from storage on mount
   // and handle leftover time if endTime > Date.now()
   // -------------------
   useEffect(() => {
@@ -424,7 +477,7 @@ const App: React.FC = () => {
   }, []);
 
   // -------------------
-  // 7) Persist changes to storage
+  // 8) Persist changes to storage
   // -------------------
   useEffect(() => {
     setStorageData({ appSettings: settings });
@@ -447,7 +500,7 @@ const App: React.FC = () => {
   }, [statistics]);
 
   // -------------------
-  // 8) Theme & Notification request
+  // 9) Theme & Notification request
   // -------------------
   useEffect(() => {
     if (settings.theme === 'dark') {
@@ -471,7 +524,7 @@ const App: React.FC = () => {
   };
 
   // -------------------
-  // 9) Rendering
+  // 10) Rendering
   // -------------------
   return (
     <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">

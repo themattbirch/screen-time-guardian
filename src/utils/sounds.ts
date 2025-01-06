@@ -1,4 +1,4 @@
-// /src/utils/sounds.ts
+// src/utils/sounds.ts
 
 interface Sound {
   id: string;
@@ -29,7 +29,7 @@ const defaultSounds: Sound[] = [
 ];
 
 class SoundManager {
-  private audioContext: AudioContext;
+  public audioContext: AudioContext; // Make it public
   private gainNode: GainNode;
   private soundBuffers: Map<string, AudioBuffer> = new Map();
 
@@ -41,7 +41,9 @@ class SoundManager {
     // Handle user interaction to resume AudioContext if suspended
     document.addEventListener('click', () => {
       if (this.audioContext.state === 'suspended') {
-        this.audioContext.resume();
+        this.audioContext.resume().catch((error) => {
+          console.error('AudioContext resume failed:', error);
+        });
       }
     }, { once: true });
   }

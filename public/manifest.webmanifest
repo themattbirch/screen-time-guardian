@@ -1,5 +1,5 @@
 {
-   "name": "Screen Time Guardian App",
+  "name": "Screen Time Guardian App",
   "short_name": "ScreenTimerApp",
   "description": "Stay focused and mindful with customizable timers, inspiring quotes, and gentle reminders to take breaks",
   "start_url": "/app/",
@@ -16,7 +16,6 @@
       "sizes": "192x192",
       "type": "image/png"
     },
-   
     {
       "src": "/icons/icon512.png",
       "sizes": "512x512",
@@ -36,6 +35,12 @@
       "src": "/icons/icon128.png",
       "sizes": "128x128",
       "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ],
   "screenshots": [
@@ -51,25 +56,25 @@
       "type": "image/png",
       "form_factor": "wide"
     },
-     {
+    {
       "src": "/screenshots/mobile3.png",
       "sizes": "1080x1920",
       "type": "image/png",
       "form_factor": "wide"
     },
-     {
+    {
       "src": "/screenshots/desktop1.png",
       "sizes": "1920x1080",
       "type": "image/png",
       "form_factor": "wide"
     },
-     {
+    {
       "src": "/screenshots/desktop2.png",
       "sizes": "1920x1080",
       "type": "image/png",
       "form_factor": "wide"
     },
-     {
+    {
       "src": "/screenshots/desktop3.png",
       "sizes": "1920x1080",
       "type": "image/png",
@@ -80,5 +85,8 @@
     "productivity",
     "lifestyle",
     "utilities"
+  ],
+  "permissions": [
+    "vibrate"
   ]
 }
