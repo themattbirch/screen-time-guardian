@@ -13,8 +13,8 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<inset xmlns:android="https://schemas.android.com/apk/res/android"
-    xmlns:aapt="https://schemas.android.com/aapt"
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
     android:inset="2dp">
     <aapt:attr name="android:drawable">
         <shape android:shape="oval">

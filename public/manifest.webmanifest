@@ -9,31 +9,10 @@
   "theme_color": "#4F46E5",
   "orientation": "portrait",
   "prefer_related_applications": false,
-  "id": "/app/",
-    "launch_handler": {
-    "client_mode": ["navigate-existing", "auto"]
-  },
-  "dir": "ltr",  
-  "lang": "en", 
-  "related_applications": [], 
-  "scope_extensions": [
-    {
-      "origin": "*.screentimeguardian.com"
-    }
-  ],
-  "icons": [
-    {
-      "src": "/icons/icon192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "/icons/icon512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
+  "lang": "en-US",
+  "dir": "ltr",
 
-    },
+  "icons": [
     {
       "src": "/icons/icon16.png",
       "sizes": "16x16",
@@ -50,53 +29,60 @@
       "type": "image/png"
     },
     {
+      "src": "/icons/icon192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
       "src": "/icons/icon-maskable.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
     }
   ],
+
   "screenshots": [
     {
       "src": "/screenshots/mobile1.png",
       "sizes": "1080x1920",
-      "type": "image/png",
-      "form_factor": "wide"
+      "type": "image/png"
     },
     {
       "src": "/screenshots/mobile2.png",
       "sizes": "1080x1920",
-      "type": "image/png",
-      "form_factor": "wide"
+      "type": "image/png"
     },
     {
       "src": "/screenshots/mobile3.png",
       "sizes": "1080x1920",
-      "type": "image/png",
-      "form_factor": "wide"
+      "type": "image/png"
     },
     {
       "src": "/screenshots/desktop1.png",
       "sizes": "1920x1080",
-      "type": "image/png",
-      "form_factor": "wide"
+      "type": "image/png"
     },
     {
       "src": "/screenshots/desktop2.png",
       "sizes": "1920x1080",
-      "type": "image/png",
-      "form_factor": "wide"
+      "type": "image/png"
     },
     {
       "src": "/screenshots/desktop3.png",
       "sizes": "1920x1080",
-      "type": "image/png",
-      "form_factor": "wide"
+      "type": "image/png"
     }
   ],
+
   "categories": [
     "productivity",
     "lifestyle",
     "utilities"
   ]
-  }
+}
