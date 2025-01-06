@@ -51,14 +51,38 @@
   ],
   "screenshots": [
     {
-      "src": "/screenshots/screen1.png",
+      "src": "/screenshots/mobile1.png",
       "sizes": "1080x1920",
       "type": "image/png",
       "form_factor": "wide"
     },
     {
-      "src": "/screenshots/screen2.png",
+      "src": "/screenshots/mobile2.png",
       "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+     {
+      "src": "/screenshots/mobile3.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+     {
+      "src": "/screenshots/desktop1.png",
+      "sizes": "1920x1080",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+     {
+      "src": "/screenshots/desktop2.png",
+      "sizes": "1920x1080",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+     {
+      "src": "/screenshots/desktop3.png",
+      "sizes": "1920x1080",
       "type": "image/png",
       "form_factor": "wide"
     }
