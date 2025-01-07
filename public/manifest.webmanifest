@@ -1,5 +1,5 @@
 {
-  "name": "Screen Time Guardian App",
+    "name": "Screen Time Guardian App",
   "short_name": "STA",
   "description": "Stay focused and mindful with customizable timers, inspiring quotes, and gentle reminders to take breaks",
   "start_url": "/app/",
@@ -11,6 +11,10 @@
   "prefer_related_applications": false,
   "lang": "en-US",
   "dir": "ltr",
+  "id": "com.screentimeguardian.app",
+  "launch_handler": {
+    "client_mode": ["navigate-existing", "auto"]
+  },
 
   "icons": [
     {
