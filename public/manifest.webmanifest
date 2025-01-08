@@ -1,6 +1,6 @@
 {
-    "name": "Screen Time Guardian App",
-  "short_name": "STA",
+  "name": "Screen Time Guardian App",
+  "short_name": "Screen Time Guardian",
   "description": "Stay focused and mindful with customizable timers, inspiring quotes, and gentle reminders to take breaks",
   "start_url": "/app/",
   "scope": "/app/",
