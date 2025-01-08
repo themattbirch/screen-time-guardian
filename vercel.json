@@ -39,6 +39,14 @@
       "destination": "/manifest.webmanifest"
     },
     {
+    "source": "/support.html",
+    "destination": "/public/support.html"
+  },
+  {
+    "source": "/privacy.html",
+    "destination": "/public/privacy.html"
+  },
+    {
       "source": "/icons/:path*",
       "destination": "/icons/:path*"
     }
