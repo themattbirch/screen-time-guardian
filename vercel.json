@@ -13,7 +13,19 @@
       "destination": "https://$1"
     }
   ],
-    "rewrites": [
+  "rewrites": [
+    {
+      "source": "/support",
+      "destination": "/support.html"
+    },
+    {
+      "source": "/privacy",
+      "destination": "/privacy.html"
+    },
+    {
+      "source": "/terms",
+      "destination": "/terms.html"
+    },
     {
       "source": "/app/service-worker.js",
       "destination": "/app/service-worker.js"
@@ -41,18 +53,10 @@
     {
       "source": "/icons/:path*",
       "destination": "/icons/:path*"
-    },
-    {
-      "source": "/support",
-      "destination": "/support.html"
-    },
-    {
-      "source": "/privacy",
-      "destination": "/privacy.html"
     }
   ],
   "headers": [
-   {
+    {
       "source": "/app/service-worker.js",
       "headers": [
         {
@@ -79,7 +83,6 @@
         }
       ]
     },
-    
     {
       "source": "/icons/:path*",
       "headers": [
