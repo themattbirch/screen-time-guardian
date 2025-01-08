@@ -46,6 +46,10 @@
     "source": "/privacy.html",
     "destination": "/public/privacy.html"
   },
+  {
+    "source": "/terms.html",
+    "destination": "/public/terms.html"
+  },
     {
       "source": "/icons/:path*",
       "destination": "/icons/:path*"
