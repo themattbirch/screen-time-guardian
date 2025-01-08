@@ -13,8 +13,8 @@
       "destination": "https://$1"
     }
   ],
-  "rewrites": [
-       {
+    "rewrites": [
+    {
       "source": "/app/service-worker.js",
       "destination": "/app/service-worker.js"
     },
@@ -39,22 +39,17 @@
       "destination": "/manifest.webmanifest"
     },
     {
-    "source": "/support.html",
-    "destination": "/public/support.html"
-  },
-  {
-    "source": "/privacy.html",
-    "destination": "/public/privacy.html"
-  },
-  {
-    "source": "/terms.html",
-    "destination": "/public/terms.html"
-  },
-    {
       "source": "/icons/:path*",
       "destination": "/icons/:path*"
+    },
+    {
+      "source": "/support",
+      "destination": "/support.html"
+    },
+    {
+      "source": "/privacy",
+      "destination": "/privacy.html"
     }
-    
   ],
   "headers": [
    {

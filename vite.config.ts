@@ -18,7 +18,11 @@ export default defineConfig({
     rollupOptions: {
       input: {
         website: resolve(__dirname, 'index.html'),          
-        app: resolve(__dirname, 'public/index.html')        
+        app: resolve(__dirname, 'public/index.html'),
+        support: resolve(__dirname, 'public/support.html'),
+        privacy: resolve(__dirname, 'public/privacy.html'),
+        terms: resolve(__dirname, 'public/terms.html'),
+        
       },
       output: {
         entryFileNames: 'assets/[name].[hash].js',
