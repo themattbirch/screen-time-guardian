@@ -1,6 +1,6 @@
 {
   "name": "screen-time-guardian",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "type": "module",
   "description": "Stay focused and mindful with customizable timers, inspiring quotes, and gentle reminders to take breaks. A progressive web app for better screen time management.",
   "scripts": {

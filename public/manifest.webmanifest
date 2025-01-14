@@ -1,7 +1,7 @@
 {
   "name": "Screen Time Guardian App",
   "short_name": "Screen Time Guardian",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Stay focused and mindful with customizable timers, inspiring quotes, and gentle reminders to take breaks",
   "start_url": "/app/",
   "scope": "/app/",

@@ -122,7 +122,7 @@ const App: React.FC = () => {
     },
     {
       target: '.quote-container',
-      content: 'A random motivational quote will appear before the timer starts and when it completes.',
+      content: "A random motivational quote will appear before the timer starts and when it completes.",
       disableBeacon: true
     },
     {
