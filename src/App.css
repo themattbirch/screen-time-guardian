@@ -80,7 +80,7 @@ ul, li {
   margin: 0;
 }
 
-/* Bottom safe area for mobile */
+/* Bottom safe area for mobile viewing */
 .pb-safe {
   padding-bottom: env(safe-area-inset-bottom, 16px);
 }
