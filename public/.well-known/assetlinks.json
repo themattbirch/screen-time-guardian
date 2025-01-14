@@ -1,5 +1,16 @@
-[{
-  "relation": ["delegate_permission/common.handle_all_urls"],
-  "target" : { "namespace": "android_app", "package_name": "com.screentimeguardian.twa",
-               "sha256_cert_fingerprints": ["C6:31:C7:BE:3B:78:F3:D1:ED:B9:6A:16:D9:CB:3D:4E:5B:EF:41:1D:83:36:44:A3:C4:41:37:62:52:49:D9:41"] }
-}]
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls",
+      "delegate_permission/common.get_login_creds"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.screentimeguardian.twa",
+      "sha256_cert_fingerprints": [
+        "C6:31:C7:BE:3B:78:F3:D1:ED:B9:6A:16:D9:CB:3D:4E:5B:EF:41:1D:83:36:44:A3:C4:41:37:62:52:49:D9:41",
+        "17:B3:BD:17:14:0A:48:6F:CD:41:D1:F7:DF:E3:FF:A6:13:21:A0:EE:2D:18:92:0B:6B:86:54:4B:9C:2D:0E:2E"
+      ]
+    }
+  }
+]
