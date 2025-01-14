@@ -15,6 +15,7 @@ export default defineConfig({
     }
   },
   build: {
+    copyPublicDir: true,
     rollupOptions: {
       input: {
         website: resolve(__dirname, 'index.html'),          

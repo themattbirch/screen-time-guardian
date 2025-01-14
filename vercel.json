@@ -43,8 +43,8 @@
       "destination": "/index.html"
     },
     {
-      "source": "/.well-known/assetlinks.json",
-      "destination": "/public/.well-known/assetlinks.json"
+     "source": "/.well-known/assetlinks.json",
+     "destination": "/.well-known/assetlinks.json"
     },
     {
       "source": "/manifest.webmanifest",
