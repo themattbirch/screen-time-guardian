@@ -30,6 +30,10 @@
       "source": "/service-worker.js",
       "destination": "/service-worker.js"
     },
+     {
+      "source": "/offline.html",
+      "destination": "/offline.html"
+    },
     {
       "source": "/app",
       "destination": "/public/index.html"
@@ -62,6 +66,15 @@
         {
           "key": "Content-Type",
           "value": "application/javascript; charset=utf-8"
+        }
+      ]
+    },
+     {
+      "source": "/offline.html",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/html; charset=utf-8"
         }
       ]
     },
