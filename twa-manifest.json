@@ -21,8 +21,8 @@
     "path": "/Users/mattb/Desktop/Projects/screen-time-guardian/android.keystore",
     "alias": "android"
   },
-  "appVersionName": "4",
-  "appVersionCode": 4,
+  "appVersionName": "5",
+  "appVersionCode": 5,
   "shortcuts": [],
   "generatorApp": "bubblewrap-cli",
   "webManifestUrl": "https://screentimeguardian.com/manifest.webmanifest",
@@ -40,5 +40,5 @@
   "fingerprints": [],
   "additionalTrustedOrigins": [],
   "retainedBundles": [],
-  "appVersion": "4"
+  "appVersion": "5"
 }
