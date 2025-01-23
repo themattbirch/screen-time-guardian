@@ -1,49 +1,49 @@
-com.screentimeguardian.twa.LauncherActivity
-com.google.androidbrowserhelper.trusted.FocusActivity
-com.screentimeguardian.twa.DelegationService
-androidx.lifecycle.FullLifecycleObserverAdapter
-androidx.core.app.RemoteActionCompatParcelizer
-com.google.androidbrowserhelper.trusted.WebViewFallbackActivity
 androidx.annotation.Keep
-android.support.v4.app.RemoteActionCompatParcelizer
-com.screentimeguardian.twa.Application
-androidx.lifecycle.ReflectiveGenericLifecycleObserver
-androidx.versionedparcelable.CustomVersionedParcelable
-com.google.androidbrowserhelper.trusted.ManageDataLauncherActivity
-androidx.core.graphics.drawable.IconCompatParcelizer
+androidx.lifecycle.SingleGeneratedAdapterObserver
 androidx.lifecycle.CompositeGeneratedAdaptersObserver
 androidx.core.graphics.drawable.IconCompat
-com.google.androidbrowserhelper.trusted.NotificationPermissionRequestActivity
-android.support.v4.graphics.drawable.IconCompatParcelizer
-androidx.versionedparcelable.ParcelImpl
-androidx.core.content.FileProvider
-androidx.core.app.CoreComponentFactory
-androidx.lifecycle.SingleGeneratedAdapterObserver
 androidx.core.app.RemoteActionCompat
+android.support.v4.app.RemoteActionCompatParcelizer
+androidx.versionedparcelable.ParcelImpl
+androidx.core.app.CoreComponentFactory
+androidx.lifecycle.ReflectiveGenericLifecycleObserver
 androidx.browser.browseractions.BrowserActionsFallbackMenuView
+com.google.androidbrowserhelper.trusted.FocusActivity
+android.support.v4.graphics.drawable.IconCompatParcelizer
+androidx.core.graphics.drawable.IconCompatParcelizer
+com.google.androidbrowserhelper.trusted.ManageDataLauncherActivity
+androidx.core.content.FileProvider
+com.google.androidbrowserhelper.trusted.WebViewFallbackActivity
+androidx.core.app.RemoteActionCompatParcelizer
+com.google.androidbrowserhelper.trusted.NotificationPermissionRequestActivity
+com.screentimeguardian.twa.LauncherActivity
+com.screentimeguardian.twa.DelegationService
+com.screentimeguardian.twa.Application
+androidx.versionedparcelable.CustomVersionedParcelable
+androidx.lifecycle.FullLifecycleObserverAdapter
 androidx.versionedparcelable.ParcelImpl: android.os.Parcelable$Creator CREATOR
-android.support.v4.app.RemoteActionCompatParcelizer: void write(androidx.core.app.RemoteActionCompat,androidx.versionedparcelable.VersionedParcel)
-com.screentimeguardian.twa.LauncherActivity: LauncherActivity()
 com.google.androidbrowserhelper.trusted.FocusActivity: FocusActivity()
-androidx.core.graphics.drawable.IconCompatParcelizer: IconCompatParcelizer()
-androidx.core.graphics.drawable.IconCompatParcelizer: void write(androidx.core.graphics.drawable.IconCompat,androidx.versionedparcelable.VersionedParcel)
-android.support.v4.app.RemoteActionCompatParcelizer: RemoteActionCompatParcelizer()
-androidx.core.graphics.drawable.IconCompatParcelizer: androidx.core.graphics.drawable.IconCompat read(androidx.versionedparcelable.VersionedParcel)
-androidx.core.app.RemoteActionCompatParcelizer: RemoteActionCompatParcelizer()
-androidx.core.app.CoreComponentFactory: CoreComponentFactory()
-androidx.core.content.FileProvider: FileProvider()
-android.support.v4.app.RemoteActionCompatParcelizer: androidx.core.app.RemoteActionCompat read(androidx.versionedparcelable.VersionedParcel)
-androidx.core.app.RemoteActionCompatParcelizer: androidx.core.app.RemoteActionCompat read(androidx.versionedparcelable.VersionedParcel)
-com.google.androidbrowserhelper.trusted.ManageDataLauncherActivity: ManageDataLauncherActivity()
-android.support.v4.graphics.drawable.IconCompatParcelizer: void write(androidx.core.graphics.drawable.IconCompat,androidx.versionedparcelable.VersionedParcel)
-androidx.core.app.RemoteActionCompat: RemoteActionCompat()
-androidx.versionedparcelable.CustomVersionedParcelable: CustomVersionedParcelable()
-com.screentimeguardian.twa.Application: Application()
 androidx.core.graphics.drawable.IconCompat: IconCompat()
 android.support.v4.graphics.drawable.IconCompatParcelizer: androidx.core.graphics.drawable.IconCompat read(androidx.versionedparcelable.VersionedParcel)
-com.google.androidbrowserhelper.trusted.NotificationPermissionRequestActivity: NotificationPermissionRequestActivity()
-com.google.androidbrowserhelper.trusted.WebViewFallbackActivity: WebViewFallbackActivity()
-androidx.core.app.RemoteActionCompatParcelizer: void write(androidx.core.app.RemoteActionCompat,androidx.versionedparcelable.VersionedParcel)
-androidx.browser.browseractions.BrowserActionsFallbackMenuView: BrowserActionsFallbackMenuView(android.content.Context,android.util.AttributeSet)
-com.screentimeguardian.twa.DelegationService: DelegationService()
+androidx.core.graphics.drawable.IconCompatParcelizer: androidx.core.graphics.drawable.IconCompat read(androidx.versionedparcelable.VersionedParcel)
 android.support.v4.graphics.drawable.IconCompatParcelizer: IconCompatParcelizer()
+com.google.androidbrowserhelper.trusted.NotificationPermissionRequestActivity: NotificationPermissionRequestActivity()
+androidx.core.app.CoreComponentFactory: CoreComponentFactory()
+com.screentimeguardian.twa.Application: Application()
+android.support.v4.app.RemoteActionCompatParcelizer: androidx.core.app.RemoteActionCompat read(androidx.versionedparcelable.VersionedParcel)
+androidx.versionedparcelable.CustomVersionedParcelable: CustomVersionedParcelable()
+androidx.core.app.RemoteActionCompatParcelizer: androidx.core.app.RemoteActionCompat read(androidx.versionedparcelable.VersionedParcel)
+android.support.v4.graphics.drawable.IconCompatParcelizer: void write(androidx.core.graphics.drawable.IconCompat,androidx.versionedparcelable.VersionedParcel)
+com.screentimeguardian.twa.LauncherActivity: LauncherActivity()
+com.google.androidbrowserhelper.trusted.ManageDataLauncherActivity: ManageDataLauncherActivity()
+androidx.core.graphics.drawable.IconCompatParcelizer: IconCompatParcelizer()
+com.google.androidbrowserhelper.trusted.WebViewFallbackActivity: WebViewFallbackActivity()
+com.screentimeguardian.twa.DelegationService: DelegationService()
+androidx.core.app.RemoteActionCompat: RemoteActionCompat()
+androidx.core.app.RemoteActionCompatParcelizer: void write(androidx.core.app.RemoteActionCompat,androidx.versionedparcelable.VersionedParcel)
+android.support.v4.app.RemoteActionCompatParcelizer: void write(androidx.core.app.RemoteActionCompat,androidx.versionedparcelable.VersionedParcel)
+androidx.core.content.FileProvider: FileProvider()
+androidx.core.app.RemoteActionCompatParcelizer: RemoteActionCompatParcelizer()
+androidx.core.graphics.drawable.IconCompatParcelizer: void write(androidx.core.graphics.drawable.IconCompat,androidx.versionedparcelable.VersionedParcel)
+androidx.browser.browseractions.BrowserActionsFallbackMenuView: BrowserActionsFallbackMenuView(android.content.Context,android.util.AttributeSet)
+android.support.v4.app.RemoteActionCompatParcelizer: RemoteActionCompatParcelizer()

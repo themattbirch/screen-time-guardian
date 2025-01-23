@@ -28,7 +28,7 @@
     <string name="hostName" translatable="false">screentimeguardian.com</string>
     <string name="launchUrl" translatable="false">https://screentimeguardian.com/app</string>
     <string name="launcherName" translatable="false">ScreenTimer</string>
-    <string name="orientation" translatable="false">default</string>
+    <string name="orientation" translatable="false">portrait</string>
     <string name="providerAuthority" translatable="false">com.screentimeguardian.twa.fileprovider</string>
     <string name="webManifestUrl" translatable="false">https://screentimeguardian.com/manifest.webmanifest</string>
 </resources>

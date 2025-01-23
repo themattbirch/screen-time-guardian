@@ -38,7 +38,7 @@
     <!-- Value from default config. -->
     <string name="launcherName" translatable="false">ScreenTimer</string>
     <!-- Value from default config. -->
-    <string name="orientation" translatable="false">default</string>
+    <string name="orientation" translatable="false">portrait</string>
     <!-- Value from default config. -->
     <string name="providerAuthority" translatable="false">com.screentimeguardian.twa.fileprovider</string>
     <!-- Value from default config. -->

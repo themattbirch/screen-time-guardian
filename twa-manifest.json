@@ -13,15 +13,16 @@
   "backgroundColor": "#FFFFFF",
   "enableNotifications": true,
   "startUrl": "/app",
-  "iconUrl": "https://screentimeguardian.com/icons/icon512.png",
-  "maskableIconUrl": "https://screentimeguardian.com/icons/icon512.png",
+  "iconUrl": "https://screentimeguardian.com/icons/timer-icon-512.png",
+  "maskableIconUrl": "https://screentimeguardian.com/icons/timer-icon-maskable-512.png",
+  "monochromeIconUrl": "https://screentimeguardian.com/icons/timer-icon-monochrome-512.png",
   "splashScreenFadeOutDuration": 300,
   "signingKey": {
     "path": "/Users/mattb/Desktop/Projects/screen-time-guardian/android.keystore",
     "alias": "android"
   },
-  "appVersionName": "1.1",
-  "appVersionCode": 3,
+  "appVersionName": "1",
+  "appVersionCode": 1,
   "shortcuts": [],
   "generatorApp": "bubblewrap-cli",
   "webManifestUrl": "https://screentimeguardian.com/manifest.webmanifest",
@@ -35,9 +36,9 @@
   "isMetaQuest": false,
   "fullScopeUrl": "https://screentimeguardian.com/app/",
   "minSdkVersion": 21,
-  "orientation": "default",
+  "orientation": "portrait",
   "fingerprints": [],
   "additionalTrustedOrigins": [],
   "retainedBundles": [],
-  "appVersion": "1.1"
+  "appVersion": "1"
 }
