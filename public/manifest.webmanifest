@@ -55,7 +55,7 @@
       "purpose": "any"
     },
     {
-      "src": "/icons/timer-icon-maskable-512.png",
+      "src": "/icons/timey-test.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
