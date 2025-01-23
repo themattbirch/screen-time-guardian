@@ -55,7 +55,7 @@
       "purpose": "any"
     },
     {
-      "src": "/icons/timer-icon-maskable-192.png",
+      "src": "/icons/timer-icon-maskable-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
