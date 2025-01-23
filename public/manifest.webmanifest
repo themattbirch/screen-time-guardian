@@ -1,7 +1,7 @@
 {
   "name": "Screen Time Guardian App",
   "short_name": "Screen Time Guardian",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Stay focused and mindful with customizable timers, inspiring quotes, and gentle reminders to take breaks",
   "start_url": "/app/",
   "scope": "/app/",
@@ -19,36 +19,52 @@
 
   "icons": [
     {
-      "src": "/icons/icon16.png",
+      "src": "/icons/timer-icon-16.png",
       "sizes": "16x16",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     },
     {
-      "src": "/icons/icon48.png",
+      "src": "/icons/timer-icon-48.png",
       "sizes": "48x48",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     },
     {
-      "src": "/icons/icon128.png",
+      "src": "/icons/timer-icon-128.png",
       "sizes": "128x128",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     },
     {
-      "src": "/icons/icon192.png",
+      "src": "/icons/timer-icon-192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     },
     {
-      "src": "/icons/icon512.png",
+      "src": "/icons/timer-icon-maskable-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icons/timer-icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/icons/icon_maskable.png",
+      "src": "/icons/timer-icon-maskable-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
+    },
+    {
+      "src": "/icons/timer-icon-monochrome-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "monochrome"
     }
   ],
 
@@ -69,6 +85,11 @@
       "type": "image/png"
     },
     {
+      "src": "/screenshots/mobile4.png",
+      "sizes": "1080x1920",
+      "type": "image/png"
+    },
+    {
       "src": "/screenshots/desktop1.png",
       "sizes": "1920x1080",
       "type": "image/png"
@@ -82,12 +103,13 @@
       "src": "/screenshots/desktop3.png",
       "sizes": "1920x1080",
       "type": "image/png"
+    },
+    {
+      "src": "/screenshots/desktop4.png",
+      "sizes": "1920x1080",
+      "type": "image/png"
     }
   ],
 
-  "categories": [
-    "productivity",
-    "lifestyle",
-    "utilities"
-  ]
+  "categories": ["productivity", "lifestyle", "utilities"]
 }
