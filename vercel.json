@@ -27,8 +27,8 @@
       "destination": "/terms.html"
     },
     {
-      "source": "/app/service-worker.js",
-      "destination": "/app/service-worker.js"
+      "source": "/service-worker.js",
+      "destination": "/service-worker.js"
     },
     {
       "source": "/app",
@@ -43,8 +43,8 @@
       "destination": "/index.html"
     },
     {
-     "source": "/.well-known/assetlinks.json",
-     "destination": "/.well-known/assetlinks.json"
+      "source": "/.well-known/assetlinks.json",
+      "destination": "/.well-known/assetlinks.json"
     },
     {
       "source": "/manifest.webmanifest",
@@ -57,7 +57,7 @@
   ],
   "headers": [
     {
-      "source": "/app/service-worker.js",
+      "source": "/service-worker.js",
       "headers": [
         {
           "key": "Content-Type",
