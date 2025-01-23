@@ -2,15 +2,11 @@ const CACHE_NAME = "screen-time-guardian-v2";
 
 // Add '/offline.html' to your precache list
 const PRECACHE_URLS = [
-  "/app",
+  "/",
   "/index.html",
   "/offline.html",
   "/manifest.webmanifest",
-  "/icons/icon16.png",
-  "/icons/icon48.png",
-  "/icons/icon128.png",
-  "/icons/icon192.png",
-  "/icons/icon512.png",
+  "/icons/",
 ];
 
 // The path to your offline fallback

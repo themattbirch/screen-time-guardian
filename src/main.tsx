@@ -3,17 +3,16 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import './index.css'; 
 
-// src/main.tsx
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
     navigator.serviceWorker
-      .register('/app/service-worker.js', { scope: '/app/' })
-      .then((registration) => {
-        console.log('Service Worker registered with scope:', registration.scope);
-      })
-      .catch((err) => {
-        console.error('Service Worker registration failed:', err);
-      });
+      .register("/service-worker.js") // no subfolder
+      .then((registration) =>
+        console.log("Service worker registered:", registration.scope)
+      )
+      .catch((err) =>
+        console.error("Service worker registration failed:", err)
+      );
   });
 }
 
