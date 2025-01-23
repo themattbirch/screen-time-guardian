@@ -1,14 +1,14 @@
 const CACHE_NAME = "screen-time-guardian-v2";
 
-// Add '/offline.html' to your precache list
 const PRECACHE_URLS = [
   "/app",
   "/index.html",
   "/offline.html",
   "/manifest.webmanifest",
+  "/icons/timer-icon-48.png",
 ];
 
-// The path to your offline fallback
+// Path to offline fallback
 const OFFLINE_FALLBACK_URL = "/offline.html";
 
 self.addEventListener("install", (event) => {
