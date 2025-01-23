@@ -28,10 +28,13 @@ dist-ssr
 android/
 
 # PWA/TWA specific
+*gradle*
 twa-manifest.json
+manifest-checksum.txt
 store_icon.png
 android.keystore
-ap
+app-release-bundle.aab
+eslint.config.js
 app-release-signed.apk
 app-release-signed.apk.idsig
 app-release-unsigned-aligned.apk
