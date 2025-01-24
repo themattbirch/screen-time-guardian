@@ -27,13 +27,18 @@
       "destination": "/terms.html"
     },
     {
+      "source": "/404",
+      "destination": "/404.html"
+    },
+    {
       "source": "/service-worker.js",
       "destination": "/service-worker.js"
     },
-     {
+    {
       "source": "/offline.html",
       "destination": "/offline.html"
     },
+
     {
       "source": "/app",
       "destination": "/public/index.html"
@@ -58,6 +63,10 @@
       "source": "/icons/:path*",
       "destination": "/icons/:path*"
     }
+  ],
+  "routes": [
+    { "handle": "filesystem" },
+    { "src": "/(.*)", "status": 404, "dest": "/404.html" }
   ],
   "headers": [
     {
