@@ -1,7 +1,7 @@
 {
   "name": "Screen Time Guardian",
   "short_name": "ScreenTimer",
-  "version": "1.2.0",
+  "version": "1.4.0",
   "description": "Stay focused and mindful with customizable timers, inspiring quotes, and gentle reminders to take breaks",
   "start_url": "/app/",
   "scope": "/app/",
@@ -18,6 +18,18 @@
   },
 
   "icons": [
+    {
+      "src": "/store/app-tile-300.png",
+      "sizes": "300x300",
+      "type": "image/png",
+      "purpose": "any storeAppTile"
+    },
+    {
+      "src": "/store/store-logo-1080.png",
+      "sizes": "1080x1080",
+      "type": "image/png",
+      "purpose": "any storeLogo"
+    },
     {
       "src": "/icons/timer-icon-16.png",
       "sizes": "16x16",
