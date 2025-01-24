@@ -46,3 +46,4 @@ build/
 www/
 .cache/
 .tmp/
+.vercel
