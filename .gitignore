@@ -47,3 +47,4 @@ www/
 .cache/
 .tmp/
 .vercel
+robots.txt
