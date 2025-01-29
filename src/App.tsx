@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import "./index.css";
 import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { Settings } from "./components/Settings/Settings";
 import Joyride, { CallBackProps } from "react-joyride";
 
@@ -109,12 +108,12 @@ const App: React.FC = () => {
   // New State: Statistics
   const [statistics, setStatistics] = useState<Statistics>(initialStatistics);
 
-  // The currently active tab in your bottom nav
+  // Currently active tab in bottom nav
   const [activeTab, setActiveTab] = useState<
     "timer" | "stats" | "quotes" | "achievements"
   >("timer");
 
-  // Control for your settings modal
+  // Control for settings modal
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
   // Force re-render in the Quote component when the timer completes
@@ -161,6 +160,17 @@ const App: React.FC = () => {
     }
   };
 
+  // Second useEffect for handling volume changes
+  useEffect(() => {
+    if (settings.soundEnabled) {
+      try {
+        soundManager.setVolume(settings.soundVolume);
+      } catch (error) {
+        console.warn("Failed to update sound volume:", error);
+      }
+    }
+  }, [settings.soundVolume, settings.soundEnabled]);
+
   // -------------------
   // 2) Achievements
   // -------------------
@@ -184,7 +194,6 @@ const App: React.FC = () => {
               };
             }
             break;
-          // Add more cases as needed
         }
         return ach;
       })
@@ -195,45 +204,26 @@ const App: React.FC = () => {
   // 3) Timer logic
   // -------------------
   const handleTimerComplete = useCallback(() => {
-    // 1. Play sound if enabled and AudioContext is active
-    if (settings.soundEnabled) {
-      if (soundManager.audioContext.state === "suspended") {
-        // Attempt to resume AudioContext
-        soundManager.audioContext
-          .resume()
-          .then(() => {
-            soundManager.playSound(settings.selectedSound);
-          })
-          .catch((error) => {
-            console.error("AudioContext resume failed:", error);
-          });
-      } else {
-        soundManager.playSound(settings.selectedSound);
-      }
-    }
+    // 1. Play sound if enabled
+ if (settings.soundEnabled) {
+  if (soundManager.isContextRunning()) {
+    // Already resumed from a user click/tap
+    soundManager.playSound(settings.selectedSound).catch((error) => {
+      console.warn("Failed to play completion sound:", error);
+      toast.info("Timer completed!");
+    });
+  } else {
+    console.warn("No user gesture yet, cannot play sound automatically.");
+    toast.info("Timer completed, but sound is blocked until user interacts!");
+  }
+}
 
     // 2. Vibrate if supported and allowed
     if ("vibrate" in navigator) {
       navigator.vibrate(150);
     }
 
-    // 3. Send a Web Notification via Service Worker
-    if (Notification.permission === "granted") {
-      navigator.serviceWorker.ready.then((registration) => {
-        registration.active?.postMessage({
-          type: "SHOW_NOTIFICATION",
-          payload: {
-            title: "Screen Time Guardian",
-            body: "Time is up!",
-            icon: "/icons/icon192.png",
-          },
-        });
-      });
-    } else {
-      toast.info("Time is up!");
-    }
-
-    // 4. Update the local timer state
+    // 3. Update the local timer state
     setTimerState((prev) => ({
       ...prev,
       isActive: false,
@@ -242,13 +232,13 @@ const App: React.FC = () => {
       isBlinking: true,
     }));
 
-    // 5. Force a quote refresh
+    // 4. Force a quote refresh
     setQuoteChangeCounter((prev) => prev + 1);
 
-    // 6. Update achievements
+    // 5. Update achievements
     updateAchievements("completeSession");
 
-    // 7. Update Statistics (as per your existing logic)
+    // 6. Update Statistics
     let sessionDuration = 0;
     switch (timerState.mode) {
       case "focus":
@@ -324,7 +314,6 @@ const App: React.FC = () => {
       averageSessionDuration: newAverageSessionDuration,
       completionRate: newCompletionRate,
       sessionHistory: updatedSessionHistory,
-      // Update other statistics as needed
     }));
   }, [settings, updateAchievements, timerState.mode, statistics]);
 
@@ -344,10 +333,22 @@ const App: React.FC = () => {
 
   // Start or resume the timer
   const handleStartOrResume = useCallback(() => {
+    // 1) On click, ensure the default (or currently selected) sound is loaded
+    if (
+      settings.soundEnabled &&
+      !soundManager.isSoundLoaded(settings.selectedSound)
+    ) {
+      const sObj = availableSounds.find((s) => s.id === settings.selectedSound);
+      if (sObj) {
+        soundManager
+          .loadSound(sObj)
+          .catch((err) => console.error("Failed to load default sound:", err));
+      }
+    }
+
+    // 2) Normal start logic
     const now = Date.now();
     const newEndTime = now + timerState.timeLeft * 1000;
-
-    // Immediately compute newTimeLeft instead of waiting for the interval
     const newTimeLeft = Math.floor((newEndTime - now) / 1000);
 
     setTimerState((prev) => ({
@@ -356,10 +357,15 @@ const App: React.FC = () => {
       isPaused: false,
       startTime: now,
       endTime: newEndTime,
-      timeLeft: newTimeLeft, // <-- force the display to update now
+      timeLeft: newTimeLeft,
     }));
     updateAchievements("startSession");
-  }, [timerState.timeLeft, updateAchievements]);
+  }, [
+    timerState.timeLeft,
+    updateAchievements,
+    settings.soundEnabled,
+    settings.selectedSound,
+  ]);
 
 
   // Pause the timer
