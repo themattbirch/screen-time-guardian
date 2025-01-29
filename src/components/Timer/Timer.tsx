@@ -50,8 +50,8 @@ export const Timer: React.FC<TimerProps> = ({
           cursor-pointer
           transition-all duration-300
           hover:shadow-xl
-          ${isBlinking ? 'animate-pulse' : ''}
-          ${isShrunk ? 'scale-75' : 'scale-100'}
+          ${isBlinking ? "animate-pulse" : ""}
+          ${isShrunk ? "scale-75" : "scale-100"}
         `}
         onClick={handleClick}
         role="button"
@@ -59,23 +59,23 @@ export const Timer: React.FC<TimerProps> = ({
       >
         <div className="flex flex-col items-center">
           <div className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">
-            {mode === 'focus'
-              ? 'Focus Time'
-              : mode === 'shortBreak'
-              ? 'Short Break'
-              : mode === 'longBreak'
-              ? 'Long Break'
-              : 'Custom Timer'}
+            {mode === "focus"
+              ? "Focus Time"
+              : mode === "shortBreak"
+              ? "Short Break"
+              : mode === "longBreak"
+              ? "Long Break"
+              : "Custom Timer"}
           </div>
 
           <div
             className={`
-              text-5xl md:text-6xl font-bold
-              text-gray-900 dark:text-white
-              transition-colors duration-300
-              ${isActive && !isPaused ? 'text-green-600 dark:text-green-400' : ''}
-              ${isPaused ? 'text-yellow-600 dark:text-yellow-400' : ''}
-            `}
+  text-5xl md:text-6xl font-bold
+  text-gray-900 dark:text-white
+  transition-colors duration-300
+  ${isActive && !isPaused ? "text-green-600 dark:text-green-400" : ""}
+  ${isPaused ? "text-yellow-600 dark:text-yellow-400" : ""}
+`}
           >
             {formatTime(timeLeft)}
           </div>
