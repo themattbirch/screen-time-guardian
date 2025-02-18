@@ -210,11 +210,9 @@ const App: React.FC = () => {
     // Already resumed from a user click/tap
     soundManager.playSound(settings.selectedSound).catch((error) => {
       console.warn("Failed to play completion sound:", error);
-      toast.info("Timer completed!");
     });
   } else {
     console.warn("No user gesture yet, cannot play sound automatically.");
-    toast.info("Timer completed, but sound is blocked until user interacts!");
   }
 }
 
@@ -386,17 +384,14 @@ const App: React.FC = () => {
     if (!quote) return;
     const isAlreadyFavorite = favoriteQuotes.some((q) => q.id === quote.id);
     if (isAlreadyFavorite) {
-      toast.info(`"${quote.text}" is already in your favorites.`);
       return;
     }
 
-    toast.success(`Added "${quote.text}" to favorites!`);
     setFavoriteQuotes((prev) => [...prev, quote]);
   };
 
   const handleRemoveFavorite = (quoteId: string) => {
     setFavoriteQuotes((prev) => prev.filter((quote) => quote.id !== quoteId));
-    toast.info("Removed quote from favorites.");
   };
 
   // -------------------
